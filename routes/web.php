@@ -26,6 +26,7 @@ Route::get('/dottori', [PublicController::class, 'doctor'])->name('doctor.index'
 Route::get('/trattamenti', [PublicController::class, 'department'])->name('department.index');
 Route::get('/prezzi', [PublicController::class, 'prezzi'])->name('prezzi');
 Route::get('/contatti', [PublicController::class, 'contact'])->name('contact');
+Route::get('/about', [PublicController::class, 'about'])->name('about');
 
 // Ricerca prestazioni (visibile a tutti)
 Route::get('/ricerca/prestazioni', [RicercaController::class, 'index'])->name('ricerca.prestazioni');
