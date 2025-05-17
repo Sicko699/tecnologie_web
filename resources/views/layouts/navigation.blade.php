@@ -44,9 +44,6 @@
                 <li class="nav-item {{ request()->routeIs('department.index') ? 'active' : '' }}">
                     <a href="{{ route('department.index') }}" class="nav-link">Trattamenti</a>
                 </li>
-                <li class="nav-item {{ request()->routeIs('prezzi') ? 'active' : '' }}">
-                    <a href="{{ route('prezzi') }}" class="nav-link">Prezzi</a>
-                </li>
                 <li class="nav-item {{ request()->routeIs('contact') ? 'active' : '' }}">
                     <a href="{{ route('contact') }}" class="nav-link">Contatti</a>
                 </li>

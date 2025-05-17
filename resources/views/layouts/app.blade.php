@@ -7,9 +7,8 @@
 
     <title>{{ config('app.name', 'Smile Clinica Dentistica') }}</title>
 
-    <!-- Fonts -->
+    <!-- Fonts & CSS -->
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
-    <!-- Qui tutti i CSS, usa asset()! -->
     <link rel="stylesheet" href="{{ asset('css/open-iconic-bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/animate.css') }}">
     <link rel="stylesheet" href="{{ asset('css/owl.carousel.min.css') }}">
@@ -22,9 +21,6 @@
     <link rel="stylesheet" href="{{ asset('css/flaticon.css') }}">
     <link rel="stylesheet" href="{{ asset('css/icomoon.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-
-    {{-- Se vuoi, puoi lasciare anche @vite per le risorse Laravel --}}
-    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
 </head>
 <body>
 <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -43,9 +39,11 @@
     <main>
         @yield('content')
     </main>
+    @include('layouts.footer')
+
 </div>
 
-<!-- Tutti i JS a fine body -->
+<!-- Tutti i JS vanno QUI, prima della chiusura body -->
 <script src="{{ asset('js/jquery.min.js') }}"></script>
 <script src="{{ asset('js/jquery-migrate-3.0.1.min.js') }}"></script>
 <script src="{{ asset('js/popper.min.js') }}"></script>
@@ -63,5 +61,18 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
 <script src="{{ asset('js/google-map.js') }}"></script>
 <script src="{{ asset('js/main.js') }}"></script>
+
+<!-- Owl Carousel custom (dopo che owl.carousel.min.js è stato caricato!) -->
+<script>
+    $(document).ready(function(){
+        $('.owl-carousel').owlCarousel({
+            loop:true,
+            margin:10,
+            nav:true,
+            items:1
+        });
+    });
+</script>
+@stack('scripts')
 </body>
 </html>
