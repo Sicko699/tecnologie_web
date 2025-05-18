@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -22,14 +23,28 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    // App\Http\Controllers\Auth\AuthenticatedSessionController.php
+
+    public function store(Request $request)
     {
-        $request->authenticate();
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-        $request->session()->regenerate();
+        if (Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+            $request->session()->regenerate();
+            Log::info('Utente autenticato', ['user'=>Auth::user()]);
+            // Redirezione custom: vai sempre alla route 'dashboard'
+            return redirect()->intended(route('dashboard'));
+        }
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        Log::warning('Login fallito', ['email'=> $request->email]);
+        return back()->withErrors([
+            'email' => 'Le credenziali non sono corrette.',
+        ]);
     }
+
 
     /**
      * Destroy an authenticated session.

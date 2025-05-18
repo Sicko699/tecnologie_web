@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\PublicController;
@@ -9,7 +10,7 @@ use App\Http\Controllers\Paziente\AppuntamentoController as PazienteAppuntamento
 use App\Http\Controllers\Paziente\ProfiloController as PazienteProfiloController;
 use App\Http\Controllers\Staff\DashboardController as StaffDashboardController;
 use App\Http\Controllers\Staff\AppuntamentoController as StaffAppuntamentoController;
-use App\Http\Controllers\Staff\PrestazioneController as StaffPrestazioneController;
+use App\Http\Controllers\Staff\PrestazioneControllerStaff as StaffPrestazioneController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\DipartimentoController as AdminDipartimentoController;
 use App\Http\Controllers\Admin\PrestazioneController as AdminPrestazioneController;
@@ -35,18 +36,28 @@ Route::get('/ricerca/prestazioni', [RicercaController::class, 'index'])->name('r
 // ROUTE GENERICA PER DASHBOARD (PER TUTTI I RUOLI)
 // -------------------------------------
 Route::get('/dashboard', function () {
+    \Log::info('Sono nella route dashboard', ['user' => Auth::user()]);
     if (Auth::check()) {
         $ruolo = Auth::user()->ruolo;
         if ($ruolo === 'admin') {
+            \Log::info('Redirect admin');
             return redirect()->route('admin.dashboard');
         } elseif ($ruolo === 'staff') {
+            \Log::info('Redirect staff');
             return redirect()->route('staff.dashboard');
         } else {
+            \Log::info('Redirect paziente');
             return redirect()->route('paziente.dashboard');
         }
     }
+    \Log::info('Non autenticato');
     return redirect()->route('login');
 })->middleware(['auth'])->name('dashboard');
+
+Route::get('/admin/dashboard', function() {
+    \Log::info('Siamo dentro la dashboard admin');
+    return 'Admin dashboard';
+})->name('admin.dashboard');
 
 // -------------------------------------
 // ROUTE COMPATIBILE BREEZE/PROFILE

@@ -1,4 +1,4 @@
-@extends('layouts.staff')
+@extends('layouts.app')
 @section('title', 'Appuntamenti Assegnati')
 @section('content')
     <h3>Appuntamenti Assegnati</h3>

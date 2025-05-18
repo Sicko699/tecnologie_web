@@ -1,4 +1,4 @@
-@extends('layouts.user')
+@extends('layouts.app')
 @section('title', 'I tuoi Appuntamenti')
 @section('content')
     <h3>I tuoi Appuntamenti</h3>

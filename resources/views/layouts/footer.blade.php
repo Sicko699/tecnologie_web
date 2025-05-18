@@ -17,7 +17,7 @@
                         <ul>
                             <li>
                                 <span class="icon icon-map-marker"></span>
-                                <span class="text">Via Roma 123, 00100 Roma (RM), Italia</span>
+                                <span class="text">Via Guglielmo Oberdan 12, Ancona</span>
                             </li>
                             <li>
                                 <a href="tel:+390612345678">
@@ -45,11 +45,12 @@
                 <div class="ftco-footer-widget mb-5 ml-md-4">
                     <h2 class="ftco-heading-2">Link Utili</h2>
                     <ul class="list-unstyled">
-                        <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Home</a></li>
-                        <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Chi Siamo</a></li>
-                        <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Servizi</a></li>
-                        <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Team</a></li>
-                        <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Contatti</a></li>
+                        <li><a href="{{ route('home') }}"><span class="ion-ios-arrow-round-forward mr-2"></span>Home</a></li>
+                        <li><a href="{{ route('about') }}"><span class="ion-ios-arrow-round-forward mr-2"></span>Chi Siamo</a></li>
+                        <li><a href="{{ route('department.index') }}"><span class="ion-ios-arrow-round-forward mr-2"></span>Trattamenti</a></li>
+                        <li><a href="{{ route('doctor.index') }}"><span class="ion-ios-arrow-round-forward mr-2"></span>Dottori</a></li>
+                        <li><a href="{{ route('contact') }}"><span class="ion-ios-arrow-round-forward mr-2"></span>Contatti</a></li>
+
                     </ul>
                 </div>
                 <div class="ftco-footer-widget mb-5 ml-md-4">

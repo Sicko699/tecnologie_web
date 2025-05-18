@@ -12,7 +12,6 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function ($middleware) {
         $middleware->alias([
-            'auth' => \App\Http\Middleware\EnsureUserIsAuthenticated::class,
             'role' => \App\Http\Middleware\CheckRole::class,
         ]);
     })

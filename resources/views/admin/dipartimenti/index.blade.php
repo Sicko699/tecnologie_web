@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 @section('title', 'Dipartimenti')
 @section('content')
     <h3>Gestione Dipartimenti</h3>

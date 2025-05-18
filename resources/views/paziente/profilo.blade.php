@@ -1,4 +1,4 @@
-@extends('layouts.user')
+@extends('layouts.app')
 @section('title', 'Profilo Utente')
 @section('content')
     <h3>Profilo di {{ Auth::user()->nome }} {{ Auth::user()->cognome }}</h3>

@@ -1,4 +1,4 @@
-@extends('layouts.user')
+@extends('layouts.app')
 @section('title', 'Area Utente')
 @section('content')
     <h2>Benvenuto, {{ Auth::user()->nome }}</h2>

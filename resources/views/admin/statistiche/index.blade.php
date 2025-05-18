@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 @section('title', 'Statistiche')
 @section('content')
     <h3>Statistiche sulle prestazioni</h3>

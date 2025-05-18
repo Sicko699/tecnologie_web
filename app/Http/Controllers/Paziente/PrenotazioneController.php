@@ -13,7 +13,7 @@ class PrenotazioneController extends Controller
     // Dashboard
     public function dashboard()
     {
-        return view('paziente.dashboard');
+        return view("paziente.dashboard");
     }
 
     // Lista prenotazioni proprie

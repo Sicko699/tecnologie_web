@@ -1,4 +1,4 @@
-@extends('layouts.user')
+@extends('layouts.app')
 @section('title', 'Nuova Prenotazione')
 @section('content')
     <h3>Nuova Prenotazione</h3>

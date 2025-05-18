@@ -1,4 +1,4 @@
-@extends('layouts.staff')
+@extends('layouts.app')
 @section('title', 'Prestazioni Gestite')
 @section('content')
     <h3>Prestazioni di competenza</h3>

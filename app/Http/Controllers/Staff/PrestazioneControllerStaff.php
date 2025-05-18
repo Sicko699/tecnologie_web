@@ -8,7 +8,7 @@ use App\Models\Prestazione;
 use App\Models\Dipartimento;
 use Illuminate\Support\Facades\Auth;
 
-class PrestazioneController extends Controller
+class PrestazioneControllerStaff extends Controller
 {
     // Lista prestazioni gestite dallo staff attuale
     public function index()

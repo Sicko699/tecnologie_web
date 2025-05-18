@@ -13,7 +13,7 @@
                         <h1 class="mb-4">Aiutiamo il tuo <span>benessere ogni giorno</span></h1>
                         <h3 class="subheading">Ogni giorno portiamo speranza e un sorriso ai pazienti che assistiamo
                         </h3>
-                        <p><a href="#" class="btn btn-secondary px-4 py-3 mt-3">I nostri lavori</a></p>
+                        <p><a href="{{ route('department.index') }}" class="btn btn-secondary px-4 py-3 mt-3">I nostri lavori</a></p>
                     </div>
                 </div>
             </div>
@@ -29,7 +29,7 @@
                         <h1 class="mb-4">Un sorriso lascia <br>un'impressione duratura</h1>
                         <h3 class="subheading">La tua salute è la nostra massima priorità, con cure mediche complete e accessibili.
                         </h3>
-                        <p><a href="#" class="btn btn-secondary px-4 py-3 mt-3">I nostri lavori</a></p>
+                        <p><a href="{{ route('department.index') }}" class="btn btn-secondary px-4 py-3 mt-3">I nostri lavori</a></p>
                     </div>
                 </div>
             </div>
