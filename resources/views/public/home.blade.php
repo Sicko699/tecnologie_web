@@ -57,13 +57,20 @@
                         <p>
                             Il nostro team di odontoiatri e igienisti dentali, costantemente aggiornato sulle più recenti innovazioni, adotta un approccio personalizzato basato sulla prevenzione e sull’attenzione estetica: il nostro obiettivo è restituirti un sorriso sano e armonioso, preservando la tua salute orale nel tempo.
                         </p>
-                        <div class="founder d-flex align-items-center mt-5">
-                            <div class="img" style="background-image: url(images/doc-1.jpg);"></div>
-                            <div class="text pl-3">
-                                <h3 class="mb-0">Dr. Paul Foster</h3>
-                                <span class="position">CEO, Founder</span>
+                        @if($medicoInEvidenza)
+                            <div class="founder d-flex align-items-center mt-5">
+                                <div class="img"
+                                     style="background-image: url('{{ asset('images/' . ($medicoInEvidenza->immagine ?? 'doc-1.jpg')) }}');
+                    width: 100px; height: 100px; border-radius: 50%; background-size: cover;">
+                                </div>
+                                <div class="text pl-3">
+                                    <h3 class="mb-0">{{ $medicoInEvidenza->name }}</h3>
+                                    <span class="position">{{ $medicoInEvidenza->ruolo ?? 'Medico' }}</span>
+                                </div>
                             </div>
-                        </div>
+                        @else
+                            <p class="text-danger mt-3">⚠️ Nessun medico disponibile al momento.</p>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -81,7 +88,7 @@
                         <p>
                             Dallo sbiancamento professionale alle protesi su misura, offriamo un’ampia gamma di prestazioni per mantenere il tuo sorriso sano e brillante.
                         </p>
-                        <a href="#" class="btn-custom">Scopri i servizi</a>
+                        <a href="{{ route('department.index') }}" class="btn-custom">Scopri i servizi</a>
                     </div>
                 </div>
                 <!-- Consulenza Gratuita -->
@@ -90,16 +97,25 @@
                         <div class="text-center">
                             <h3 class="mb-4">Consulenza Gratuita</h3>
                         </div>
-                        <form action="#" class="appointment-form">
+
+                        {{-- Feedback visivo --}}
+                        @if(session('success'))
+                            <div class="alert alert-success text-center">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+
+                        <form action="{{ route('richiesta.pubblica.store') }}" method="POST" class="appointment-form">
+                            @csrf
                             <div class="row">
                                 <div class="col-md-12 col-lg-6 col-xl-4">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Nome">
+                                        <input type="text" name="nome" class="form-control" placeholder="Nome" required>
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-lg-6 col-xl-4">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Cognome">
+                                        <input type="text" name="cognome" class="form-control" placeholder="Cognome" required>
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-lg-6 col-xl-4">
@@ -107,10 +123,10 @@
                                         <div class="form-field">
                                             <div class="select-wrap">
                                                 <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                                                <select name="" id="" class="form-control">
+                                                <select name="reparto" class="form-control" required>
                                                     <option style="color: black;" value="">Seleziona reparto</option>
                                                     @foreach($dipartimenti as $dipartimento)
-                                                        <option style="color: black;" value="">{{ $dipartimento->nome }}</option>
+                                                        <option style="color: black;" value="{{ $dipartimento->nome }}">{{ $dipartimento->nome }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -121,7 +137,7 @@
                                     <div class="form-group">
                                         <div class="input-wrap">
                                             <div class="icon"><span class="ion-md-calendar"></span></div>
-                                            <input type="text" class="form-control appointment_date" placeholder="Data">
+                                            <input type="text" name="data" class="form-control appointment_date" placeholder="Data" required>
                                         </div>
                                     </div>
                                 </div>
@@ -129,7 +145,7 @@
                                     <div class="form-group">
                                         <div class="input-wrap">
                                             <div class="icon"><span class="ion-ios-clock"></span></div>
-                                            <input type="text" class="form-control appointment_time" placeholder="Orario">
+                                            <input type="text" name="ora" class="form-control appointment_time" placeholder="Orario" required>
                                         </div>
                                     </div>
                                 </div>
@@ -142,6 +158,7 @@
                         </form>
                     </div>
                 </div>
+
                 <!-- Trova un Dentista -->
                 <div class="col-md-3 d-flex align-items-stretch">
                     <div class="consultation w-100 text-center px-4 px-md-5">
@@ -149,7 +166,7 @@
                         <p>
                             Professionisti qualificati e sempre aggiornati per offrirti le migliori cure in un ambiente accogliente.
                         </p>
-                        <a href="#" class="btn-custom">Scopri il team</a>
+                        <a href="{{ route('doctor.index') }}" class="btn-custom">Scopri il team</a>
                     </div>
                 </div>
             </div>
@@ -218,6 +235,7 @@
                             </div>
                             <div class="media-body p-2 mt-3">
                                 <h3 class="heading">{{ $dentista->nome }}</h3>
+                                <p>{{ $dentista->membroStaff->descrizione ?? 'Nessuna descrizione disponibile' }}</p>
                             </div>
                         </div>
                     </div>

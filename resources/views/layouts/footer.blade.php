@@ -74,22 +74,11 @@
                         Domenica: chiuso
                     </h3>
                 </div>
-                <div class="ftco-footer-widget mb-5">
-                    <h2 class="ftco-heading-2">Iscriviti</h2>
-                    <form action="#" class="subscribe-form">
-                        <div class="form-group">
-                            <input
-                                type="email"
-                                class="form-control mb-2 text-center"
-                                placeholder="Inserisci la tua email"
-                            />
-                            <input
-                                type="submit"
-                                value="Iscriviti"
-                                class="form-control submit px-3"
-                            />
-                        </div>
-                    </form>
+                <div class="ftco-footer-widget mb-5 footer-map-large "style="height: 250px; min-height: 200px; width: 320px; min-width: 270px">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2906.417091779479!2d13.513812415554915!3d43.606215879125836!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x132da3c58ebfaab7%3A0xe3032a526e3e3b05!2sVia%20Guglielmo%20Oberdan%2C%2012%2C%2060118%20Ancona%20AN!5e0!3m2!1sit!2sit!4v1688400000000"
+                        width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0">
+                    </iframe>
                 </div>
             </div>
         </div>

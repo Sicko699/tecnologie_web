@@ -25,12 +25,14 @@ use App\Http\Controllers\Admin\StatisticaController as AdminStatisticaController
 Route::get('/', [PublicController::class, 'home'])->name('home');
 Route::get('/dottori', [PublicController::class, 'doctor'])->name('doctor.index');
 Route::get('/trattamenti', [PublicController::class, 'department'])->name('department.index');
-Route::get('/prezzi', [PublicController::class, 'prezzi'])->name('prezzi');
 Route::get('/contatti', [PublicController::class, 'contact'])->name('contact');
 Route::get('/about', [PublicController::class, 'about'])->name('about');
+Route::post('/richiesta-pubblica', [RichiestaController::class, 'publicStore'])->name('richiesta.pubblica.store');
+
 
 // Ricerca prestazioni (visibile a tutti)
 Route::get('/ricerca/prestazioni', [RicercaController::class, 'index'])->name('ricerca.prestazioni');
+Route::get('/ricerca', [RicercaController::class, 'index'])->name('ricerca.index');
 
 // -------------------------------------
 // ROUTE GENERICA PER DASHBOARD (PER TUTTI I RUOLI)

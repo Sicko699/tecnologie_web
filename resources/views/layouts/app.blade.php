@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Smile Clinica Dentistica') }}</title>
+    <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
 
-    <!-- Fonts & CSS -->
+    <title>@yield('title', config('app.name', 'Smile Clinica Dentistica'))</title>
+
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/open-iconic-bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/animate.css') }}">
@@ -26,7 +27,6 @@
 <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
     @include('layouts.navigation')
 
-    <!-- Page Heading -->
     @isset($header)
         <header class="bg-white dark:bg-gray-800 shadow">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -35,7 +35,6 @@
         </header>
     @endisset
 
-    <!-- Page Content -->
     <main>
         @yield('content')
     </main>
@@ -43,7 +42,6 @@
 
 </div>
 
-<!-- Tutti i JS vanno QUI, prima della chiusura body -->
 <script src="{{ asset('js/jquery.min.js') }}"></script>
 <script src="{{ asset('js/jquery-migrate-3.0.1.min.js') }}"></script>
 <script src="{{ asset('js/popper.min.js') }}"></script>
@@ -62,7 +60,6 @@
 <script src="{{ asset('js/google-map.js') }}"></script>
 <script src="{{ asset('js/main.js') }}"></script>
 
-<!-- Owl Carousel custom (dopo che owl.carousel.min.js è stato caricato!) -->
 <script>
     $(document).ready(function(){
         $('.owl-carousel').owlCarousel({

@@ -6,6 +6,7 @@ use App\Models\Richiesta;
 use App\Models\User;
 use App\Models\Prestazione;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class RichiestaController extends Controller
 {
@@ -68,5 +69,30 @@ class RichiestaController extends Controller
         $richiesta = Richiesta::findOrFail($id);
         $richiesta->delete();
         return redirect()->route('richieste.index')->with('success', 'Richiesta eliminata!');
+    }
+
+    public function publicStore(Request $request)
+    {
+        $request->validate([
+            'nome' => 'required|string|max:255',
+            'cognome' => 'required|string|max:255',
+            'reparto' => 'required|string|max:255',
+            'data' => 'required|string', // string perché viene convertita manualmente
+            'ora' => 'required|string|max:10',
+        ]);
+
+        // Conversione data da 'd/m/Y' a 'Y-m-d'
+        $dataConvertita = Carbon::createFromFormat('d/m/Y', $request->data)->format('Y-m-d');
+
+        Richiesta::create([
+            'nome' => $request->nome,
+            'cognome' => $request->cognome,
+            'reparto' => $request->reparto,
+            'data_richiesta' => $dataConvertita,
+            'ora' => $request->ora,
+            'stato' => 'in attesa'
+        ]);
+
+        return redirect()->back()->with('success', 'Richiesta inviata con successo!');
     }
 }

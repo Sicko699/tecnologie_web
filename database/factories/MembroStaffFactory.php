@@ -11,6 +11,7 @@ class MembroStaffFactory extends Factory
         return [
             'codice_fiscale' => null,   // impostato dal seeder (FK users)
             'id_dipartimento' => null,  // impostato dal seeder
+            'descrizione' => $this->faker->sentence
         ];
     }
 }
