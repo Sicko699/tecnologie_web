@@ -10,8 +10,8 @@ class CreateRichiesteTable extends Migration
     {
         Schema::create('richieste', function (Blueprint $table) {
             $table->id('id_richiesta');
-            $table->string('id_utente', 16);
-            $table->unsignedBigInteger('id_prestazione');
+            $table->string('id_utente', 16)->nullable(); // permetti NULL
+            $table->unsignedBigInteger('id_prestazione')->nullable();
             $table->date('data_richiesta');
             $table->string('giorno_escluso', 100)->nullable();
             $table->string('stato', 30)->default('in attesa');
