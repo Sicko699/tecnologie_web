@@ -9,10 +9,10 @@
         <table class="table">
             <thead>
             <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Email</th>
                 <th>Codice Fiscale</th>
+                <th>Nome</th>
+                <th>Cognome</th>
+                <th>Email</th>
                 <th>Ruolo</th>
                 <th>Azioni</th>
             </tr>
@@ -22,6 +22,7 @@
                 <tr>
                     <td>{{ $u->codice_fiscale }}</td>
                     <td>{{ $u->nome }}</td>
+                    <td>{{ $u->cognome }}</td>
                     <td>{{ $u->email }}</td>
                     <td>{{ ucfirst($u->ruolo) }}</td>
                     <td>

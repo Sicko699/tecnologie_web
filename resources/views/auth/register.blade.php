@@ -29,6 +29,7 @@
                 <input type="date" name="data_nascita" class="form-control" id="data_nascita" required>
                 @error('data_nascita') <div class="text-danger small">{{ $message }}</div> @enderror
             </div>
+
             <div class="mb-3 position-relative">
                 <label for="provincia_nascita" class="form-label">Provincia di nascita</label>
                 <input type="text" name="provincia_nascita" class="form-control" id="provincia_nascita" autocomplete="off" maxlength="2" required>

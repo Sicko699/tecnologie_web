@@ -28,22 +28,34 @@ class UtenteController extends Controller
         return view('admin.utenti.create');
     }
 
-    public function store(Request $request): RedirectResponse{
+    public function store(Request $request): RedirectResponse
+    {
         $request->validate([
             'codice_fiscale' => ['required', 'string', 'size:16', 'unique:users,codice_fiscale'],
             'nome'           => ['required', 'string', 'max:100'],
+            'cognome'        => ['required', 'string', 'max:100'],
             'email'          => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'ruolo'          => ['required', 'in:admin,staff'],
+            'telefono'       => ['nullable', 'string', 'max:50'],
+            'data_nascita'   => ['nullable', 'date'],
+            'foto'           => ['nullable', 'image', 'max:2048'],
             'password'       => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // Gestione upload foto
+        $fotoPath = null;
+        if ($request->hasFile('foto')) {
+            $fotoPath = $request->file('foto')->store('profili', 'public');
+        }
 
-        // Creazione dell'utente
         $user = User::create([
             'codice_fiscale' => strtoupper($request->codice_fiscale),
             'nome'           => $request->nome,
+            'cognome'        => $request->cognome,
             'email'          => $request->email,
-            'ruolo'          => $request->ruolo,
+            'telefono'       => $request->telefono,
+            'data_nascita'   => $request->data_nascita,
+            'foto'           => $fotoPath,
+            'user'           => $request->ruolo, // correggi questa linea nel create
             'password'       => Hash::make($request->password),
         ]);
 

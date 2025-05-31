@@ -13,6 +13,30 @@
                 @error('nome') <div class="text-danger">{{ $message }}</div>@enderror
             </div>
 
+            {{-- COGNOME --}}
+            <div class="form-group">
+                <label for="cognome" class="form-label">Cognome</label>
+                <input type="text" name="cognome" class="form-control" id="cognome" required>
+                @error('cognome') <div class="text-danger small">{{ $message }}</div> @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="sesso" class="form-label">Sesso</label>
+                <select name="sesso" id="sesso" class="form-control" required>
+                    <option value="">Seleziona</option>
+                    <option value="M">Maschio</option>
+                    <option value="F">Femmina</option>
+                </select>
+                @error('sesso') <div class="text-danger small">{{ $message }}</div> @enderror
+            </div>
+
+            {{-- TELEFONO --}}
+            <div class="form-group mt-2">
+                <label for="telefono" class="form-label">Telefono</label>
+                <input type="text" name="telefono" class="form-control">
+                @error('telefono') <div class="text-danger small">{{ $message }}</div> @enderror
+            </div>
+
             {{-- CODICE FISCALE --}}
             <div class="form-group mt-2">
                 <label for="codice_fiscale">Codice Fiscale</label>
@@ -24,6 +48,18 @@
                 <label for="email">Email</label>
                 <input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
                 @error('email') <div class="text-danger">{{ $message }}</div>@enderror
+            </div>
+
+            <div class="mb-3">
+                <label for="foto" class="form-label">Foto Profilo</label>
+                <input type="file" name="foto" class="form-control" accept="image/*">
+                @error('foto') <div class="text-danger small">{{ $message }}</div> @enderror
+            </div>
+
+            <div class="mb-3">
+                <label for="data_nascita" class="form-label">Data di nascita</label>
+                <input type="date" name="data_nascita" class="form-control" id="data_nascita" required>
+                @error('data_nascita') <div class="text-danger small">{{ $message }}</div> @enderror
             </div>
 
             <div class="form-group mt-2">
