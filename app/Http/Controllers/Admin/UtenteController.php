@@ -55,7 +55,7 @@ class UtenteController extends Controller
             'telefono'       => $request->telefono,
             'data_nascita'   => $request->data_nascita,
             'foto'           => $fotoPath,
-            'user'           => $request->ruolo, // correggi questa linea nel create
+            'user'           => $request->ruolo,
             'password'       => Hash::make($request->password),
         ]);
 
