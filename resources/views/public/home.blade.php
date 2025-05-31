@@ -120,35 +120,10 @@
                                 </div>
                                 <div class="col-md-12 col-lg-6 col-xl-4">
                                     <div class="form-group">
-                                        <div class="form-field">
-                                            <div class="select-wrap">
-                                                <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                                                <select name="reparto" class="form-control" required>
-                                                    <option style="color: black;" value="">Seleziona reparto</option>
-                                                    @foreach($dipartimenti as $dipartimento)
-                                                        <option style="color: black;" value="{{ $dipartimento->nome }}">{{ $dipartimento->nome }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
+                                        <input type="text" name="telefono" class="form-control" placeholder="Numero di telefono" required>
                                     </div>
                                 </div>
-                                <div class="col-md-12 col-lg-6 col-xl-4">
-                                    <div class="form-group">
-                                        <div class="input-wrap">
-                                            <div class="icon"><span class="ion-md-calendar"></span></div>
-                                            <input type="text" name="data" class="form-control appointment_date" placeholder="Data" required>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 col-lg-6 col-xl-4">
-                                    <div class="form-group">
-                                        <div class="input-wrap">
-                                            <div class="icon"><span class="ion-ios-clock"></span></div>
-                                            <input type="text" name="ora" class="form-control appointment_time" placeholder="Orario" required>
-                                        </div>
-                                    </div>
-                                </div>
+
                                 <div class="col-md-12 col-lg-6 col-xl-4">
                                     <div class="form-group">
                                         <input type="submit" value="Prenota" class="btn btn-secondary py-2 px-4">
