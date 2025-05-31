@@ -21,7 +21,7 @@
             <label>Telefono</label>
             <input type="text" class="form-control" name="telefono" value="{{ old('telefono', Auth::user()->telefono) }}">
         </div>
-        <button class="btn btn-primary" type="submit">Salva modifiche</button>
+        <a href="{{ route('paziente.dashboard') }}" class="btn btn-primary">Salva modifiche</a>
         <a href="{{ route('paziente.dashboard') }}" class="btn btn-secondary">Indietro</a>
     </form>
     <form method="POST" action="{{ route('paziente.account.delete') }}" class="mt-3">

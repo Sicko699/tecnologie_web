@@ -1,7 +1,7 @@
 @extends('layouts.app')
-@section('title', 'Nuova Prenotazione')
+@section('title', 'Nuova Richiesta')
 @section('content')
-    <h3>Nuova Prenotazione</h3>
+    <h3>Nuova Richiesta</h3>
     <form method="POST" action="{{ route('paziente.prenotazioni.store') }}">
         @csrf
         <div class="mb-3">

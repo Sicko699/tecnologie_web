@@ -1,7 +1,7 @@
 @extends('layouts.app')
-@section('title', 'Modifica Prenotazione')
+@section('title', 'Modifica Richiesta')
 @section('content')
-    <h3>Modifica Prenotazione</h3>
+    <h3>Modifica Richieste</h3>
     <form method="POST" action="{{ route('paziente.prenotazioni.update', $prenotazione->id_richiesta) }}">
         @csrf
         @method('PUT')

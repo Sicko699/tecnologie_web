@@ -1,7 +1,7 @@
 @extends('layouts.app')
-@section('title', 'Dettaglio Prenotazione')
+@section('title', 'Dettaglio Richiesta')
 @section('content')
-    <h3>Dettaglio Prenotazione</h3>
+    <h3>Dettaglio Richieste</h3>
     <ul class="list-group">
         <li class="list-group-item"><strong>Prestazione:</strong> {{ $prenotazione->prestazione->nome }}</li>
         <li class="list-group-item"><strong>Data richiesta:</strong> {{ $prenotazione->data_richiesta }}</li>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
-@section('title', 'Le tue Prenotazioni')
+@section('title', 'Le tue richieste ')
 @section('content')
-    <h3>Gestisci Prenotazioni</h3>
+    <h3>Gestisci Richieste</h3>
     <a href="{{ route('paziente.prenotazioni.create') }}" class="btn btn-success mb-3">Nuova Prenotazione</a>
     <table class="table table-hover">
         <thead>
