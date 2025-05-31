@@ -53,27 +53,29 @@ class UtenteController extends Controller
     }
 
 
-    public function edit($utenti)
+    public function edit($codice_fiscale)
     {
-        $utente = User::findOrFail($utenti);
+        $utente = User::findOrFail($codice_fiscale);
         return view('admin.utenti.edit', compact('utente'));
     }
 
-    public function update(Request $request, $utenti)
-{
-    $utente = User::findOrFail($utenti);
+    public function update(Request $request, $codice_fiscale)
+    {
+        $utente = User::findOrFail($codice_fiscale);
 
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $utente->id,
+            'nome'  => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $utente->codice_fiscale . ',codice_fiscale',
             'ruolo' => 'required|in:admin,staff',
         ]);
 
+
         $utente->update([
-            'name' => $request->name,
+            'nome' => $request->nome,
             'email' => $request->email,
             'ruolo' => $request->ruolo,
         ]);
+
 
         return redirect()->route('admin.utenti.index')->with('success', 'Utente aggiornato!');
     }

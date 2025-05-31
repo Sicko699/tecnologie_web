@@ -4,8 +4,9 @@
 @section('content')
     <div class="container mt-4">
         <h1>Modifica Utente Staff/Admin</h1>
-        <form action="{{ route('admin.utenti.update', ['utenti' => $utente->id]) }}" method="POST">
-            @csrf @method('PUT')
+        <form action="{{ route('admin.utenti.update', ['utenti' => $utente->codice_fiscale]) }}" method="POST">
+            @csrf
+            @method('PUT')
             <label for="nome">Nome</label>
             <input type="text" name="nome" class="form-control" value="{{ old('nome') }}" required>
             @error('nome') <div class="text-danger">{{ $message }}</div>@enderror
