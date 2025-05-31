@@ -25,8 +25,7 @@ class PrestazioneController extends Controller
         $request->validate([
             'nome' => 'required|string|max:100',
             'descrizione' => 'nullable|string',
-            'id_dipartimento' => 'required|exists:dipartimenti,id_dipartimento',
-            'id_membro' => 'nullable|exists:membro_staff,codice_fiscale'
+            'id_dipartimento' => 'required|exists:dipartimenti,id_dipartimento'
         ]);
         Prestazione::create($request->all());
         return redirect()->route('prestazioni.index')->with('success', 'Prestazione creata!');
@@ -51,7 +50,6 @@ class PrestazioneController extends Controller
             'nome' => 'required|string|max:100',
             'descrizione' => 'nullable|string',
             'id_dipartimento' => 'required|exists:dipartimenti,id_dipartimento',
-            'id_membro' => 'nullable|exists:membro_staff,codice_fiscale'
         ]);
         $prestazione = Prestazione::findOrFail($id);
         $prestazione->update($request->all());

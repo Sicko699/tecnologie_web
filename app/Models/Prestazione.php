@@ -15,7 +15,7 @@ class Prestazione extends Model
     protected $primaryKey = 'id_prestazione';
 
     protected $fillable = [
-        'nome', 'descrizione', 'id_dipartimento', 'id_membro'
+        'nome', 'descrizione', 'id_dipartimento'
     ];
 
     public function dipartimento()

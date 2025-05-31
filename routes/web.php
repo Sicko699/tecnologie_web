@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AgendaController;
 use App\Http\Controllers\RichiestaController;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
@@ -116,4 +117,5 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('appuntamenti', AdminAppuntamentoController::class);
     Route::resource('notifiche', AdminNotificaController::class)->only(['index', 'store', 'destroy']);
     Route::resource('statistiche', AdminStatisticaController::class)->only(['index', 'show']);
+    Route::resource('agende', AgendaController::class);
 });

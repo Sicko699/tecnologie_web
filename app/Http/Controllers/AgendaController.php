@@ -29,7 +29,7 @@ class AgendaController extends Controller
             'max_appuntamenti' => 'required|integer|min:1'
         ]);
         Agenda::create($request->all());
-        return redirect()->route('agende.index')->with('success', 'Slot agenda creato!');
+        return redirect()->route('agende.index')->with('success', 'Slot agende creato!');
     }
 
     public function show($id)
@@ -55,13 +55,13 @@ class AgendaController extends Controller
         ]);
         $agenda = Agenda::findOrFail($id);
         $agenda->update($request->all());
-        return redirect()->route('agende.index')->with('success', 'Slot agenda aggiornato!');
+        return redirect()->route('agende.index')->with('success', 'Slot agende aggiornato!');
     }
 
     public function destroy($id)
     {
         $agenda = Agenda::findOrFail($id);
         $agenda->delete();
-        return redirect()->route('agende.index')->with('success', 'Slot agenda eliminato!');
+        return redirect()->route('agende.index')->with('success', 'Slot agende eliminato!');
     }
 }

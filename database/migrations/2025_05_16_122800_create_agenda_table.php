@@ -8,7 +8,7 @@ class CreateAgendaTable extends Migration
 {
     public function up()
     {
-        Schema::create('agenda', function (Blueprint $table) {
+        Schema::create('agende', function (Blueprint $table) {
             $table->id('id_agenda');
             $table->unsignedBigInteger('id_prestazione');
             $table->string('giorno_settimana', 20);
@@ -20,6 +20,6 @@ class CreateAgendaTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('agenda');
+        Schema::dropIfExists('agende');
     }
 }
