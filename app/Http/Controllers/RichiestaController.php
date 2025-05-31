@@ -28,7 +28,6 @@ class RichiestaController extends Controller
         $request->validate([
             'id_utente' => 'required|exists:users,codice_fiscale',
             'id_prestazione' => 'required|exists:prestazioni,id_prestazione',
-            'data_richiesta' => 'required|date',
             'giorno_escluso' => 'nullable|date',
             'stato' => 'required|string|max:50'
         ]);
@@ -55,7 +54,6 @@ class RichiestaController extends Controller
         $request->validate([
             'id_utente' => 'required|exists:users,codice_fiscale',
             'id_prestazione' => 'required|exists:prestazioni,id_prestazione',
-            'data_richiesta' => 'required|date',
             'giorno_escluso' => 'nullable|date',
             'stato' => 'required|string|max:50'
         ]);
@@ -88,7 +86,6 @@ class RichiestaController extends Controller
             'nome' => $request->nome,
             'cognome' => $request->cognome,
             'reparto' => $request->reparto,
-            'data_richiesta' => $dataConvertita,
             'ora' => $request->ora,
             'stato' => 'in attesa'
         ]);

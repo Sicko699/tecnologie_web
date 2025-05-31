@@ -42,13 +42,11 @@ class PrenotazioneController extends Controller
     {
         $request->validate([
             'id_prestazione' => 'required|exists:prestazioni,id_prestazione',
-            'data_richiesta' => 'required|date',
             'giorno_escluso' => 'nullable|string|max:100'
         ]);
         Richiesta::create([
             'id_utente' => Auth::user()->codice_fiscale,
             'id_prestazione' => $request->id_prestazione,
-            'data_richiesta' => $request->data_richiesta,
             'giorno_escluso' => $request->giorno_escluso,
             'stato' => 'in attesa'
         ]);
@@ -66,11 +64,10 @@ class PrenotazioneController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'data_richiesta' => 'required|date',
             'giorno_escluso' => 'nullable|string|max:100'
         ]);
         $prenotazione = Richiesta::where('id_utente', Auth::user()->codice_fiscale)->findOrFail($id);
-        $prenotazione->update($request->only('data_richiesta', 'giorno_escluso'));
+        $prenotazione->update($request->only('giorno_escluso'));
         return redirect()->route('paziente.prenotazioni.index')->with('success', 'Prenotazione aggiornata!');
     }
 

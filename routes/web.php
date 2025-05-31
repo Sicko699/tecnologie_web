@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\NotificaController as AdminNotificaController;
 use App\Http\Controllers\Admin\StatisticaController as AdminStatisticaController;
 
 
+
 // -------------------------------------
 // PUBBLICO
 // -------------------------------------
@@ -99,11 +100,26 @@ Route::middleware(['auth', 'role:paziente'])->prefix('user')->name('paziente.')-
 // -------------------------------------
 Route::middleware(['auth', 'role:staff'])->prefix('staff')->name('staff.')->group(function () {
     Route::get('/dashboard', [StaffDashboardController::class, 'index'])->name('dashboard');
-    // Appuntamenti
-    Route::resource('appuntamenti', StaffAppuntamentoController::class)->except(['show', 'create']);
-    // Prestazioni
+
+    // Richieste pendenti (nuova route)
+    Route::get('/richieste', [StaffAppuntamentoController::class, 'richiestePendenti'])->name('richieste.index');
+
+    // Assegna appuntamento a richiesta (step di conferma slot)
+    Route::get('/appuntamenti/create/{richiesta}', [StaffAppuntamentoController::class, 'create'])->name('appuntamenti.create');
+    Route::post('/appuntamenti', [StaffAppuntamentoController::class, 'store'])->name('appuntamenti.store');
+
+    // Gestione appuntamenti (modifica/annulla)
+    Route::get('/appuntamenti', [StaffAppuntamentoController::class, 'index'])->name('appuntamenti.index');
+    Route::get('/appuntamenti/{appuntamento}/edit', [StaffAppuntamentoController::class, 'edit'])->name('appuntamenti.edit');
+    Route::put('/appuntamenti/{appuntamento}', [StaffAppuntamentoController::class, 'update'])->name('appuntamenti.update');
+    Route::delete('/appuntamenti/{appuntamento}', [StaffAppuntamentoController::class, 'destroy'])->name('appuntamenti.destroy');
+
+    // Agenda giornaliera (visualizzazione appuntamenti per prestazione e giorno)
+    Route::get('/agenda', [StaffAppuntamentoController::class, 'agendaGiornalieraForm'])->name('agenda.giornaliera.form');
+    Route::get('/agenda/giornaliera', [StaffAppuntamentoController::class, 'agendaGiornaliera'])->name('agenda.giornaliera');
     Route::resource('prestazioni', StaffPrestazioneController::class)->except(['show']);
 });
+
 
 // -------------------------------------
 // AREA ADMIN (auth + ruolo admin)

@@ -15,7 +15,7 @@ class Richiesta extends Model
     protected $primaryKey = 'id_richiesta';
 
     protected $fillable = [
-        'id_utente', 'id_prestazione', 'data_richiesta', 'giorno_escluso', 'stato'
+        'id_utente', 'id_prestazione', 'giorno_escluso', 'stato'
     ];
 
     public function utente()

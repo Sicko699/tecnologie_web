@@ -16,7 +16,6 @@
         @foreach($prenotazioni as $prenotazione)
             <tr>
                 <td>{{ $prenotazione->prestazione->nome }}</td>
-                <td>{{ $prenotazione->data_richiesta }}</td>
                 <td>{{ $prenotazione->stato }}</td>
                 <td>
                     <a href="{{ route('paziente.prenotazioni.show', $prenotazione->id_richiesta) }}" class="btn btn-info btn-sm">Visualizza</a>

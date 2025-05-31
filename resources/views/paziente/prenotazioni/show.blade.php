@@ -4,7 +4,6 @@
     <h3>Dettaglio Richieste</h3>
     <ul class="list-group">
         <li class="list-group-item"><strong>Prestazione:</strong> {{ $prenotazione->prestazione->nome }}</li>
-        <li class="list-group-item"><strong>Data richiesta:</strong> {{ $prenotazione->data_richiesta }}</li>
         <li class="list-group-item"><strong>Stato:</strong> {{ $prenotazione->stato }}</li>
         <li class="list-group-item"><strong>Dipartimento:</strong> {{ $prenotazione->prestazione->dipartimento->nome }}</li>
     </ul>
