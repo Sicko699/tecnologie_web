@@ -13,7 +13,7 @@ class CreatePrestazioniTable extends Migration
             $table->string('nome', 100);
             $table->string('descrizione', 255)->nullable();
             $table->unsignedBigInteger('id_dipartimento');
-            $table->string('id_membro', 16);
+            $table->string('id_membro', 16)->nullable();
             $table->foreign('id_dipartimento')->references('id_dipartimento')->on('dipartimenti')->onDelete('cascade');
             $table->foreign('id_membro')->references('codice_fiscale')->on('membro_staff')->onDelete('cascade');
         });

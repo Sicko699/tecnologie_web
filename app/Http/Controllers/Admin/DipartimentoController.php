@@ -3,11 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Dipartimento;
+use Illuminate\Http\Request;
 
 class DipartimentoController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'role:admin']);
+    }
+
     public function index()
     {
         $dipartimenti = Dipartimento::all();
@@ -22,40 +27,36 @@ class DipartimentoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nome' => 'required|max:255',
-            'descrizione' => 'nullable|string|max:255'
+            'nome' => 'required|string|max:255',
         ]);
-        Dipartimento::create($request->only('nome', 'descrizione'));
+        $dipartimento = Dipartimento::create([
+            'nome' => $request->nome,
+        ]);
+        // Se vuoi tornare subito alla modifica del nuovo dipartimento:
+        // return redirect()->route('admin.dipartimenti.edit', ['dipartimento' => $dipartimento->id])->with('success', 'Dipartimento creato!');
+        // Oppure solo alla lista:
         return redirect()->route('admin.dipartimenti.index')->with('success', 'Dipartimento creato!');
     }
 
-    public function show($id)
+    // Con il binding SINGOLARE!
+    public function edit(Dipartimento $dipartimenti)
     {
-        $dipartimento = Dipartimento::findOrFail($id);
-        return view('admin.dipartimenti.show', compact('dipartimento'));
-    }
-
-    public function edit($id)
-    {
-        $dipartimento = Dipartimento::findOrFail($id);
+        $dipartimento = $dipartimenti;
         return view('admin.dipartimenti.edit', compact('dipartimento'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Dipartimento $dipartimenti)
     {
-        $request->validate([
-            'nome' => 'required|max:255',
-            'descrizione' => 'nullable|string|max:255'
+        $dipartimenti->update([
+            'nome' => $request->nome,
         ]);
-        $dipartimento = Dipartimento::findOrFail($id);
-        $dipartimento->update($request->only('nome', 'descrizione'));
         return redirect()->route('admin.dipartimenti.index')->with('success', 'Dipartimento aggiornato!');
     }
 
-    public function destroy($id)
+    public function destroy(Dipartimento $dipartimenti)
     {
-        $dipartimento = Dipartimento::findOrFail($id);
-        $dipartimento->delete();
+        $dipartimenti->delete();
         return redirect()->route('admin.dipartimenti.index')->with('success', 'Dipartimento eliminato!');
     }
+
 }

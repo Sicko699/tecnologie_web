@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Admin\AgendaController;
 use App\Http\Controllers\RichiestaController;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\PublicController;
@@ -20,6 +19,7 @@ use App\Http\Controllers\Admin\UtenteController as AdminUtenteController;
 use App\Http\Controllers\Admin\AppuntamentoController as AdminAppuntamentoController;
 use App\Http\Controllers\Admin\NotificaController as AdminNotificaController;
 use App\Http\Controllers\Admin\StatisticaController as AdminStatisticaController;
+
 
 // -------------------------------------
 // PUBBLICO

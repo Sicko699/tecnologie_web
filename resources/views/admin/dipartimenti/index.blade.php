@@ -1,31 +1,36 @@
 @extends('layouts.app')
 @section('title', 'Dipartimenti')
+
 @section('content')
-    <h3>Gestione Dipartimenti</h3>
-    <a href="{{ route('admin.dipartimenti.create') }}" class="btn btn-success mb-3">Nuovo Dipartimento</a>
-    <table class="table table-hover">
-        <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Descrizione</th>
-            <th>Azioni</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach($dipartimenti as $dip)
+    <div class="container mt-4">
+        <h1>Dipartimenti</h1>
+        <a href="{{ route('admin.dipartimenti.create') }}" class="btn btn-success mb-3">Aggiungi Dipartimento</a>
+        @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
+        <table class="table">
+            <thead>
             <tr>
-                <td>{{ $dip->nome }}</td>
-                <td>{{ $dip->descrizione }}</td>
-                <td>
-                    <a href="{{ route('admin.dipartimenti.show', $dip->id_dipartimento) }}" class="btn btn-info btn-sm">Visualizza</a>
-                    <a href="{{ route('admin.dipartimenti.edit', $dip->id_dipartimento) }}" class="btn btn-warning btn-sm">Modifica</a>
-                    <form action="{{ route('admin.dipartimenti.destroy', $dip->id_dipartimento) }}" method="POST" style="display:inline">
-                        @csrf @method('DELETE')
-                        <button class="btn btn-danger btn-sm" onclick="return confirm('Confermi eliminazione?')">Elimina</button>
-                    </form>
-                </td>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Azioni</th>
             </tr>
-        @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            @foreach($dipartimenti as $d)
+                <tr>
+                    <td>{{ $d->id_dipartimento }}</td>
+                    <td>{{ $d->nome }}</td>
+                    <td>
+                        <a href="{{ route('admin.dipartimenti.edit', ['dipartimenti' => $d->id_dipartimento]) }}" class="btn btn-primary btn-sm">Modifica</a>
+
+                        <form action="{{ route('admin.dipartimenti.destroy', ['dipartimenti' => $d->id_dipartimento]) }}" method="POST" class="d-inline" onsubmit="return confirm('Confermi eliminazione?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm">Elimina</button>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
 @endsection
