@@ -1,19 +1,18 @@
 @extends('layouts.app')
-@section('title', 'Nuovo Dipartimento')
+@section('title', 'Aggiungi Dipartimento')
+
 @section('content')
-    <div class="container">
-        <h1>Aggiungi Dipartimento</h1>
-        <form method="POST" action="{{ route('dipartimenti.store') }}">
+    <div class="container mt-4">
+        <h1>Nuovo Dipartimento</h1>
+        <form action="{{ route('admin.dipartimenti.store') }}" method="POST">
             @csrf
-            <div class="mb-3">
-                <label>Nome</label>
-                <input type="text" name="nome" class="form-control" required>
+            <div class="form-group">
+                <label for="nome">Nome</label>
+                <input type="text" name="nome" class="form-control" value="{{ old('nome') }}" required>
+                @error('nome') <div class="text-danger">{{ $message }}</div>@enderror
             </div>
-            <div class="mb-3">
-                <label>Descrizione</label>
-                <textarea name="descrizione" class="form-control"></textarea>
-            </div>
-            <button class="btn btn-primary" type="submit">Salva</button>
+            <button type="submit" class="btn btn-success mt-2">Crea</button>
+            <a href="{{ route('admin.dipartimenti.index') }}" class="btn btn-secondary mt-2">Annulla</a>
         </form>
     </div>
 @endsection
