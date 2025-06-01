@@ -33,7 +33,6 @@
                             {{ old('id_dipartimento', $agenda->id_dipartimento) == $d->id_dipartimento ? 'selected' : '' }}>
                             {{ $d->nome }}
                         </option>
-
                     @endforeach
                 </select>
                 @error('id_dipartimento') <div class="text-danger">{{ $message }}</div> @enderror
@@ -48,7 +47,6 @@
                             {{ old('id_prestazione', $agenda->id_prestazione) == $prestazione->id_prestazione ? 'selected' : '' }}>
                             {{ $prestazione->nome }} ({{ $prestazione->dipartimento->nome }})
                         </option>
-
                     @endforeach
                 </select>
                 @error('id_prestazione') <div class="text-danger">{{ $message }}</div> @enderror
@@ -66,13 +64,42 @@
                 @error('giorno_settimana') <div class="text-danger">{{ $message }}</div> @enderror
             </div>
 
-            {{-- Slot orario --}}
-            <div class="form-group">
-                <label for="slot_orario">Slot Orario</label>
-                <input type="text" name="slot_orario" id="slot_orario" class="form-control"
-                       value="{{ old('slot_orario', $agenda->slot_orario) }}" required>
+            {{-- Slot orari multipli --}}
+            @php
+                $slots = [];
+                for ($h = 9; $h < 19; $h++) {
+                    $start = sprintf('%02d:00', $h);
+                    $end = sprintf('%02d:00', $h+1);
+                    $slots[] = "$start-$end";
+                }
+                // Recupera orari già selezionati (array da old() oppure dall'agenda)
+                $selectedOrari = old('orari', $agenda->orari ?? []);
+                // Se arriva come stringa JSON decodifica
+                if (is_string($selectedOrari)) {
+                    $selectedOrari = json_decode($selectedOrari, true);
+                }
+                if (!is_array($selectedOrari)) {
+                    $selectedOrari = [];
+                }
+            @endphp
+            <div class="mb-3 mt-2">
+                <label class="form-label">Slot orari disponibili</label>
+                <div class="btn-group btn-group-toggle d-flex flex-wrap" data-toggle="buttons">
+                    @foreach($slots as $slot)
+                        <label class="btn btn-outline-primary m-1 {{ in_array($slot, $selectedOrari) ? 'active' : '' }}">
+                            <input
+                                type="checkbox"
+                                name="orari[]"
+                                value="{{ $slot }}"
+                                autocomplete="off"
+                                {{ in_array($slot, $selectedOrari) ? 'checked' : '' }}
+                            > {{ $slot }}
+                        </label>
+                    @endforeach
+                </div>
+                <small class="form-text text-muted">Seleziona uno o più slot orari (1h ciascuno).</small>
+                @error('orari') <div class="text-danger">{{ $message }}</div> @enderror
             </div>
-
 
             {{-- Max appuntamenti --}}
             <div class="form-group mt-2">
@@ -81,9 +108,9 @@
                 @error('max_appuntamenti') <div class="text-danger">{{ $message }}</div> @enderror
             </div>
 
-
             <button type="submit" class="btn btn-primary mt-3">Salva modifiche</button>
             <a href="{{ route('admin.agende.index') }}" class="btn btn-secondary">Annulla</a>
         </form>
+
     </div>
 @endsection

@@ -24,49 +24,34 @@ class AgendaController extends Controller
 
     public function create()
     {
-
         $dipartimenti = Dipartimento::all();
         $prestazioni = Prestazione::all();
-
         return view('admin.agende.create', compact('dipartimenti', 'prestazioni'));
-
     }
 
     public function store(Request $request)
     {
-
         $request->validate([
-            'id_dipartimento' => 'required|exists:dipartimenti,id_dipartimento',
-            'id_prestazione' => 'required|exists:prestazioni,id_prestazione',
-            'giorno_settimana' => 'required|in:0,1,2,3,4,5',
-            'orari' => 'required|string',
-            'max_appuntamenti' => 'required|integer|min:1',
+            'id_dipartimento'   => 'required|exists:dipartimenti,id_dipartimento',
+            'id_prestazione'    => 'required|exists:prestazioni,id_prestazione',
+            'giorni_settimana'  => 'required|array|min:1',
+            'giorni_settimana.*'=> 'integer|between:0,5',
+            'orari_per_giorno'  => 'required|string',
+            'max_appuntamenti'  => 'required|integer|min:1',
         ]);
 
+        // Decodifica orari_per_giorno in array associativo
+        $orariPerGiorno = json_decode($request->orari_per_giorno, true) ?? [];
 
+        Agenda::create([
+            'id_dipartimento'   => $request->id_dipartimento,
+            'id_prestazione'    => $request->id_prestazione,
+            'giorni_settimana'  => $request->giorni_settimana, // array (es: [0,2,4])
+            'orari'             => $orariPerGiorno, // array associativo giorno => [orari]
+            'max_appuntamenti'  => $request->max_appuntamenti,
+        ]);
 
-        $orari = array_map('trim', explode(',', $request->orari));
-
-        foreach ($orari as $orario) {
-            if (!preg_match('/^\d{2}:\d{2}-\d{2}:\d{2}$/', $orario)) {
-                return back()->withErrors(['orari' => "Formato slot orario non valido: $orario"]);
-            }
-
-            $agenda = new Agenda([
-                'id_dipartimento' => $request->id_dipartimento,
-                'id_prestazione' => $request->id_prestazione,
-                'giorno_settimana' => $request->giorno_settimana,
-                'slot_orario' => $orario,
-                'max_appuntamenti' => $request->max_appuntamenti,
-            ]);
-
-            if ($agenda->save()) {
-                return redirect()->route('admin.agende.index')->with('success', 'Slot agenda creati!');
-            } else {
-                return back()->withErrors('Errore nel salvataggio dell’agenda.');
-            }
-        }
-
+        return redirect()->route('admin.agende.index')->with('success', 'Agenda creata con successo!');
     }
 
     public function edit($id_agenda)
@@ -77,26 +62,30 @@ class AgendaController extends Controller
         return view('admin.agende.edit', compact('agenda', 'dipartimenti', 'prestazioni'));
     }
 
-    public function update(Request $request, $id_agenda)
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'id_dipartimento' => 'required|exists:dipartimenti,id_dipartimento',
-            'id_prestazione' => 'required|exists:prestazioni,id_prestazione',
-            'giorno_settimana' => 'required|in:0,1,2,3,4,5',
-            'slot_orario' => 'required|regex:/^\d{2}:\d{2}-\d{2}:\d{2}$/',
-            'max_appuntamenti' => 'required|integer|min:1',
+            'id_dipartimento'   => 'required|exists:dipartimenti,id_dipartimento',
+            'id_prestazione'    => 'required|exists:prestazioni,id_prestazione',
+            'giorni_settimana'  => 'required|array|min:1',
+            'giorni_settimana.*'=> 'integer|between:0,5',
+            'orari_per_giorno'  => 'required|string',
+            'max_appuntamenti'  => 'required|integer|min:1',
         ]);
 
-        $agenda = Agenda::findOrFail($id_agenda);
+        $orariPerGiorno = json_decode($request->orari_per_giorno, true) ?? [];
+
+        $agenda = Agenda::findOrFail($id);
+
         $agenda->update([
-            'id_dipartimento' => $request->id_dipartimento,
-            'id_prestazione' => $request->id_prestazione,
-            'giorno_settimana' => $request->giorno_settimana,
-            'slot_orario' => $request->slot_orario,
-            'max_appuntamenti' => $request->max_appuntamenti,
+            'id_dipartimento'   => $request->id_dipartimento,
+            'id_prestazione'    => $request->id_prestazione,
+            'giorni_settimana'  => $request->giorni_settimana,
+            'orari'             => $orariPerGiorno,
+            'max_appuntamenti'  => $request->max_appuntamenti,
         ]);
 
-        return redirect()->route('admin.agende.index')->with('success', 'Slot agende aggiornato!');
+        return redirect()->route('admin.agende.index')->with('success', 'Agenda aggiornata con successo!');
     }
 
     public function destroy($id)

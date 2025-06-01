@@ -10,16 +10,20 @@ class Agenda extends Model
     use HasFactory;
 
     protected $table = 'agende';
-
     public $timestamps = false;
-
     protected $primaryKey = 'id_agenda';
 
     protected $fillable = [
-        'id_prestazione',   // FK alla prestazione
-        'giorno_settimana', // Es: 'Lunedi', 'Martedi', ecc. o numerico 1-7
-        'slot_orario',      // Es: '09:00-10:00'
+        'id_dipartimento',
+        'id_prestazione',
+        'giorni_settimana', // array di indici giorni
+        'orari',            // array associativo giorno => array di orari
         'max_appuntamenti'
+    ];
+
+    protected $casts = [
+        'giorni_settimana' => 'array',
+        'orari' => 'array',
     ];
 
     public function dipartimento()
