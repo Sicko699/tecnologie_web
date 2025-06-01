@@ -134,4 +134,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('notifiche', AdminNotificaController::class)->only(['index', 'store', 'destroy']);
     Route::resource('statistiche', AdminStatisticaController::class)->only(['index', 'show']);
     Route::resource('agende', AgendaController::class);
+    Route::get('agende/{id}/giornaliera', [AgendaController::class, 'giornaliera'])->name('agende.giornaliera');
+
 });

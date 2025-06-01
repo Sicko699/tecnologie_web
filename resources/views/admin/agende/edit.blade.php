@@ -26,11 +26,14 @@
             {{-- Dipartimento --}}
             <div class="form-group">
                 <label for="id_dipartimento">Dipartimento</label>
-                <select name="id_dipartimento" class="form-control" required>
+                <select name="id_dipartimento" id="id_dipartimento" class="form-control" required>
+                    <option value="">Seleziona</option>
                     @foreach($dipartimenti as $d)
-                        <option value="{{ $d->id }}" {{ old('id_dipartimento', $agenda->id_dipartimento) == $d->id ? 'selected' : '' }}>
+                        <option value="{{ $d->id_dipartimento }}"
+                            {{ old('id_dipartimento', $agenda->id_dipartimento) == $d->id_dipartimento ? 'selected' : '' }}>
                             {{ $d->nome }}
                         </option>
+
                     @endforeach
                 </select>
                 @error('id_dipartimento') <div class="text-danger">{{ $message }}</div> @enderror
@@ -40,10 +43,12 @@
             <div class="form-group mt-2">
                 <label for="id_prestazione">Prestazione</label>
                 <select name="id_prestazione" class="form-control" required>
-                    @foreach($prestazioni as $p)
-                        <option value="{{ $p->id }}" {{ old('id_prestazione', $agenda->id_prestazione) == $p->id ? 'selected' : '' }}>
-                            {{ $p->nome }}
+                    @foreach($prestazioni as $prestazione)
+                        <option value="{{ $prestazione->id_prestazione }}"
+                            {{ old('id_prestazione', $agenda->id_prestazione) == $prestazione->id_prestazione ? 'selected' : '' }}>
+                            {{ $prestazione->nome }} ({{ $prestazione->dipartimento->nome }})
                         </option>
+
                     @endforeach
                 </select>
                 @error('id_prestazione') <div class="text-danger">{{ $message }}</div> @enderror
@@ -61,17 +66,24 @@
                 @error('giorno_settimana') <div class="text-danger">{{ $message }}</div> @enderror
             </div>
 
-            {{-- Orario inizio --}}
-            <div class="form-group mt-2">
-                <label for="orario_inizio">Orario Inizio</label>
-                <input type="time" name="orario_inizio" class="form-control" required value="{{ old('orario_inizio', $agenda->orario_inizio) }}">
-                @error('orario_inizio') <div class="text-danger">{{ $message }}</div> @enderror
+            {{-- Slot orario --}}
+            <div class="form-group">
+                <label for="slot_orario">Slot Orario</label>
+                <input type="text" name="slot_orario" id="slot_orario" class="form-control"
+                       value="{{ old('slot_orario', $agenda->slot_orario) }}" required>
             </div>
 
-            <div class="mt-4">
-                <button type="submit" class="btn btn-primary">Salva Modifiche</button>
-                <a href="{{ route('admin.agende.index') }}" class="btn btn-secondary">Annulla</a>
+
+            {{-- Max appuntamenti --}}
+            <div class="form-group mt-2">
+                <label for="max_appuntamenti">Numero massimo appuntamenti per slot</label>
+                <input type="number" class="form-control" name="max_appuntamenti" min="1" required value="{{ old('max_appuntamenti', $agenda->max_appuntamenti) }}">
+                @error('max_appuntamenti') <div class="text-danger">{{ $message }}</div> @enderror
             </div>
+
+
+            <button type="submit" class="btn btn-primary mt-3">Salva modifiche</button>
+            <a href="{{ route('admin.agende.index') }}" class="btn btn-secondary">Annulla</a>
         </form>
     </div>
 @endsection

@@ -37,9 +37,15 @@
                     </td>
                     <td>{{ $agenda->orario_inizio }}</td>
                     <td>
-                        <!-- Link Modifica con parametro obbligatorio 'agende' -->
+                    <td class="d-flex gap-1">
+                        <!-- Link Modifica -->
                         <a href="{{ route('admin.agende.edit', ['agende' => $agenda->id_agenda]) }}" class="btn btn-sm btn-primary">
                             Modifica
+                        </a>
+
+                        <!-- Link Giornaliera -->
+                        <a href="{{ route('admin.agende.giornaliera', ['id' => $agenda->id_agenda, 'data' => now()->toDateString()]) }}" class="btn btn-sm btn-info">
+                            Giornaliera
                         </a>
 
                         <!-- Form per eliminare -->
@@ -48,6 +54,8 @@
                             @method('DELETE')
                             <button class="btn btn-sm btn-danger" type="submit">Elimina</button>
                         </form>
+                    </td>
+
                     </td>
                 </tr>
             @endforeach
