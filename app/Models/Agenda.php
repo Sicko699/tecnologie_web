@@ -22,6 +22,11 @@ class Agenda extends Model
         'max_appuntamenti'
     ];
 
+    public function dipartimento()
+    {
+        return $this->belongsTo(Dipartimento::class, 'id_dipartimento');
+    }
+
     public function prestazione()
     {
         return $this->belongsTo(Prestazione::class, 'id_prestazione');

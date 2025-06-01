@@ -18,8 +18,18 @@
         </div>
         <div class="mb-3">
             <label>Giorno escluso (opzionale)</label>
-            <input type="text" name="giorno_escluso" class="form-control" value="{{ old('giorno_escluso') }}">
+            @php
+                $giorni = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+                $oldGiorno = old('giorno_escluso');
+            @endphp
+            <select name="giorno_escluso" class="form-control">
+                <option value="">-- Nessuno --</option>
+                @foreach($giorni as $key => $giorno)
+                    <option value="{{ $key }}" @if($oldGiorno !== null && $oldGiorno == $key) selected @endif>{{ $giorno }}</option>
+                @endforeach
+            </select>
         </div>
+
         <button class="btn btn-success" type="submit">Salva</button>
         <a href="{{ route('paziente.prenotazioni.index') }}" class="btn btn-secondary">Indietro</a>
     </form>
