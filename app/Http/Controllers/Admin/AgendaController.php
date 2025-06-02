@@ -8,6 +8,7 @@ use App\Models\Dipartimento;
 use App\Models\Prestazione;
 use Illuminate\Http\Request;
 use App\Models\Appuntamento;
+use Carbon\Carbon;
 
 class AgendaController extends Controller
 {
@@ -34,99 +35,137 @@ class AgendaController extends Controller
         $request->validate([
             'id_dipartimento'   => 'required|exists:dipartimenti,id_dipartimento',
             'id_prestazione'    => 'required|exists:prestazioni,id_prestazione',
-            'giorni_settimana'  => 'required|array|min:1',
-            'giorni_settimana.*'=> 'integer|between:0,5',
             'orari_per_giorno'  => 'required|string',
             'max_appuntamenti'  => 'required|integer|min:1',
         ]);
 
-        // Decodifica orari_per_giorno in array associativo
-        $orariPerGiorno = json_decode($request->orari_per_giorno, true) ?? [];
+        $orariPerGiorno = json_decode($request->orari_per_giorno, true);
+
+        if (empty($orariPerGiorno)) {
+            return back()->withErrors(['orari_per_giorno' => 'Devi selezionare almeno uno slot orario.'])->withInput();
+        }
+
+        $prestazione = Prestazione::where('id_prestazione', $request->id_prestazione)
+            ->where('id_dipartimento', $request->id_dipartimento)
+            ->first();
+
+        if (!$prestazione) {
+            return back()->withErrors(['id_prestazione' => 'La prestazione non appartiene al dipartimento selezionato.'])->withInput();
+        }
 
         Agenda::create([
-            'id_dipartimento'   => $request->id_dipartimento,
-            'id_prestazione'    => $request->id_prestazione,
-            'giorni_settimana'  => $request->giorni_settimana, // array (es: [0,2,4])
-            'orari'             => $orariPerGiorno, // array associativo giorno => [orari]
-            'max_appuntamenti'  => $request->max_appuntamenti,
+            'id_dipartimento'     => $request->id_dipartimento,
+            'id_prestazione'      => $request->id_prestazione,
+            'configurazione_orari' => $orariPerGiorno,
+            'max_appuntamenti'    => $request->max_appuntamenti,
         ]);
 
         return redirect()->route('admin.agende.index')->with('success', 'Agenda creata con successo!');
     }
 
-    public function edit($id_agenda)
+    public function show(Agenda $agende)
     {
-        $agenda = Agenda::findOrFail($id_agenda);
-        $dipartimenti = Dipartimento::all();
-        $prestazioni = Prestazione::all();
-        return view('admin.agende.edit', compact('agenda', 'dipartimenti', 'prestazioni'));
+        return view('admin.agende.show', ['agenda' => $agende]);
     }
 
-    public function update(Request $request, $id)
+    public function edit(Agenda $agende)
+    {
+        $dipartimenti = Dipartimento::all();
+        $prestazioni = Prestazione::all();
+        return view('admin.agende.edit', [
+            'agenda' => $agende,
+            'dipartimenti' => $dipartimenti,
+            'prestazioni' => $prestazioni
+        ]);
+    }
+
+    public function update(Request $request, Agenda $agende)
     {
         $request->validate([
             'id_dipartimento'   => 'required|exists:dipartimenti,id_dipartimento',
             'id_prestazione'    => 'required|exists:prestazioni,id_prestazione',
-            'giorni_settimana'  => 'required|array|min:1',
-            'giorni_settimana.*'=> 'integer|between:0,5',
             'orari_per_giorno'  => 'required|string',
             'max_appuntamenti'  => 'required|integer|min:1',
         ]);
 
-        $orariPerGiorno = json_decode($request->orari_per_giorno, true) ?? [];
+        $orariPerGiorno = json_decode($request->orari_per_giorno, true);
 
-        $agenda = Agenda::findOrFail($id);
+        if (empty($orariPerGiorno)) {
+            return back()->withErrors(['orari_per_giorno' => 'Devi selezionare almeno uno slot orario.'])->withInput();
+        }
 
-        $agenda->update([
-            'id_dipartimento'   => $request->id_dipartimento,
-            'id_prestazione'    => $request->id_prestazione,
-            'giorni_settimana'  => $request->giorni_settimana,
-            'orari'             => $orariPerGiorno,
-            'max_appuntamenti'  => $request->max_appuntamenti,
+        $agende->update([
+            'id_dipartimento'     => $request->id_dipartimento,
+            'id_prestazione'      => $request->id_prestazione,
+            'configurazione_orari' => $orariPerGiorno,
+            'max_appuntamenti'    => $request->max_appuntamenti,
         ]);
 
         return redirect()->route('admin.agende.index')->with('success', 'Agenda aggiornata con successo!');
     }
 
-    public function destroy($id)
+    public function destroy(Agenda $agende)
     {
-        $agenda = Agenda::findOrFail($id);
-        $agenda->delete();
-        return redirect()->route('admin.agende.index')->with('success', 'Slot agende eliminato!');
+        $appuntamentiFuturi = Appuntamento::whereHas('richiesta', function($query) use ($agende) {
+            $query->where('id_prestazione', $agende->id_prestazione);
+        })->where('data', '>=', now()->toDateString())->count();
+
+        if ($appuntamentiFuturi > 0) {
+            return back()->withErrors(['delete' => 'Impossibile eliminare: esistono appuntamenti futuri collegati a questa agenda.']);
+        }
+
+        $agende->delete();
+        return redirect()->route('admin.agende.index')->with('success', 'Agenda eliminata con successo!');
     }
 
+    // Gli altri metodi non resource rimangono come sono
     public function giornaliera($id_agenda, Request $request)
     {
-        $agenda = Agenda::with('prestazione')->findOrFail($id_agenda);
+        $agenda = Agenda::with(['prestazione', 'dipartimento'])->findOrFail($id_agenda);
+        $data = $request->query('data', now()->toDateString());
 
-        $data = $request->query('data') ?? now()->toDateString();
+        $dataCarbon = Carbon::parse($data);
+        $giornoSettimana = $dataCarbon->dayOfWeek;
+        $giornoMappato = $giornoSettimana === 0 ? 6 : $giornoSettimana - 1;
 
-        // 1) Prendo gli id delle prestazioni legate all'agenda
-        $idPrestazioni = $agenda->prestazione->pluck('id_prestazione')->toArray();
+        $configurazione = $agenda->configurazione_orari;
+        $slotGiorno = $configurazione[$giornoMappato] ?? [];
 
-        // 2) Prendo gli id delle richieste legate a queste prestazioni
-        $idRichieste = \App\Models\Richiesta::whereIn('id_prestazione', $idPrestazioni)->pluck('id_richiesta');
+        if (empty($slotGiorno)) {
+            return view('admin.agende.giornaliera', [
+                'agenda' => $agenda,
+                'data' => $data,
+                'slotInfo' => collect(),
+                'message' => 'Nessuno slot disponibile per questo giorno.'
+            ]);
+        }
 
-        // 3) Prendo gli appuntamenti di queste richieste e per la data specificata
         $appuntamenti = Appuntamento::with('richiesta.utente')
-            ->whereIn('id_richiesta', $idRichieste)
+            ->whereHas('richiesta', function($query) use ($agenda) {
+                $query->where('id_prestazione', $agenda->id_prestazione);
+            })
             ->where('data', $data)
-            ->get();
+            ->get()
+            ->keyBy('ora');
 
         $slotInfo = collect();
 
-        for ($i = 0; $i < $agenda->max_appuntamenti; $i++) {
-            $slotOrario = \Carbon\Carbon::parse($agenda->slot_orario)->addMinutes($i * $agenda->durata_slot);
+        foreach ($slotGiorno as $slot) {
+            [$oraInizio, $oraFine] = explode('-', $slot);
+            $oraCompleta = $oraInizio . ':00';
 
-            // Trova appuntamento che ha la stessa ora dello slot (ora è stringa H:i:s)
-            $app = $appuntamenti->first(function ($item) use ($slotOrario) {
-                return $item->ora === $slotOrario->format('H:i:s');
+            $appuntamentiSlot = $appuntamenti->filter(function($app) use ($oraCompleta) {
+                return $app->ora === $oraCompleta;
             });
 
             $slotInfo->push([
-                'slot_orario' => $slotOrario,
-                'utente' => $app ? $app->richiesta->utente : null,
-                'appuntamento' => $app,
+                'slot' => $slot,
+                'ora_inizio' => $oraInizio,
+                'ora_fine' => $oraFine,
+                'appuntamenti_prenotati' => $appuntamentiSlot->count(),
+                'posti_disponibili' => $agenda->max_appuntamenti - $appuntamentiSlot->count(),
+                'appuntamenti' => $appuntamentiSlot->values(),
+                'completo' => $appuntamentiSlot->count() >= $agenda->max_appuntamenti
             ]);
         }
 
@@ -134,6 +173,17 @@ class AgendaController extends Controller
             'agenda' => $agenda,
             'data' => $data,
             'slotInfo' => $slotInfo,
+            'nomeGiorno' => $dataCarbon->locale('it')->dayName
         ]);
+    }
+
+    public function getSlotDisponibili($id_agenda, $data)
+    {
+        $agenda = Agenda::findOrFail($id_agenda);
+        $dataCarbon = Carbon::parse($data);
+        $giornoMappato = $dataCarbon->dayOfWeek === 0 ? 6 : $dataCarbon->dayOfWeek - 1;
+
+        $configurazione = $agenda->configurazione_orari;
+        return $configurazione[$giornoMappato] ?? [];
     }
 }

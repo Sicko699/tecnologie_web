@@ -13,19 +13,19 @@ class Agenda extends Model
     public $timestamps = false;
     protected $primaryKey = 'id_agenda';
 
+    // Nel modello Agenda
     protected $fillable = [
         'id_dipartimento',
         'id_prestazione',
-        'giorni_settimana', // array di indici giorni
-        'orari',            // array associativo giorno => array di orari
+        'configurazione_orari',
         'max_appuntamenti'
     ];
 
     protected $casts = [
-        'giorni_settimana' => 'array',
-        'orari' => 'array',
+        'configurazione_orari' => 'array'
     ];
 
+// Relazioni
     public function dipartimento()
     {
         return $this->belongsTo(Dipartimento::class, 'id_dipartimento');
