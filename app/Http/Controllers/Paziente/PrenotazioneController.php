@@ -11,10 +11,24 @@ use Illuminate\Support\Facades\Auth;
 class PrenotazioneController extends Controller
 {
     // Dashboard
+    // Dashboard
     public function dashboard()
     {
-        return view("paziente.dashboard");
+        $user = Auth::user();
+        $notifiche = $user->notifiche()
+            ->orderByDesc('data_creazione')
+            ->take(5)
+            ->get();
+
+        $prenotazioni = $user->richieste()
+            ->orderByDesc('id_richiesta')
+            ->take(5)
+            ->get();
+
+        return view('paziente.dashboard', compact('notifiche', 'prenotazioni'));
     }
+
+
 
     // Lista prenotazioni proprie
     public function index()

@@ -17,31 +17,93 @@ class AppuntamentoController extends Controller
         return view('staff.richieste.index', compact('richieste'));
     }
 
-    public function create($id_richiesta)
+    // Mostra il form per assegnare un appuntamento a una richiesta utente
+    public function create($id_richiesta, Request $request)
     {
-        $richiesta = Richiesta::with(['utente', 'prestazione'])->findOrFail($id_richiesta);
-        return view('staff.appuntamenti.create', compact('richiesta'));
+        $richiesta = \App\Models\Richiesta::with(['utente', 'prestazione'])->findOrFail($id_richiesta);
+        $agenda = \App\Models\Agenda::where('id_prestazione', $richiesta->id_prestazione)->firstOrFail();
+        $dataSelezionata = $request->input('data', now()->toDateString());
+
+        // Giorno della settimana (0 = lunedì, 6 = domenica)
+        $dayOfWeek = \Carbon\Carbon::parse($dataSelezionata)->dayOfWeek;
+        $giornoMappato = $dayOfWeek === 0 ? 6 : $dayOfWeek - 1;
+
+        $slotOrari = $agenda->configurazione_orari[$giornoMappato] ?? [];
+
+        // Filtra solo slot con posti disponibili
+        $slotDisponibili = [];
+        foreach ($slotOrari as $slot) {
+            $oraInizio = explode('-', $slot)[0];
+            $appPrenotati = \App\Models\Appuntamento::where('data', $dataSelezionata)
+                ->where('ora', $oraInizio . ':00')
+                ->whereHas('richiesta', fn($q) => $q->where('id_prestazione', $richiesta->id_prestazione))
+                ->count();
+            if ($appPrenotati < $agenda->max_appuntamenti) {
+                $slotDisponibili[] = $slot;
+            }
+        }
+
+        return view('staff.appuntamenti.create', compact('richiesta', 'agenda', 'slotDisponibili', 'dataSelezionata'));
     }
 
+// Store - salva l'appuntamento, valida che lo slot sia ancora disponibile
     public function store(Request $request)
     {
         $request->validate([
             'id_richiesta' => 'required|exists:richieste,id_richiesta',
-            'data' => 'required|date',
-            'ora' => 'required',
+            'data' => 'required|date|after_or_equal:today',
+            'ora'  => 'required'
         ]);
-        $appuntamento = Appuntamento::create([
+
+        $richiesta = \App\Models\Richiesta::findOrFail($request->id_richiesta);
+        $agenda = \App\Models\Agenda::where('id_prestazione', $richiesta->id_prestazione)->firstOrFail();
+
+        // Giorno della settimana
+        $dayOfWeek = \Carbon\Carbon::parse($request->data)->dayOfWeek;
+        $giornoMappato = $dayOfWeek === 0 ? 6 : $dayOfWeek - 1;
+        $slotOrari = $agenda->configurazione_orari[$giornoMappato] ?? [];
+
+        // Controlla che la slot scelta sia tra quelle dell’agenda
+        $oraSelezionata = collect($slotOrari)->filter(function($slot) use ($request) {
+            return explode('-', $slot)[0] . ':00' === $request->ora;
+        })->first();
+
+        if (!$oraSelezionata) {
+            return back()->withErrors(['ora' => 'Orario non valido per il giorno selezionato!'])->withInput();
+        }
+
+        // Controlla che non sia pieno
+        $appPrenotati = \App\Models\Appuntamento::where('data', $request->data)
+            ->where('ora', $request->ora)
+            ->whereHas('richiesta', fn($q) => $q->where('id_prestazione', $richiesta->id_prestazione))
+            ->count();
+
+        if ($appPrenotati >= $agenda->max_appuntamenti) {
+            return back()->withErrors(['ora' => 'Slot orario già pieno!'])->withInput();
+        }
+
+        // CREA appuntamento
+        $appuntamento = \App\Models\Appuntamento::create([
             'id_richiesta' => $request->id_richiesta,
             'data' => $request->data,
-            'ora' => $request->ora,
+            'ora'  => $request->ora,
             'stato' => 'prenotato',
         ]);
-        $richiesta = Richiesta::find($request->id_richiesta);
+
         $richiesta->stato = 'in agenda';
         $richiesta->save();
 
+        // (Eventuale) Notifica
+        \App\Models\Notifica::create([
+            'id_utente' => $richiesta->id_utente,
+            'messaggio' => 'È stato fissato un appuntamento per la tua richiesta il ' . $request->data . ' alle ' . $request->ora,
+            'data_creazione' => now(),
+            'conferma_lettura' => false,
+        ]);
+
         return redirect()->route('staff.appuntamenti.index')->with('success', 'Appuntamento inserito!');
     }
+
 
     public function index()
     {

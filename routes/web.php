@@ -1,25 +1,25 @@
 <?php
 
 use App\Http\Controllers\Admin\AgendaController;
-use App\Http\Controllers\RichiestaController;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\PublicController;
-use App\Http\Controllers\RicercaController;
-use App\Http\Controllers\Paziente\PrenotazioneController as PazientePrenotazioneController;
-use App\Http\Controllers\Paziente\AppuntamentoController as PazienteAppuntamentoController;
-use App\Http\Controllers\Paziente\ProfiloController as PazienteProfiloController;
-use App\Http\Controllers\Staff\DashboardController as StaffDashboardController;
-use App\Http\Controllers\Staff\AppuntamentoController as StaffAppuntamentoController;
-use App\Http\Controllers\Staff\PrestazioneControllerStaff as StaffPrestazioneController;
+use App\Http\Controllers\Admin\AppuntamentoController as AdminAppuntamentoController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\DipartimentoController as AdminDipartimentoController;
-use App\Http\Controllers\Admin\PrestazioneController as AdminPrestazioneController;
-use App\Http\Controllers\Admin\UtenteController as AdminUtenteController;
-use App\Http\Controllers\Admin\AppuntamentoController as AdminAppuntamentoController;
 use App\Http\Controllers\Admin\NotificaController as AdminNotificaController;
+use App\Http\Controllers\Admin\PrestazioneController as AdminPrestazioneController;
 use App\Http\Controllers\Admin\StatisticaController as AdminStatisticaController;
-
+use App\Http\Controllers\Admin\UtenteController as AdminUtenteController;
+use App\Http\Controllers\Paziente\AppuntamentoController as PazienteAppuntamentoController;
+use App\Http\Controllers\Paziente\NotificaController;
+use App\Http\Controllers\Paziente\PrenotazioneController as PazientePrenotazioneController;
+use App\Http\Controllers\Paziente\ProfiloController as PazienteProfiloController;
+use App\Http\Controllers\PublicController;
+use App\Http\Controllers\RicercaController;
+use App\Http\Controllers\RichiestaController;
+use App\Http\Controllers\Staff\AppuntamentoController as StaffAppuntamentoController;
+use App\Http\Controllers\Staff\DashboardController as StaffDashboardController;
+use App\Http\Controllers\Staff\PrestazioneControllerStaff as StaffPrestazioneController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 
 // -------------------------------------
@@ -93,6 +93,10 @@ Route::middleware(['auth', 'role:paziente'])->prefix('user')->name('paziente.')-
     Route::resource('prenotazioni', PazientePrenotazioneController::class)->except(['dashboard']);
     // Appuntamenti
     Route::get('appuntamenti', [PazienteAppuntamentoController::class, 'index'])->name('appuntamenti.index');
+
+    // Segna tutte le notifiche come lette (AJAX)
+    Route::post('/notifiche/mark-all-read', [NotificaController::class, 'markAllRead'])
+        ->name('notifiche.markAllRead');
 });
 
 // -------------------------------------
@@ -105,7 +109,7 @@ Route::middleware(['auth', 'role:staff'])->prefix('staff')->name('staff.')->grou
     Route::get('/richieste', [StaffAppuntamentoController::class, 'richiestePendenti'])->name('richieste.index');
 
     // Assegna appuntamento a richiesta (step di conferma slot)
-    Route::get('/appuntamenti/create/{richiesta}', [StaffAppuntamentoController::class, 'create'])->name('appuntamenti.create');
+    Route::get('/appuntamenti/create/{id_richiesta}', [StaffAppuntamentoController::class, 'create'])->name('appuntamenti.create');
     Route::post('/appuntamenti', [StaffAppuntamentoController::class, 'store'])->name('appuntamenti.store');
 
     // Gestione appuntamenti (modifica/annulla)
