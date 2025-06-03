@@ -33,12 +33,17 @@ class PrestazioneController extends Controller
             'id_dipartimento' => 'required|exists:dipartimenti,id_dipartimento',
         ]);
 
-        Prestazione::create([
+        // 1. Salva la prestazione
+        $prestazione = Prestazione::create([
             'nome' => $request->nome,
             'id_dipartimento' => $request->id_dipartimento,
         ]);
 
-        return redirect()->route('admin.prestazioni.index')->with('success', 'Prestazione creata!');
+        // 2. Redirigi direttamente a creazione agenda
+        return redirect()->route('admin.agende.create', [
+            'id_dipartimento' => $prestazione->id_dipartimento,
+            'id_prestazione' => $prestazione->id_prestazione
+        ])->with('success', 'Prestazione creata! Ora configura la relativa agenda.');
     }
 
     public function edit($id)

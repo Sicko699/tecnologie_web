@@ -28,22 +28,22 @@ class AuthenticatedSessionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'username' => 'required|string',
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+        if (Auth::attempt($request->only('username', 'password'), $request->boolean('remember'))) {
             $request->session()->regenerate();
-            Log::info('Utente autenticato', ['user'=>Auth::user()]);
-            // Redirezione custom: vai sempre alla route 'dashboard'
+            \Log::info('Utente autenticato', ['user'=>Auth::user()]);
             return redirect()->intended(route('dashboard'));
         }
 
-        Log::warning('Login fallito', ['email'=> $request->email]);
+        \Log::warning('Login fallito', ['username'=> $request->username]);
         return back()->withErrors([
-            'email' => 'Le credenziali non sono corrette.',
+            'username' => 'Le credenziali non sono corrette.',
         ]);
     }
+
 
 
     /**

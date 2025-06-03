@@ -18,7 +18,7 @@ class User extends Authenticatable
     protected $keyType = 'string';
 
     protected $fillable = [
-        'codice_fiscale', 'nome', 'cognome', 'email', 'password', 'telefono', 'data_nascita', 'foto', 'ruolo'
+        'codice_fiscale', 'nome', 'cognome', 'username', 'email', 'password', 'telefono', 'data_nascita', 'foto', 'ruolo'
     ];
 
     protected $hidden = ['password', 'remember_token'];
@@ -56,5 +56,10 @@ class User extends Authenticatable
     public function getNameAttribute()
     {
         return $this->nome . ' ' . $this->cognome;
+    }
+
+    public function username()
+    {
+        return 'username';
     }
 }

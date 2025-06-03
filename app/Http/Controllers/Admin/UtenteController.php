@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Validation\Rules;
+use App\Models\MembroStaff;
 use Illuminate\Http\Request;
-use Illuminate\Auth\Events\Registered;
+use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Hash;
 
 class UtenteController extends Controller
@@ -19,56 +18,58 @@ class UtenteController extends Controller
 
     public function index()
     {
-        $utenti = User::whereIn('ruolo', ['admin', 'staff'])->get();
+        $utenti = User::with(['membroStaff.dipartimento'])
+            ->where('ruolo', 'staff')
+            ->get();
         return view('admin.utenti.index', compact('utenti'));
     }
 
     public function create()
     {
-        return view('admin.utenti.create');
+        // Recupera tutti i dipartimenti per la select
+        $dipartimenti = \App\Models\Dipartimento::all();
+        return view('admin.utenti.create', compact('dipartimenti'));
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         $request->validate([
-            'codice_fiscale' => ['required', 'string', 'size:16', 'unique:users,codice_fiscale'],
             'nome'           => ['required', 'string', 'max:100'],
             'cognome'        => ['required', 'string', 'max:100'],
-            'email'          => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'telefono'       => ['nullable', 'string', 'max:50'],
-            'data_nascita'   => ['nullable', 'date'],
-            'foto'           => ['nullable', 'image', 'max:2048'],
+            'username'       => ['required', 'string', 'max:50', 'unique:users,username'],
             'password'       => ['required', 'confirmed', Rules\Password::defaults()],
+            'id_dipartimento'=> ['required', 'exists:dipartimenti,id_dipartimento'],
         ]);
 
-        // Gestione upload foto
-        $fotoPath = null;
-        if ($request->hasFile('foto')) {
-            $fotoPath = $request->file('foto')->store('profili', 'public');
-        }
+        // Genera un codice fiscale fittizio univoco se non lo inserisci, o genera a partire da nome/cognome
+        // Qui creiamo una stringa random di 16 caratteri (ma puoi sostituire con la logica che vuoi tu)
+        $codice_fiscale = strtoupper(substr(uniqid(md5($request->nome . $request->cognome)), 0, 16));
+        // oppure puoi chiedere di inserirlo tramite la form, ma ora lo generiamo per esempio.
 
+        // CREA L'UTENTE STAFF
         $user = User::create([
-            'codice_fiscale' => strtoupper($request->codice_fiscale),
+            'codice_fiscale' => $codice_fiscale,
             'nome'           => $request->nome,
             'cognome'        => $request->cognome,
-            'email'          => $request->email,
-            'telefono'       => $request->telefono,
-            'data_nascita'   => $request->data_nascita,
-            'foto'           => $fotoPath,
-            'user'           => $request->ruolo,
+            'username'       => $request->username,
             'password'       => Hash::make($request->password),
+            'ruolo'          => 'staff',
         ]);
 
-        event(new Registered($user));
+        // CREA IL MEMBRO STAFF ASSOCIATO
+        $membroStaff = MembroStaff::create([
+            'codice_fiscale'  => $user->codice_fiscale,
+            'id_dipartimento' => $request->id_dipartimento,
+        ]);
 
-        return redirect()->route('admin.utenti.index')->with('success', 'Utente registrato con successo.');
+        return redirect()->route('admin.utenti.index')->with('success', 'Staff creato con successo.');
     }
-
 
     public function edit($codice_fiscale)
     {
         $utente = User::findOrFail($codice_fiscale);
-        return view('admin.utenti.edit', compact('utente'));
+        $dipartimenti = \App\Models\Dipartimento::all();
+        return view('admin.utenti.edit', compact('utente', 'dipartimenti'));
     }
 
     public function update(Request $request, $codice_fiscale)
@@ -76,25 +77,38 @@ class UtenteController extends Controller
         $utente = User::findOrFail($codice_fiscale);
 
         $request->validate([
-            'nome'  => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $utente->codice_fiscale . ',codice_fiscale',
-            'ruolo' => 'required|in:admin,staff',
+            'nome'     => 'required|string|max:100',
+            'cognome'  => 'required|string|max:100',
+            'username' => 'required|string|max:50|unique:users,username,' . $utente->codice_fiscale . ',codice_fiscale',
+            'id_dipartimento' => 'required|exists:dipartimenti,id_dipartimento',
+            'password' => 'nullable|confirmed', // opzionale, solo se vuoi cambiare password
         ]);
 
+        $utente->nome = $request->nome;
+        $utente->cognome = $request->cognome;
+        $utente->username = $request->username;
+        // aggiorna password solo se compilata
+        if($request->filled('password')) {
+            $utente->password = Hash::make($request->password);
+        }
+        $utente->save();
 
-        $utente->update([
-            'nome' => $request->nome,
-            'email' => $request->email,
-            'ruolo' => $request->ruolo,
-        ]);
-
+        // aggiorna dipartimento in membro_staff
+        if ($utente->membroStaff) {
+            $utente->membroStaff->id_dipartimento = $request->id_dipartimento;
+            $utente->membroStaff->save();
+        }
 
         return redirect()->route('admin.utenti.index')->with('success', 'Utente aggiornato!');
     }
 
-    public function destroy($id)
+    public function destroy($codice_fiscale)
     {
-        $utente = User::findOrFail($id);
+        $utente = User::findOrFail($codice_fiscale);
+        // cancella anche membro_staff associato
+        if ($utente->membroStaff) {
+            $utente->membroStaff->delete();
+        }
         $utente->delete();
         return redirect()->route('admin.utenti.index')->with('success', 'Utente eliminato!');
     }

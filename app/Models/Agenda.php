@@ -35,4 +35,11 @@ class Agenda extends Model
     {
         return $this->belongsTo(Prestazione::class, 'id_prestazione');
     }
+
+    public function agenda()
+    {
+        return $this->hasOne(Agenda::class, 'id_prestazione', 'id_prestazione');
+    }
+
+
 }

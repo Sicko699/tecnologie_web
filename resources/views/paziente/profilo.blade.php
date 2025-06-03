@@ -24,7 +24,7 @@
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label fw-semibold">Email</label>
+                        <label class="form-label fw-semibold">Username</label>
                         <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email', Auth::user()->email) }}">
                         @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
@@ -33,6 +33,23 @@
                         <label class="form-label fw-semibold">Telefono</label>
                         <input type="text" class="form-control @error('telefono') is-invalid @enderror" name="telefono" value="{{ old('telefono', Auth::user()->telefono) }}">
                         @error('telefono') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Vecchia Password</label>
+                        <input type="password" class="form-control @error('current_password') is-invalid @enderror" name="current_password">
+                        @error('current_password') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Nuova Password</label>
+                        <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" autocomplete="new-password">
+                        @error('password') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Conferma Nuova Password</label>
+                        <input type="password" class="form-control" name="password_confirmation" autocomplete="new-password">
                     </div>
 
                     <div class="d-flex gap-2 justify-content-between align-items-center pt-1">

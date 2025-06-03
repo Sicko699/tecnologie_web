@@ -10,9 +10,10 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->string('codice_fiscale', 16)->primary();
+            $table->string('username', 50)->unique();     // <--- nuovo campo
             $table->string('nome', 100);
             $table->string('cognome', 100);
-            $table->string('email', 255)->unique();
+            $table->string('email', 255)->nullable();     // <--- ora nullable
             $table->string('password');
             $table->string('telefono', 50)->nullable();
             $table->date('data_nascita')->nullable();

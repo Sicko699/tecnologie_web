@@ -7,9 +7,9 @@
         <form method="POST" action="{{ route('login') }}">
             @csrf
             <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" name="email" class="form-control" required autofocus>
-                @error('email') <div class="text-danger small">{{ $message }}</div> @enderror
+                <label for="username" class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" required autofocus>
+                @error('username') <div class="text-danger small">{{ $message }}</div> @enderror
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>

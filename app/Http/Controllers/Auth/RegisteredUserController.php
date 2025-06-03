@@ -24,9 +24,10 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'codice_fiscale' => ['required', 'string', 'size:16', 'unique:users,codice_fiscale'],
+            'username'       => ['required', 'string', 'max:50', 'unique:users,username'],
             'nome'           => ['required', 'string', 'max:100'],
             'cognome'        => ['required', 'string', 'max:100'],
-            'email'          => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'email'          => ['nullable', 'email', 'max:255', 'unique:users,email'], // ora nullable
             'telefono'       => ['nullable', 'string', 'max:50'],
             'data_nascita'   => ['nullable', 'date'],
             'foto'           => ['nullable', 'image', 'max:2048'],
@@ -41,9 +42,10 @@ class RegisteredUserController extends Controller
 
         $user = User::create([
             'codice_fiscale' => strtoupper($request->codice_fiscale),
+            'username'       => $request->username,
             'nome'           => $request->nome,
             'cognome'        => $request->cognome,
-            'email'          => $request->email,
+            'email'          => $request->email, // può essere null
             'telefono'       => $request->telefono,
             'data_nascita'   => $request->data_nascita,
             'foto'           => $fotoPath,

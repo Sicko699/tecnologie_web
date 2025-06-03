@@ -16,6 +16,11 @@
                 @error('cognome') <div class="text-danger small">{{ $message }}</div> @enderror
             </div>
             <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" required>
+                @error('username') <div class="text-danger small">{{ $message }}</div> @enderror
+            </div>
+            <div class="mb-3">
                 <label for="sesso" class="form-label">Sesso</label>
                 <select name="sesso" id="sesso" class="form-control" required>
                     <option value="">Seleziona</option>

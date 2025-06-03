@@ -23,11 +23,13 @@ class AgendaController extends Controller
         return view('admin.agende.index', compact('agende'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $dipartimenti = Dipartimento::all();
         $prestazioni = Prestazione::all();
-        return view('admin.agende.create', compact('dipartimenti', 'prestazioni'));
+        $selectedDipartimento = $request->query('id_dipartimento');
+        $selectedPrestazione = $request->query('id_prestazione');
+        return view('admin.agende.create', compact('dipartimenti', 'prestazioni', 'selectedDipartimento', 'selectedPrestazione'));
     }
 
     public function store(Request $request)

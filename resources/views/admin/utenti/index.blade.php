@@ -9,22 +9,21 @@
         <table class="table">
             <thead>
             <tr>
-                <th>Codice Fiscale</th>
+                <th>Username</th>
                 <th>Nome</th>
                 <th>Cognome</th>
-                <th>Email</th>
-                <th>Ruolo</th>
+                <th>Dipartimento</th>
                 <th>Azioni</th>
             </tr>
             </thead>
             <tbody>
             @foreach($utenti as $u)
                 <tr>
-                    <td>{{ $u->codice_fiscale }}</td>
+                    <td>{{ $u->username }}</td>
                     <td>{{ $u->nome }}</td>
                     <td>{{ $u->cognome }}</td>
-                    <td>{{ $u->email }}</td>
-                    <td>{{ ucfirst($u->ruolo) }}</td>
+                    <td>    {{ $u->membroStaff && $u->membroStaff->dipartimento ? $u->membroStaff->dipartimento->nome : '-' }}
+                    </td>
                     <td>
                         <a href="{{ route('admin.utenti.edit', ['utenti' => $u->codice_fiscale]) }}" class="btn btn-primary btn-sm">Modifica</a>
                         <form action="{{ route('admin.utenti.destroy', ['utenti' => $u->codice_fiscale]) }}" method="POST" class="d-inline" onsubmit="return confirm('Confermi eliminazione?')">
