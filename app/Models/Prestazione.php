@@ -10,9 +10,8 @@ class Prestazione extends Model
     use HasFactory;
 
     protected $table = 'prestazioni';
-    public $timestamps = false;
-
     protected $primaryKey = 'id_prestazione';
+    public $timestamps = false;
 
     protected $fillable = [
         'nome', 'descrizione', 'id_dipartimento'
@@ -23,13 +22,21 @@ class Prestazione extends Model
         return $this->belongsTo(Dipartimento::class, 'id_dipartimento');
     }
 
-    public function membroStaff()
-    {
-        return $this->belongsTo(MembroStaff::class, 'id_membro', 'codice_fiscale');
-    }
-
     public function richieste()
     {
         return $this->hasMany(Richiesta::class, 'id_prestazione');
     }
+
+    public function membriStaff()
+    {
+        return $this->belongsToMany(
+            MembroStaff::class,
+            'membrostaff_prestazione',
+            'id_prestazione',      // chiave locale su questa tabella
+            'codice_fiscale',      // chiave esterna verso MembroStaff
+            'id_prestazione',      // local key su questa tabella
+            'codice_fiscale'       // local key su MembroStaff
+        );
+    }
+
 }

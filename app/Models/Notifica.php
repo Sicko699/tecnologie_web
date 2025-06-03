@@ -15,7 +15,7 @@ class Notifica extends Model
     protected $primaryKey = 'id_notifica';
 
     protected $fillable = [
-        'id_utente', 'messaggio', 'data_creazione', 'conferma_lettura'
+        'codice_fiscale', 'messaggio', 'data_creazione', 'conferma_lettura'
     ];
 
     public function utente()

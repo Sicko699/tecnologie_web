@@ -12,10 +12,13 @@ class CreateAppuntamentiTable extends Migration
             $table->id('id_appuntamento');
             $table->unsignedBigInteger('id_richiesta');
             $table->date('data');
-            $table->string('ora', 10);
-            $table->string('stato', 30)->default('prenotato');
+            $table->time('ora');
+            $table->string('stato')->default('prenotato');
+            $table->timestamps();
+
             $table->foreign('id_richiesta')->references('id_richiesta')->on('richieste')->onDelete('cascade');
         });
+
     }
 
     public function down()

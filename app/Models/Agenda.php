@@ -18,11 +18,13 @@ class Agenda extends Model
         'id_dipartimento',
         'id_prestazione',
         'configurazione_orari',
-        'max_appuntamenti'
+        'max_appuntamenti',
+        'giorni_settimana', // <-- aggiungi questo!
     ];
 
     protected $casts = [
-        'configurazione_orari' => 'array'
+        'configurazione_orari' => 'array',
+        'giorni_settimana' => 'array', // <-- aggiungi questo!
     ];
 
 // Relazioni

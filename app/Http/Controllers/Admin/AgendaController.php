@@ -55,15 +55,26 @@ class AgendaController extends Controller
             return back()->withErrors(['id_prestazione' => 'La prestazione non appartiene al dipartimento selezionato.'])->withInput();
         }
 
+        // Calcola i giorni effettivamente usati
+        $nomiGiorni = ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
+        $giorniSettimana = [];
+        foreach ($orariPerGiorno as $idx => $slots) {
+            if (!empty($slots)) {
+                $giorniSettimana[] = $nomiGiorni[$idx];
+            }
+        }
+
         Agenda::create([
-            'id_dipartimento'     => $request->id_dipartimento,
-            'id_prestazione'      => $request->id_prestazione,
+            'id_dipartimento'      => $request->id_dipartimento,
+            'id_prestazione'       => $request->id_prestazione,
+            'giorni_settimana'     => $giorniSettimana,            // <-- qui!
             'configurazione_orari' => $orariPerGiorno,
-            'max_appuntamenti'    => $request->max_appuntamenti,
+            'max_appuntamenti'     => $request->max_appuntamenti,
         ]);
 
         return redirect()->route('admin.agende.index')->with('success', 'Agenda creata con successo!');
     }
+
 
     public function show(Agenda $agende)
     {
@@ -96,15 +107,26 @@ class AgendaController extends Controller
             return back()->withErrors(['orari_per_giorno' => 'Devi selezionare almeno uno slot orario.'])->withInput();
         }
 
+        // Calcola i giorni effettivamente usati
+        $nomiGiorni = ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
+        $giorniSettimana = [];
+        foreach ($orariPerGiorno as $idx => $slots) {
+            if (!empty($slots)) {
+                $giorniSettimana[] = $nomiGiorni[$idx];
+            }
+        }
+
         $agende->update([
-            'id_dipartimento'     => $request->id_dipartimento,
-            'id_prestazione'      => $request->id_prestazione,
+            'id_dipartimento'      => $request->id_dipartimento,
+            'id_prestazione'       => $request->id_prestazione,
+            'giorni_settimana'     => $giorniSettimana,           // <-- qui!
             'configurazione_orari' => $orariPerGiorno,
-            'max_appuntamenti'    => $request->max_appuntamenti,
+            'max_appuntamenti'     => $request->max_appuntamenti,
         ]);
 
         return redirect()->route('admin.agende.index')->with('success', 'Agenda aggiornata con successo!');
     }
+
 
     public function destroy(Agenda $agende)
     {

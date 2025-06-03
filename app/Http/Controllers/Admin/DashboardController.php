@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Dipartimento;
 use App\Models\Prestazione;
 use App\Models\MembroStaff;
+use App\Models\Agenda; // <-- aggiungi questa riga!
 
 class DashboardController extends Controller
 {
@@ -15,6 +16,7 @@ class DashboardController extends Controller
         $dipartimentiCount = Dipartimento::count();
         $prestazioniCount = Prestazione::count();
         $utentiCount = MembroStaff::count();
+        $agendeCount = Agenda::count(); // <-- aggiungi questa riga
 
         // Dati placeholder per grafico (puoi sostituirli con query reali)
         $chartLabels = ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu'];
@@ -24,6 +26,7 @@ class DashboardController extends Controller
             'dipartimentiCount',
             'prestazioniCount',
             'utentiCount',
+            'agendeCount',      // <-- aggiungi qui!
             'chartLabels',
             'chartData'
         ));

@@ -50,7 +50,7 @@ class User extends Authenticatable
     // Notifiche ricevute
     public function notifiche()
     {
-        return $this->hasMany(Notifica::class, 'id_utente', 'codice_fiscale');
+        return $this->hasMany(Notifica::class, 'codice_fiscale', 'codice_fiscale');
     }
 
     public function getNameAttribute()

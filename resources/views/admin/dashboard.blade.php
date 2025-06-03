@@ -37,12 +37,13 @@
                     </div>
                 </div>
             </div>
+            <!-- Qui la card modificata -->
             <div class="col-md-3">
                 <div class="card text-white bg-warning mb-3 shadow">
                     <div class="card-body">
-                        <h5 class="card-title">Appuntamenti</h5>
-                        <p class="card-text display-4">{{ $appuntamentiCount ?? '-' }}</p>
-                        <a href="{{ route('admin.appuntamenti.index') }}" class="btn btn-light btn-sm">Gestisci</a>
+                        <h5 class="card-title">Agenda Slot</h5>
+                        <p class="card-text display-4">{{ $agendeCount ?? '-' }}</p>
+                        <a href="{{ route('admin.agende.index') }}" class="btn btn-light btn-sm">Gestisci</a>
                     </div>
                 </div>
             </div>
@@ -66,7 +67,7 @@
         <div class="row mb-4">
             <div class="col">
                 <a href="{{ route('admin.statistiche.index') }}" class="btn btn-outline-primary">Vai alle Statistiche avanzate</a>
-                <a href="{{ route('admin.agende.index') }}" class="btn btn-outline-secondary">Gestisci Agenda Slot</a>
+{{--                <a href="{{ route('admin.agende.index') }}" class="btn btn-outline-secondary">Gestisci Agenda Slot</a>--}}
             </div>
         </div>
     </div>

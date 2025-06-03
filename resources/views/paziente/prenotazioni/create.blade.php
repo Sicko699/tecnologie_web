@@ -40,7 +40,7 @@
                                 class="form-select @error('giorno_escluso') is-invalid @enderror">
                             <option value="" {{ old('giorno_escluso') == '' ? 'selected' : '' }}>Nessuno</option>
                             @php
-                                $giorni = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+                                $giorni = ['Lunedi', 'Martedi', 'Mercoledi', 'Giovedi', 'Venerdi', 'Sabato'];
                             @endphp
                             @foreach($giorni as $giorno)
                                 <option value="{{ $giorno }}"

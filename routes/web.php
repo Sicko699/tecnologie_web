@@ -122,6 +122,8 @@ Route::middleware(['auth', 'role:staff'])->prefix('staff')->name('staff.')->grou
     Route::get('/agenda', [StaffAppuntamentoController::class, 'agendaGiornalieraForm'])->name('agenda.giornaliera.form');
     Route::get('/agenda/giornaliera', [StaffAppuntamentoController::class, 'agendaGiornaliera'])->name('agenda.giornaliera');
     Route::resource('prestazioni', StaffPrestazioneController::class)->except(['show']);
+    Route::get('staff/membri/{id}/edit-prestazioni', [StaffPrestazioneController::class, 'editGestionePrestazioni'])->name('staff.membri.editPrestazioni');
+    Route::put('staff/membri/{id}/update-prestazioni', [StaffPrestazioneController::class, 'updateGestionePrestazioni'])->name('staff.membri.updatePrestazioni');
 });
 
 

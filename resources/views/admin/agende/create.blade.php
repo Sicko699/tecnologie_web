@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Nuovo Slot Agenda')
 
+@section('content')
 <div class="container mt-4">
     <h1>Nuovo Slot Agenda</h1>
     <form action="{{ route('admin.agende.store') }}" method="POST">
@@ -307,3 +308,4 @@
         }
     }
 </script>
+@endsection

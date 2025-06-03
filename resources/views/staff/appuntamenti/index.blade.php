@@ -1,3 +1,4 @@
+@php use Carbon\Carbon; @endphp
 @extends('layouts.app')
 @section('title', 'Appuntamenti in agenda')
 
@@ -19,13 +20,26 @@
             @foreach($appuntamenti as $a)
                 <tr>
                     <td>{{ $a->data }}</td>
-                    <td>{{ $a->ora }}</td>
+                    <td>
+                        {{
+                            Carbon::createFromFormat('H:i:s', $a->ora)->format('H:i')
+                        }} -
+                        {{
+                            Carbon::createFromFormat('H:i:s', $a->ora)
+                                ->addHour()
+                                ->format('H:i')
+                        }}
+                    </td>
+
                     <td>{{ $a->richiesta->utente->name ?? $a->richiesta->utente->codice_fiscale }}</td>
                     <td>{{ $a->richiesta->prestazione->nome }}</td>
                     <td>{{ $a->stato }}</td>
                     <td>
-                        <a href="{{ route('staff.appuntamenti.edit', ['appuntamento' => $a->id_appuntamento]) }}" class="btn btn-warning btn-sm">Modifica</a>
-                        <form action="{{ route('staff.appuntamenti.destroy', ['appuntamento' => $a->id_appuntamento]) }}" method="POST" class="d-inline" onsubmit="return confirm('Confermi eliminazione?')">
+                        <a href="{{ route('staff.appuntamenti.edit', ['appuntamento' => $a->id_appuntamento]) }}"
+                           class="btn btn-warning btn-sm">Modifica</a>
+                        <form
+                            action="{{ route('staff.appuntamenti.destroy', ['appuntamento' => $a->id_appuntamento]) }}"
+                            method="POST" class="d-inline" onsubmit="return confirm('Confermi eliminazione?')">
                             @csrf @method('DELETE')
                             <button class="btn btn-danger btn-sm">Annulla</button>
                         </form>

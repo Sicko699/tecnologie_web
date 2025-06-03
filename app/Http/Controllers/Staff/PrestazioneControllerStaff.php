@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
+use App\Models\MembroStaff;
 use Illuminate\Http\Request;
 use App\Models\Prestazione;
 use App\Models\Dipartimento;
@@ -72,5 +73,27 @@ class PrestazioneControllerStaff extends Controller
         $prestazione = Prestazione::where('id_membro', $cf)->findOrFail($id);
         $prestazione->delete();
         return redirect()->route('staff.prestazioni.index')->with('success', 'Prestazione eliminata!');
+    }
+
+    public function editGestionePrestazioni($idMembro)
+    {
+        $membro = MembroStaff::findOrFail($idMembro);
+        $prestazioni = Prestazione::all();
+        $prestazioniGestite = $membro->prestazioni->pluck('id_prestazione')->toArray();
+
+        return view('staff.membri.edit_prestazioni', compact('membro', 'prestazioni', 'prestazioniGestite'));
+    }
+
+    public function updateGestionePrestazioni(Request $request, $idMembro)
+    {
+        $membro = MembroStaff::findOrFail($idMembro);
+
+        // Salva la lista delle prestazioni selezionate
+        $prestazioniIds = $request->input('prestazioni', []); // array di id_prestazione
+
+        // Aggiorna la tabella pivot
+        $membro->prestazioni()->sync($prestazioniIds);
+
+        return redirect()->route('staff.membri.index')->with('success', 'Prestazioni assegnate aggiornate!');
     }
 }
