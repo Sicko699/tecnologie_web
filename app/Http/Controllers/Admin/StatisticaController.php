@@ -17,28 +17,40 @@ class StatisticaController extends Controller
     {
         $start = $request->input('start_date');
         $end = $request->input('end_date');
+        $codiceFiscale = $request->input('utente_id'); // codice fiscale
 
-        $query = Appuntamento::query();
-        if ($start && $end) {
-            $query->whereBetween('data', [$start, $end]);
-        }
+        // Filtro base per data
+        $dateFilter = function ($query) use ($start, $end) {
+            if ($start && $end) {
+                $query->whereBetween('data', [$start, $end]);
+            }
+        };
 
-        // 1. Numero prestazioni per tipo
-        $prestazioniCount = $query->clone()->selectRaw('prestazione_id, count(*) as totale')
-            ->groupBy('prestazione_id')->with('prestazione')->get();
+        $base = Appuntamento::where($dateFilter)->with('richiesta.prestazione', 'richiesta.dipartimento', 'richiesta.utente');
 
-        // 2. Numero prestazioni per dipartimento
-        $dipartimentiCount = $query->clone()->selectRaw('dipartimento_id, count(*) as totale')
-            ->groupBy('dipartimento_id')->with('dipartimento')->get();
+        // Numero prestazioni per tipo
+        $prestazioniCount = (clone $base)->get()
+            ->groupBy(fn($a) => optional($a->richiesta->prestazione)->nome)
+            ->map(fn($items) => count($items));
 
-        // 3. Tutte le prestazioni erogate ad utente esterno specificato
-        $utente_id = $request->input('utente_id');
+        // Numero prestazioni per dipartimento (una barra per dipartimento)
+        $dipartimentiCount = (clone $base)->get()
+            ->groupBy(fn($a) => optional($a->richiesta->dipartimento)->nome)
+            ->map(fn($items) => count($items));
+
+        // Prestazioni per utente specificato
         $prestazioniUtente = null;
-        if ($utente_id) {
-            $prestazioniUtente = $query->clone()->where('utente_id', $utente_id)
-                ->with('prestazione', 'dipartimento')->get();
+        if ($codiceFiscale) {
+            $prestazioniUtente = (clone $base)
+                ->get()
+                ->filter(fn($a) => optional($a->richiesta->utente)->codice_fiscale === $codiceFiscale);
         }
 
-        return view('admin.statistiche.index', compact('prestazioniCount', 'dipartimentiCount', 'prestazioniUtente'));
+        return view('admin.statistiche.index', compact(
+            'prestazioniCount',
+            'dipartimentiCount',
+            'prestazioniUtente'
+        ));
+
     }
 }

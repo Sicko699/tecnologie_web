@@ -13,6 +13,7 @@ class UserFactory extends Factory
             'codice_fiscale' => strtoupper($this->faker->unique()->bothify('????????????????')),
             'nome' => $this->faker->firstName,
             'cognome' => $this->faker->lastName,
+            'username' => $this->faker->unique()->userName,
             'email' => $this->faker->unique()->safeEmail,
             'password' => bcrypt('password'),
             'telefono' => $this->faker->phoneNumber,

@@ -22,4 +22,5 @@ class Appuntamento extends Model
     {
         return $this->belongsTo(Richiesta::class, 'id_richiesta');
     }
+
 }

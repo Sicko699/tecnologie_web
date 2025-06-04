@@ -14,7 +14,7 @@ class CreateNotificheTable extends Migration
             $table->string('messaggio', 255);
             $table->timestamp('data_creazione')->useCurrent();
             $table->boolean('conferma_lettura')->default(false);
-            $table->foreign('id_utente')->references('codice_fiscale')->on('users')->onDelete('cascade');
+            $table->foreign('codice_fiscale')->references('codice_fiscale')->on('users')->onDelete('cascade');
         });
     }
 

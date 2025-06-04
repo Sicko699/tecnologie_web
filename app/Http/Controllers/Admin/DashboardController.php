@@ -3,30 +3,45 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 use App\Models\Dipartimento;
 use App\Models\Prestazione;
-use App\Models\MembroStaff;
-use App\Models\Agenda; // <-- aggiungi questa riga!
+use App\Models\User;
+use App\Models\Agenda;
+use App\Models\Appuntamento;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        // Conteggi da visualizzare nella dashboard
+        // Conteggi per le card
         $dipartimentiCount = Dipartimento::count();
         $prestazioniCount = Prestazione::count();
-        $utentiCount = MembroStaff::count();
-        $agendeCount = Agenda::count(); // <-- aggiungi questa riga
+        $utentiCount = User::whereIn('ruolo', ['admin', 'staff'])->count();
+        $agendeCount = Agenda::count();
 
-        // Dati placeholder per grafico (puoi sostituirli con query reali)
-        $chartLabels = ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu'];
-        $chartData = [10, 20, 15, 30, 25, 40];
+        // Dati per il grafico: ultimi 6 mesi
+        $chartLabels = [];
+        $chartData = [];
+
+        for ($i = 5; $i >= 0; $i--) {
+            $month = Carbon::now()->subMonths($i);
+            $label = $month->format('M Y'); // Es: "Jun 2025"
+
+            $count = Appuntamento::whereYear('data', $month->year)
+                ->whereMonth('data', $month->month)
+                ->count();
+
+            $chartLabels[] = $label;
+            $chartData[] = $count;
+        }
 
         return view('admin.dashboard', compact(
             'dipartimentiCount',
             'prestazioniCount',
             'utentiCount',
-            'agendeCount',      // <-- aggiungi qui!
+            'agendeCount',
             'chartLabels',
             'chartData'
         ));

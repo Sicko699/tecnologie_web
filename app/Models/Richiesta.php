@@ -13,10 +13,14 @@ class Richiesta extends Model
     public $timestamps = false;
 
     protected $primaryKey = 'id_richiesta';
-
     protected $fillable = [
-        'id_utente', 'id_prestazione', 'giorno_escluso', 'stato'
+        'id_utente',
+        'id_prestazione',
+        'giorno_escluso',
+        'stato',
+        'id_dipartimento'
     ];
+
 
     public function utente()
     {
@@ -32,4 +36,10 @@ class Richiesta extends Model
     {
         return $this->hasMany(Appuntamento::class, 'id_richiesta');
     }
+
+    public function dipartimento()
+    {
+        return $this->belongsTo(Dipartimento::class, 'id_dipartimento');
+    }
+
 }
