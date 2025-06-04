@@ -48,9 +48,9 @@
                 <tbody>
                 @foreach($prestazioniUtente as $p)
                     <tr>
-                        <td>{{ $p->id_prestazione }}</td>
-                        <td>{{ $p->prestazione->nome ?? '-' }}</td>
-                        <td>{{ $p->dipartimento->nome ?? '-' }}</td>
+                        <td>{{ $p->id_appuntamento }}</td>
+                        <td>{{ $p->richiesta->prestazione->nome ?? '-' }}</td>
+                        <td>{{ $p->richiesta->dipartimento->nome ?? '-' }}</td>
                         <td>{{ $p->data ?? '-' }}</td>
                     </tr>
                 @endforeach
