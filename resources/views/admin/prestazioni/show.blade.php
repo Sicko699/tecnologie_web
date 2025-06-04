@@ -11,12 +11,9 @@
                 </div>
             </div>
             <div class="d-flex gap-2">
-                <a href="{{ route('admin.prestazioni.index') }}" class="btn btn-light border-0 text-muted">
-                    ← Indietro
-                </a>
-                <a href="{{ route('admin.prestazioni.edit', $prestazione) }}" class="btn btn-dark">
-                    Modifica
-                </a>
+                <a href="{{ route('admin.prestazioni.index') }}" class="btn btn-outline-secondary">← Indietro</a>
+                <a href="{{ route('admin.prestazioni.edit', $prestazione) }}" class="btn btn-primary">Modifica</a>
+
             </div>
         </div>
         @if($agenda)
