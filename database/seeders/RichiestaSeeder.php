@@ -6,21 +6,22 @@ use Illuminate\Database\Seeder;
 use App\Models\Richiesta;
 use App\Models\User;
 use App\Models\Prestazione;
+use App\Models\Dipartimento;
 
 class RichiestaSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        $pazienti = User::where('ruolo', 'paziente')->get();
-        $prestazioni = Prestazione::all();
+        $user = User::where('ruolo', 'paziente')->inRandomOrder()->first();
+        $prestazione = Prestazione::inRandomOrder()->first();
+        $dipartimento = $prestazione->id_dipartimento;
 
-        foreach ($pazienti as $paziente) {
-            foreach ($prestazioni->random(2) as $prestazione) {
-                Richiesta::factory()->create([
-                    'id_utente' => $paziente->codice_fiscale,
-                    'id_prestazione' => $prestazione->id_prestazione
-                ]);
-            }
-        }
+        Richiesta::create([
+            'id_utente' => $user->codice_fiscale,
+            'id_prestazione' => $prestazione->id_prestazione,
+            'id_dipartimento' => $dipartimento,
+            'giorno_escluso' => 'lunedì',
+            'stato' => 'in attesa',
+        ]);
     }
 }

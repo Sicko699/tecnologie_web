@@ -64,10 +64,10 @@
                     width: 100px; height: 100px; border-radius: 50%; background-size: cover;">
                                 </div>
                                 <div class="text pl-3">
-                                    <h3 class="mb-0">{{ $medicoInEvidenza->name }}</h3>
+                                    <h3 class="mb-0">{{ $medicoInEvidenza->nome }}</h3>
+                                    <h3 class="mb-0">{{ $medicoInEvidenza->cognome }}</h3>
                                     <span class="position">{{ $medicoInEvidenza->ruolo ?? 'Medico' }}</span>
                                 </div>
-                            </div>
                         @else
                             <p class="text-danger mt-3">⚠️ Nessun medico disponibile al momento.</p>
                         @endif
@@ -210,6 +210,7 @@
                             </div>
                             <div class="media-body p-2 mt-3">
                                 <h3 class="heading">{{ $dentista->nome }}</h3>
+                                <h3 class="heading">{{ $dentista->cognome }}</h3>
                                 <p>{{ $dentista->membroStaff->descrizione ?? 'Nessuna descrizione disponibile' }}</p>
                             </div>
                         </div>

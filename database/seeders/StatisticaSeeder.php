@@ -6,21 +6,22 @@ use Illuminate\Database\Seeder;
 use App\Models\Statistica;
 use App\Models\Amministratore;
 use App\Models\Prestazione;
+use Illuminate\Support\Carbon;
 
 class StatisticaSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        $admin = Amministratore::all();
-        $prestazioni = Prestazione::all();
+        $admin = Amministratore::inRandomOrder()->first();
+        $prestazione = Prestazione::inRandomOrder()->first();
 
-        foreach ($admin as $a) {
-            foreach ($prestazioni->random(2) as $prestazione) {
-                Statistica::factory()->create([
-                    'id_amministratore' => $a->codice_fiscale,
-                    'id_prestazione' => $prestazione->id_prestazione
-                ]);
-            }
-        }
+        Statistica::create([
+            'id_amministratore' => $admin->codice_fiscale,
+            'id_prestazione' => $prestazione->id_prestazione,
+            'data_inizio' => Carbon::now()->subMonth()->toDateString(),
+            'data_fine' => Carbon::now()->toDateString(),
+            'tipo' => 'frequenza',
+            'risultato' => '50 appuntamenti eseguiti',
+        ]);
     }
 }

@@ -2,46 +2,43 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Database\Seeder;
 use App\Models\Medico;
-use App\Models\Prestazione;
 
-// === DENTISTI ===
-$dentisti = [
-    ['nome' => 'Luca', 'cognome' => 'Bianchi', 'specializzazione' => 'Odontoiatria generale'],
-    ['nome' => 'Sara', 'cognome' => 'Rossi', 'specializzazione' => 'Ortodontista'],
-    ['nome' => 'Giulia', 'cognome' => 'Neri', 'specializzazione' => 'Igienista dentale'],
-];
+class MedicoSeeder extends Seeder
+{
+    public function run()
+    {
+        $medici = [
+            [
+                'nome' => 'Luca',
+                'cognome' => 'Bianchi',
+                'specializzazione' => 'Ortodonzia',
+            ],
+            [
+                'nome' => 'Giulia',
+                'cognome' => 'Rossi',
+                'specializzazione' => 'Chirurgia Orale',
+            ],
+            [
+                'nome' => 'Marco',
+                'cognome' => 'Verdi',
+                'specializzazione' => 'Igiene e Prevenzione',
+            ],
+            [
+                'nome' => 'Sara',
+                'cognome' => 'Esposito',
+                'specializzazione' => 'Estetica Dentale',
+            ],
+            [
+                'nome' => 'Francesco',
+                'cognome' => 'Romano',
+                'specializzazione' => 'Implantologia',
+            ],
+        ];
 
-foreach ($dentisti as $dati) {
-    Medico::create($dati);
+        foreach ($medici as $medico) {
+            Medico::create($medico);
+        }
+    }
 }
-
-// === PRESTAZIONI ===
-$prestazioni = [
-    [
-        'nome' => 'Pulizia dentale',
-        'descrizione' => 'Rimozione placca e tartaro.',
-        //'orari' => 'Lunedì - Mercoledì 10:00–13:00',
-        'prescrizioni' => 'Non mangiare 1 ora prima.',
-        'medico_id' => Medico::where('cognome', 'Neri')->first()->id,
-    ],
-    [
-        'nome' => 'Visita ortodontica',
-        'descrizione' => 'Controllo allineamento dentale.',
-        //'orari' => 'Martedì e Giovedì 14:00–17:00',
-        'prescrizioni' => 'Portare radiografie se disponibili.',
-        'medico_id' => Medico::where('cognome', 'Rossi')->first()->id,
-    ],
-    [
-        'nome' => 'Visita odontoiatrica',
-        'descrizione' => 'Controllo generale dei denti e delle gengive.',
-        //'orari' => 'Lunedì - Venerdì 09:00–12:00',
-        'prescrizioni' => 'Lavare i denti prima della visita.',
-        'medico_id' => Medico::where('cognome', 'Bianchi')->first()->id,
-    ],
-];
-
-foreach ($prestazioni as $prestazione) {
-    Prestazione::create($prestazione);
-}
-

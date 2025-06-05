@@ -3,21 +3,19 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\MembroStaff;
-use App\Models\User;
-use App\Models\Dipartimento;
+use Illuminate\Support\Facades\DB;
 
 class MembroStaffSeeder extends Seeder
 {
     public function run()
     {
-        $dipartimenti = Dipartimento::all();
-        $staff = User::where('ruolo', 'staff')->get();
-        foreach ($staff as $i => $u) {
-            MembroStaff::factory()->create([
-                'codice_fiscale' => $u->codice_fiscale,
-                'id_dipartimento' => $dipartimenti[$i % $dipartimenti->count()]->id_dipartimento
-            ]);
-        }
+        DB::table('membro_staff')->insert([
+            [
+                'codice_fiscale' => 'BNCGPP90A01F205T',
+                'id_dipartimento' => 1, // Ortodonzia
+                'descrizione' => 'Ortodonzista certificato'
+            ]
+        ]);
     }
 }
+

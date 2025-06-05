@@ -18,6 +18,12 @@ class Medico extends Model
     {
         return $this->hasMany(Prestazione::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }
 
 
