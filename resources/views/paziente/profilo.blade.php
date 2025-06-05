@@ -37,19 +37,34 @@
 
                     <div class="mb-4">
                         <label class="form-label fw-semibold">Vecchia Password</label>
-                        <input type="password" class="form-control @error('current_password') is-invalid @enderror" name="current_password">
+                        <div class="position-relative">
+                            <input type="password" class="form-control @error('current_password') is-invalid @enderror" name="current_password" id="current_password">
+                            <span class="password-toggle" onclick="togglePassword('current_password', this)">
+                            <i class="fa-regular fa-eye"></i>
+                        </span>
+                        </div>
                         @error('current_password') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
 
                     <div class="mb-4">
                         <label class="form-label fw-semibold">Nuova Password</label>
-                        <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" autocomplete="new-password">
+                        <div class="position-relative">
+                            <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" id="new_password" autocomplete="new-password">
+                            <span class="password-toggle" onclick="togglePassword('new_password', this)">
+                            <i class="fa-regular fa-eye"></i>
+                        </span>
+                        </div>
                         @error('password') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
 
                     <div class="mb-4">
                         <label class="form-label fw-semibold">Conferma Nuova Password</label>
-                        <input type="password" class="form-control" name="password_confirmation" autocomplete="new-password">
+                        <div class="position-relative">
+                            <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" autocomplete="new-password">
+                            <span class="password-toggle" onclick="togglePassword('password_confirmation', this)">
+                            <i class="fa-regular fa-eye"></i>
+                        </span>
+                        </div>
                     </div>
 
                     <div class="d-flex gap-2 justify-content-between align-items-center pt-1">
@@ -71,6 +86,7 @@
             </div>
         </div>
     </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         .form-label {
             font-size: 1.05em;
@@ -102,6 +118,20 @@
         .btn-outline-danger {
             border-radius: 20px;
         }
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 1.2em;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #888;
+            font-size: 1.18em;
+            z-index: 10;
+            height: 1.8em;
+            display: flex;
+            align-items: center;
+        }
+        .password-toggle:hover { color: #2b79c9; }
         @media (max-width: 600px) {
             .container {
                 padding-left: 0.6em;
@@ -109,4 +139,19 @@
             }
         }
     </style>
+    <script>
+        function togglePassword(fieldId, el) {
+            const input = document.getElementById(fieldId);
+            const icon = el.querySelector('i');
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
 @endsection

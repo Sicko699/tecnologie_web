@@ -20,7 +20,8 @@ class UserFactory extends Factory
             'data_nascita' => $this->faker->date('Y-m-d', '2003-12-31'),
             'foto' => null,
             'ruolo' => $this->faker->randomElement(['paziente','staff','admin']),
-            'remember_token' => Str::random(10),
+	    'remember_token' => Str::random(10),
+	    'id_dipartimento' = null,
         ];
     }
 }

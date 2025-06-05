@@ -3,54 +3,52 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('users')->insert([
-            [
-                'codice_fiscale' => 'RSSMRA85M01H501Z',
-                'username' => 'admin1',
-                'nome' => 'Mario',
-                'cognome' => 'Rossi',
-                'email' => 'admin@studio.it',
-                'password' => Hash::make('password'),
-                'telefono' => '3201234567',
-                'data_nascita' => '1985-01-01',
-                'ruolo' => 'admin',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'codice_fiscale' => 'BNCGPP90A01F205T',
-                'username' => 'staff1',
-                'nome' => 'Giuseppe',
-                'cognome' => 'Bianchi',
-                'email' => 'staff@studio.it',
-                'password' => Hash::make('password'),
-                'telefono' => '3298765432',
-                'data_nascita' => '1990-01-01',
-                'ruolo' => 'staff',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'codice_fiscale' => 'VRDLGI95C10H501A',
-                'username' => 'paziente1',
-                'nome' => 'Lucia',
-                'cognome' => 'Verdi',
-                'email' => 'lucia@studio.it',
-                'password' => Hash::make('password'),
-                'telefono' => '3381234567',
-                'data_nascita' => '1995-03-10',
-                'ruolo' => 'paziente',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]
+        $pw = '9wNl' . '9wNl';
+
+        User::create([
+            'codice_fiscale' => 'PAZIPAZI01A01A', 
+            'nome' => 'Utente',
+            'cognome' => 'Esterno',
+            'username' => 'pazipazi',
+            'email' => 'pazipazi@email.com',
+            'password' => Hash::make($pw),
+            'telefono' => '3331234567',
+            'data_nascita' => '2000-01-01',
+            'foto' => null,
+            'ruolo' => 'paziente', 
         ]);
+
+        User::create([
+            'codice_fiscale' => 'STAFFSTAFF01A01A',
+            'nome' => 'Staff',
+            'cognome' => 'Membro',
+            'username' => 'staffstaff',
+            'email' => 'staffstaff@email.com',
+            'password' => Hash::make($pw),
+            'telefono' => '3339876543',
+            'data_nascita' => '1990-01-01',
+            'foto' => null,
+            'ruolo' => 'staff',
+        ]);
+
+        User::create([
+            'codice_fiscale' => 'ADMINADMIN01A01A',
+            'nome' => 'Admin',
+            'cognome' => 'Utente',
+            'username' => 'adminadmin',
+            'email' => 'adminadmin@email.com',
+            'password' => Hash::make($pw),
+            'telefono' => '3331112233',
+            'data_nascita' => '1980-01-01',
+            'foto' => null,
+            'ruolo' => 'admin', 
+        ]); 
     }
 }
-
