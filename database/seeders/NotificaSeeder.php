@@ -8,13 +8,13 @@ use App\Models\User;
 
 class NotificaSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        $utenti = User::all();
-        foreach ($utenti as $utente) {
-            Notifica::factory()->count(2)->create([
-                'id_utente' => $utente->codice_fiscale
-            ]);
-        }
+        $user = User::where('ruolo', 'paziente')->inRandomOrder()->first();
+
+        Notifica::create([
+            'codice_fiscale' => $user->codice_fiscale,
+            'messaggio' => 'Hai un nuovo appuntamento prenotato.',
+        ]);
     }
 }

@@ -3,24 +3,26 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Prestazione;
-use App\Models\Dipartimento;
-use App\Models\MembroStaff;
+use Illuminate\Support\Facades\DB;
 
 class PrestazioneSeeder extends Seeder
 {
     public function run()
     {
-        $dipartimenti = Dipartimento::all();
-        $membri = MembroStaff::all();
-
-        foreach ($dipartimenti as $dep) {
-            foreach ($membri as $membro) {
-                Prestazione::factory()->create([
-                    'id_dipartimento' => $dep->id_dipartimento,
-                    'id_membro' => $membro->codice_fiscale
-                ]);
-            }
-        }
+        DB::table('prestazioni')->insert([
+            [
+                'nome' => 'Igiene orale professionale',
+                'descrizione' => 'Pulizia completa dei denti con ablazione del tartaro',
+                'id_dipartimento' => 3,
+                'id_membro' => 'BNCGPP90A01F205T'
+            ],
+            [
+                'nome' => 'Apparecchio fisso',
+                'descrizione' => 'Trattamento ortodontico con brackets',
+                'id_dipartimento' => 1,
+                'id_membro' => 'BNCGPP90A01F205T'
+            ]
+        ]);
     }
 }
+

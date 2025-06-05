@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Dipartimento;
 use App\Models\User;
 use App\Models\MembroStaff;
 use Illuminate\Http\Request;
@@ -18,16 +19,18 @@ class UtenteController extends Controller
 
     public function index()
     {
-        $utenti = User::with(['membroStaff.dipartimento'])
-            ->where('ruolo', 'staff')
+        $utenti = User::where('ruolo', 'staff')
+            ->with('membroStaff.dipartimento')
             ->get();
+
         return view('admin.utenti.index', compact('utenti'));
     }
 
+
+
     public function create()
     {
-        // Recupera tutti i dipartimenti per la select
-        $dipartimenti = \App\Models\Dipartimento::all();
+        $dipartimenti = Dipartimento::all();
         return view('admin.utenti.create', compact('dipartimenti'));
     }
 
@@ -37,30 +40,30 @@ class UtenteController extends Controller
             'nome'           => ['required', 'string', 'max:100'],
             'cognome'        => ['required', 'string', 'max:100'],
             'username'       => ['required', 'string', 'max:50', 'unique:users,username'],
+            'email'          => ['required', 'email', 'unique:users,email'],
             'password'       => ['required', 'confirmed', Rules\Password::defaults()],
             'id_dipartimento'=> ['required', 'exists:dipartimenti,id_dipartimento'],
         ]);
 
-        // Genera un codice fiscale fittizio univoco se non lo inserisci, o genera a partire da nome/cognome
-        // Qui creiamo una stringa random di 16 caratteri (ma puoi sostituire con la logica che vuoi tu)
         $codice_fiscale = strtoupper(substr(uniqid(md5($request->nome . $request->cognome)), 0, 16));
-        // oppure puoi chiedere di inserirlo tramite la form, ma ora lo generiamo per esempio.
 
-        // CREA L'UTENTE STAFF
         $user = User::create([
             'codice_fiscale' => $codice_fiscale,
             'nome'           => $request->nome,
             'cognome'        => $request->cognome,
             'username'       => $request->username,
+            'email'          => $request->email,
             'password'       => Hash::make($request->password),
             'ruolo'          => 'staff',
         ]);
 
-        // CREA IL MEMBRO STAFF ASSOCIATO
         $membroStaff = MembroStaff::create([
             'codice_fiscale'  => $user->codice_fiscale,
             'id_dipartimento' => $request->id_dipartimento,
         ]);
+
+        $prestazioni = \App\Models\Prestazione::where('id_dipartimento', $membroStaff->id_dipartimento)->get();
+        $membroStaff->prestazioni()->syncWithoutDetaching($prestazioni->pluck('id_prestazione'));
 
         return redirect()->route('admin.utenti.index')->with('success', 'Staff creato con successo.');
     }
@@ -68,44 +71,46 @@ class UtenteController extends Controller
     public function edit($codice_fiscale)
     {
         $utente = User::findOrFail($codice_fiscale);
-        $dipartimenti = \App\Models\Dipartimento::all();
+        $dipartimenti = Dipartimento::all();
         return view('admin.utenti.edit', compact('utente', 'dipartimenti'));
     }
 
     public function update(Request $request, $codice_fiscale)
     {
-        $utente = User::findOrFail($codice_fiscale);
+        $utente = User::with('membroStaff')->findOrFail($codice_fiscale);
 
         $request->validate([
-            'nome'     => 'required|string|max:100',
-            'cognome'  => 'required|string|max:100',
-            'username' => 'required|string|max:50|unique:users,username,' . $utente->codice_fiscale . ',codice_fiscale',
-            'id_dipartimento' => 'required|exists:dipartimenti,id_dipartimento',
-            'password' => 'nullable|confirmed', // opzionale, solo se vuoi cambiare password
+            'nome'             => 'required|string|max:100',
+            'cognome'          => 'required|string|max:100',
+            'username'         => 'required|string|max:50|unique:users,username,' . $utente->codice_fiscale . ',codice_fiscale',
+            'id_dipartimento'  => 'required|exists:dipartimenti,id_dipartimento',
         ]);
 
-        $utente->nome = $request->nome;
-        $utente->cognome = $request->cognome;
-        $utente->username = $request->username;
-        // aggiorna password solo se compilata
-        if($request->filled('password')) {
-            $utente->password = Hash::make($request->password);
-        }
-        $utente->save();
+        $utente->update([
+            'nome'     => $request->nome,
+            'cognome'  => $request->cognome,
+            'username' => $request->username,
+        ]);
 
-        // aggiorna dipartimento in membro_staff
+        // ✅ Se esiste, aggiorna. Se non esiste, crea.
         if ($utente->membroStaff) {
-            $utente->membroStaff->id_dipartimento = $request->id_dipartimento;
-            $utente->membroStaff->save();
+            $utente->membroStaff->update([
+                'id_dipartimento' => $request->id_dipartimento,
+            ]);
+        } else {
+            $utente->membroStaff()->create([
+                'id_dipartimento' => $request->id_dipartimento,
+            ]);
         }
 
-        return redirect()->route('admin.utenti.index')->with('success', 'Utente aggiornato!');
+        // Controllo finale
+        $utente->load('membroStaff.dipartimento');
+        return redirect()->route('admin.utenti.index')->with('success', 'Utente aggiornato correttamente.');
     }
 
     public function destroy($codice_fiscale)
     {
         $utente = User::findOrFail($codice_fiscale);
-        // cancella anche membro_staff associato
         if ($utente->membroStaff) {
             $utente->membroStaff->delete();
         }

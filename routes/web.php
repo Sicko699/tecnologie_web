@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PublicController::class, 'home'])->name('home');
 Route::get('/dottori', [PublicController::class, 'doctor'])->name('doctor.index');
 Route::get('/trattamenti', [PublicController::class, 'department'])->name('department.index');
+Route::get('/trattamenti/{id}', [PublicController::class, 'show'])->name('prestazione.show');
 Route::get('/contatti', [PublicController::class, 'contact'])->name('contact');
 Route::get('/about', [PublicController::class, 'about'])->name('about');
 Route::post('/richiesta-pubblica', [RichiestaController::class, 'publicStore'])->name('richiesta.pubblica.store');

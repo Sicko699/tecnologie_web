@@ -31,7 +31,7 @@
             <span class="oi oi-menu"></span> Menu
         </button>
         <div class="collapse navbar-collapse" id="ftco-nav">
-            <ul class="navbar-nav m-auto">
+            <ul class="navbar-nav m-auto align-items-center">
                 <li class="nav-item {{ request()->routeIs('home') ? 'active' : '' }}">
                     <a href="{{ route('home') }}" class="nav-link pl-0">Home</a>
                 </li>
@@ -48,6 +48,7 @@
                     <a href="{{ route('contact') }}" class="nav-link">Contatti</a>
                 </li>
 
+                {{-- Autenticazione --}}
                 @auth
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
@@ -69,6 +70,19 @@
                     <li class="nav-item"><a href="{{ route('login') }}" class="nav-link">Login</a></li>
                     <li class="nav-item"><a href="{{ route('register') }}" class="nav-link">Registrati</a></li>
                 @endauth
+
+                {{--  Form di ricerca  --}}
+                <li class="nav-item">
+                    <form class="d-flex ms-3" method="GET" action="{{ route('ricerca.prestazioni') }}">
+                        <input class="form-control form-control-sm me-2" type="search" name="q"
+                               placeholder="Effettua una ricerca" aria-label="Cerca"
+                               value="{{ request('q') }}">
+                        <button class="btn btn-outline-info btn-sm rounded-pill px-3" type="submit">
+                            Cerca
+                        </button>
+                    </form>
+                </li>
+
             </ul>
         </div>
     </div>

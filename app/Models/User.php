@@ -62,4 +62,10 @@ class User extends Authenticatable
     {
         return 'username';
     }
+
+    public function medico()
+    {
+        return $this->hasOne(Medico::class);
+    }
+
 }

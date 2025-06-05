@@ -27,6 +27,7 @@ class AppuntamentoController extends Controller
 
         $agenda = Agenda::where('id_prestazione', $richiesta->id_prestazione)->firstOrFail();
         $configurazione = $agenda->configurazione_orari;     // array di array slot per ogni giorno
+        //dd($configurazione);
         $giorniSettimana = $agenda->giorni_settimana;        // array tipo ['Lunedì', 'Martedì', ...]
         $giornoEscluso = $richiesta->giorno_escluso;         // es. 'Martedì' o null
 
@@ -39,14 +40,14 @@ class AppuntamentoController extends Controller
         $slotDisponibili = [];
         $erroreGiornoEscluso = null;
 
-        // 1. Controllo: la data selezionata è il giorno escluso dall’utente?
+        // 1. Controllo: la data selezionata è il giorno escluso dall'utente?
         if ($giornoEscluso && $giornoData === $giornoEscluso) {
             $erroreGiornoEscluso = $giornoEscluso;
         } else {
-            // 2. La data selezionata è tra i giorni lavorativi dell’agenda?
+            // 2. La data selezionata è tra i giorni lavorativi dell'agenda?
             $idxInAgenda = array_search($giornoData, $giorniSettimana);
             if ($idxInAgenda !== false) {
-                // 3. Recupera gli slot previsti per quel giorno dall’agenda
+                // 3. Recupera gli slot previsti per quel giorno dall'agenda
                 $slotGiorno = $configurazione[$idxInAgenda] ?? [];
                 foreach ($slotGiorno as $slot) {
                     $oraInizio = explode('-', $slot)[0];
@@ -99,7 +100,7 @@ class AppuntamentoController extends Controller
         $carbonData = Carbon::parse($data);
         $giornoData = ucfirst($carbonData->locale('it')->dayName);
         if ($giornoData === $giornoEscluso) {
-            return back()->withErrors(['data' => 'Non puoi prenotare in questo giorno: l’utente lo ha escluso.'])->withInput();
+            return back()->withErrors(['data' => 'Non puoi prenotare in questo giorno: l utente lo ha escluso.'])->withInput();
         }
 
         // Trova max appuntamenti consentiti per quello slot
@@ -128,11 +129,12 @@ class AppuntamentoController extends Controller
             $richiesta->stato = 'confermato';
             $richiesta->save();
 
-            // NOTIFICA all’utente (sostituisci qui con il campo corretto!)
+            // NOTIFICA all'utente - CAMPI CORRETTI
             Notifica::create([
+                'codice_fiscale' => $richiesta->utente->codice_fiscale,
                 'messaggio' => 'Il tuo appuntamento è stato confermato per il ' . $data . ' alle ' . $oraInizio,
-                'letta' => false
-                // 'id_utente' => $richiesta->utente->id_utente // <-- aggiungi qui il campo giusto!
+                'data_creazione' => now(),
+                'conferma_lettura' => false
             ]);
         });
 
@@ -167,22 +169,28 @@ class AppuntamentoController extends Controller
             'ora' => $oraInizio,
             'stato' => $request->stato,
         ]);
-        // NOTIFICA all'utente
+
+        // NOTIFICA all'utente - CAMPI CORRETTI
         Notifica::create([
+            'codice_fiscale' => $appuntamento->richiesta->utente->codice_fiscale,
             'messaggio' => 'Il tuo appuntamento del ' . $appuntamento->data . ' è stato modificato!',
-            'letta' => false
-            // 'id_utente' => $appuntamento->richiesta->utente->id_utente
+            'data_creazione' => now(),
+            'conferma_lettura' => false
         ]);
+
         return redirect()->route('staff.appuntamenti.index')->with('success', 'Appuntamento aggiornato!');
     }
 
     public function destroy(Appuntamento $appuntamento)
     {
+        // NOTIFICA all'utente - CAMPI CORRETTI
         Notifica::create([
+            'codice_fiscale' => $appuntamento->richiesta->utente->codice_fiscale,
             'messaggio' => 'Il tuo appuntamento del ' . $appuntamento->data . ' è stato annullato dallo staff!',
-            'letta' => false
-            // 'id_utente' => $appuntamento->richiesta->utente->id_utente
+            'data_creazione' => now(),
+            'conferma_lettura' => false
         ]);
+
         $appuntamento->delete();
         return redirect()->route('staff.appuntamenti.index')->with('success', 'Appuntamento eliminato!');
     }
@@ -199,6 +207,7 @@ class AppuntamentoController extends Controller
     {
         $id_prestazione = $request->input('id_prestazione');
         $giorno = $request->input('giorno');
+        $prestazioni = Prestazione::all();
 
         $appuntamenti = Appuntamento::where('data', $giorno)
             ->where('stato', '!=', 'erogato')
@@ -208,6 +217,6 @@ class AppuntamentoController extends Controller
             ->with(['richiesta.utente', 'richiesta.prestazione'])
             ->get();
 
-        return view('staff.agenda.giornaliera', compact('appuntamenti', 'giorno'));
+        return view('staff.agenda.giornaliera', compact('appuntamenti', 'giorno','prestazioni'));
     }
 }

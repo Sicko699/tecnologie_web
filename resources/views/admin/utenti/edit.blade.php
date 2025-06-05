@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('title', 'Modifica Utente')
 
 @section('content')
@@ -7,7 +8,7 @@
             <div class="col-md-7 col-lg-5">
                 <h2 class="fw-bold mb-4 text-center" style="letter-spacing:.01em;">
                     <i class="fas fa-user-edit me-2 text-primary"></i>
-                    Modifica Utente Staff/Admin
+                    Modifica Utente Staff
                 </h2>
 
                 <form action="{{ route('admin.utenti.update', ['utenti' => $utente->codice_fiscale]) }}" method="POST" class="p-0">
@@ -27,9 +28,9 @@
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label fw-semibold" for="email">Email</label>
-                        <input type="email" id="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $utente->email) }}" required>
-                        @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <label class="form-label fw-semibold" for="username">Username</label>
+                        <input type="text" id="username" name="username" class="form-control @error('username') is-invalid @enderror" value="{{ old('username', $utente->username) }}" required>
+                        @error('username') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
 
                     <div class="mb-4">

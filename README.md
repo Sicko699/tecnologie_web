@@ -68,3 +68,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 =======
 # tecnologie_web
 >>>>>>> eb912d9a480cb115e931896fec5e856508a811f3
+
+## Problemi
+1. Su membro staff non vengono lette le prestazioni per dipartimento
+2. Su membro staff 
