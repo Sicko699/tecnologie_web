@@ -39,5 +39,9 @@ class Prestazione extends Model
         );
     }
 
+    public function medico()
+    {
+        return $this->belongsTo(Medico::class);
+    }
 
 }

@@ -34,11 +34,18 @@ class PublicController extends Controller
     }
 
     public function department(){
-        $trattamenti = Prestazione::with('dipartimento')->get();
+        $trattamenti = Prestazione::with(['dipartimento', 'medico'])->get();
         return view('public.department', compact('trattamenti'));
     }
 
     public function contact(){
         return view('public.contact');
     }
+
+    public function show($id)
+    {
+        $prestazione = Prestazione::with(['medico', 'dipartimento'])->findOrFail($id);
+        return view('public.prestazioni_show', compact('prestazione'));
+    }
+
 }
