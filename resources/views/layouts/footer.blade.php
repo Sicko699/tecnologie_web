@@ -56,11 +56,11 @@
                 <div class="ftco-footer-widget mb-5 ml-md-4">
                     <h2 class="ftco-heading-2">Servizi</h2>
                     <ul class="list-unstyled">
-                        <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Igiene Orale</a></li>
-                        <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Ortodonzia</a></li>
-                        <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Implantologia</a></li>
-                        <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Estetica Dentale</a></li>
-                        <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Parodontologia</a></li>
+                        <li><a href="{{ route('department.index') }}"><span class="ion-ios-arrow-round-forward mr-2"></span>Igiene Orale</a></li>
+                        <li><a href="{{ route('department.index') }}"><span class="ion-ios-arrow-round-forward mr-2"></span>Ortodonzia</a></li>
+                        <li><a href="{{ route('department.index') }}"><span class="ion-ios-arrow-round-forward mr-2"></span>Implantologia</a></li>
+                        <li><a href="{{ route('department.index') }}"><span class="ion-ios-arrow-round-forward mr-2"></span>Estetica Dentale</a></li>
+                        <li><a href="{{ route('department.index') }}"><span class="ion-ios-arrow-round-forward mr-2"></span>Parodontologia</a></li>
                     </ul>
                 </div>
             </div>
