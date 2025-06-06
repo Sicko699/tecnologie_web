@@ -24,6 +24,7 @@
         </div>
     </div>
 </div>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark ftco-navbar-light" id="ftco-navbar">
     <div class="container d-flex align-items-center">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
@@ -67,11 +68,19 @@
                         </div>
                     </li>
                 @else
-                    <li class="nav-item"><a href="{{ route('login') }}" class="nav-link">Login</a></li>
-                    <li class="nav-item"><a href="{{ route('register') }}" class="nav-link">Registrati</a></li>
+                    <li class="nav-item dropdown">
+                        <a id="guestDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Account
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="guestDropdown">
+                            <a class="dropdown-item" href="{{ route('login') }}">Login</a>
+                            <a class="dropdown-item" href="{{ route('register') }}">Registrati</a>
+                        </div>
+                    </li>
                 @endauth
 
-                {{--  Form di ricerca  --}}
+                {{-- Form di ricerca --}}
                 <li class="nav-item">
                     <form class="d-flex ms-3" method="GET" action="{{ route('ricerca.prestazioni') }}">
                         <input class="form-control form-control-sm me-2" type="search" name="q"
@@ -82,7 +91,6 @@
                         </button>
                     </form>
                 </li>
-
             </ul>
         </div>
     </div>

@@ -3,16 +3,21 @@
 
 @section('content')
     <div class="container py-5">
+        {{-- Header con titolo e bottone "Nuovo Dipartimento" --}}
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="fw-bold mb-0" style="letter-spacing: .01em;">Dipartimenti</h2>
-            <a href="{{ route('admin.dipartimenti.create') }}" class="btn btn-success rounded-pill px-4">+ Nuovo Dipartimento</a>
+            <a href="{{ route('admin.dipartimenti.create') }}" class="btn btn-success rounded-pill px-4">
+                + Nuovo Dipartimento
+            </a>
         </div>
 
+        {{-- Messaggio di successo --}}
         @if(session('success'))
             <div class="alert alert-success rounded-3 shadow-sm">{{ session('success') }}</div>
         @endif
 
-        <div class="card shadow rounded-4">
+        {{-- Tabella --}}
+        <div class="card shadow rounded-4 border-0">
             <div class="card-body p-0">
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">
@@ -43,16 +48,23 @@
                                     </form>
                                 </div>
                             </td>
-
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="text-center py-4 text-muted">Nessun dipartimento disponibile.</td>
+                            <td colspan="3" class="text-center py-4 text-muted">
+                                Nessun dipartimento disponibile.
+                            </td>
                         </tr>
                     @endforelse
                     </tbody>
                 </table>
             </div>
+        </div>
+
+        <div class="mt-4">
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4">
+                <i class="fas fa-arrow-left me-2"></i> Indietro
+            </a>
         </div>
     </div>
 @endsection

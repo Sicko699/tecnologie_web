@@ -55,5 +55,11 @@
                 </table>
             </div>
         </div>
+
+        <div class="mt-4">
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4">
+                <i class="fas fa-arrow-left me-2"></i> Indietro
+            </a>
+        </div>
     </div>
 @endsection

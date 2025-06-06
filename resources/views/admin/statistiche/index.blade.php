@@ -2,12 +2,12 @@
 @section('title', 'Statistiche')
 
 @section('content')
-    <div class="container py-5">
+    <div class="container mt-5 mb-5">
+        {{-- Titolo --}}
+        <h2 class="fw-bold text-primary mb-4">Statistiche Prestazioni</h2>
 
-        <h1 class="display-5 fw-bold mb-4 text-primary">Statistiche Prestazioni</h1>
-
-        {{-- Form di filtro --}}
-        <div class="card shadow-sm mb-5">
+        {{-- Filtro --}}
+        <div class="card shadow rounded-4 mb-5">
             <div class="card-body">
                 <form method="GET" class="row g-4 align-items-end">
                     <div class="col-md-3">
@@ -23,14 +23,14 @@
                         <input type="text" id="utente_id" name="utente_id" value="{{ request('utente_id') }}" class="form-control" placeholder="Codice Fiscale" />
                     </div>
                     <div class="col-md-2 d-grid">
-                        <button type="submit" class="btn btn-primary btn-lg">Filtra</button>
+                        <button type="submit" class="btn btn-primary btn-lg rounded-pill">Filtra</button>
                     </div>
                 </form>
             </div>
         </div>
 
         {{-- Grafico Prestazioni per Tipo --}}
-        <div class="card shadow-sm mb-5">
+        <div class="card shadow rounded-4 mb-5">
             <div class="card-header bg-primary text-white fw-bold">
                 Numero Prestazioni per Tipo
             </div>
@@ -40,7 +40,7 @@
         </div>
 
         {{-- Grafico Prestazioni per Dipartimento --}}
-        <div class="card shadow-sm mb-5">
+        <div class="card shadow rounded-4 mb-5">
             <div class="card-header bg-primary text-white fw-bold">
                 Numero Prestazioni per Dipartimento
             </div>
@@ -51,20 +51,20 @@
 
         {{-- Tabella Prestazioni Utente --}}
         @if($prestazioniUtente)
-            <div class="card shadow-sm">
+            <div class="card shadow rounded-4 mb-5">
                 <div class="card-header bg-info text-white fw-bold d-flex justify-content-between align-items-center">
                     <span>Prestazioni erogate all'utente CF: <code>{{ request('utente_id') }}</code></span>
-                    <a href="{{ route('admin.prestazioni.index') }}" class="btn btn-light btn-sm">Torna a Prestazioni</a>
+                    <a href="{{ route('admin.prestazioni.index') }}" class="btn btn-light btn-sm rounded-pill">Torna a Prestazioni</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0">
                             <thead class="table-light">
                             <tr>
-                                <th scope="col">ID Appuntamento</th>
-                                <th scope="col">Prestazione</th>
-                                <th scope="col">Dipartimento</th>
-                                <th scope="col">Data</th>
+                                <th>ID Appuntamento</th>
+                                <th>Prestazione</th>
+                                <th>Dipartimento</th>
+                                <th>Data</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -83,6 +83,12 @@
             </div>
         @endif
 
+        {{-- Pulsante Indietro --}}
+        <div class="mt-5">
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4">
+                <i class="fas fa-arrow-left me-2"></i> Indietro
+            </a>
+        </div>
     </div>
 
     {{-- Chart.js CDN --}}
