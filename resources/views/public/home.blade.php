@@ -64,9 +64,8 @@
                     width: 100px; height: 100px; border-radius: 50%; background-size: cover;">
                                 </div>
                                 <div class="text pl-3">
-                                    <h3 class="mb-0">{{ $medicoInEvidenza->nome }}</h3>
-                                    <h3 class="mb-0">{{ $medicoInEvidenza->cognome }}</h3>
-                                    <span class="position">{{ $medicoInEvidenza->ruolo ?? 'Medico' }}</span>
+                                    <h3 class="mb-0">{{ $medicoInEvidenza->nome }} {{ $medicoInEvidenza->cognome }}</h3>
+                                    <span class="position">{{ $medicoInEvidenza->specializzazione ?? 'Medico' }}</span>
                                 </div>
                         @else
                             <p class="text-danger mt-3">⚠️ Nessun medico disponibile al momento.</p>
@@ -124,10 +123,9 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-12 col-lg-6 col-xl-4">
-                                    <div class="form-group">
-                                        <input type="submit" value="Prenota" class="btn btn-secondary py-2 px-4">
-                                    </div>
+                                <!-- Pulsante centrato -->
+                                <div class="col-12 d-flex justify-content-center mt-3">
+                                    <input type="submit" value="Prenota" class="btn btn-secondary py-2 px-4 w-auto">
                                 </div>
                             </div>
                         </form>

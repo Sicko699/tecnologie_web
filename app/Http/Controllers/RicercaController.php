@@ -9,17 +9,22 @@ class RicercaController extends Controller
 {
     public function index(Request $request)
     {
-        $query = $request->input('q');
+        $query = trim($request->input('q'));
         $risultati = collect();
-        if ($query) {
-            $pattern = (substr($query, -1) === '*')
+
+        if ($query && strlen($query) >= 1) {
+            $pattern = str_ends_with($query, '*')
                 ? rtrim($query, '*') . '%'
                 : $query;
+
             $risultati = Prestazione::where('nome', 'like', $pattern)
                 ->orWhereHas('dipartimento', function($q2) use ($pattern) {
                     $q2->where('nome', 'like', $pattern);
-                })->get();
+                })
+                ->with('dipartimento')
+                ->get();
         }
+
         return view('ricerca.risultati', compact('risultati'));
     }
 }

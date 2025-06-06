@@ -31,9 +31,9 @@ class PublicController extends Controller
 
     public function about()
     {
-        $medico = Medico::inRandomOrder()->first();
+        $medicoInEvidenza = Medico::inRandomOrder()->first();
 
-        return view('public.about', compact('medico'));
+        return view('public.about', compact('medicoInEvidenza'));
     }
 
     public function department(){

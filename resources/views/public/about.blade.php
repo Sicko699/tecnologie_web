@@ -44,19 +44,21 @@
                             pensati per soddisfare al meglio le esigenze dei pazienti.
                         </p>
 
-                        @if($medico)
+                        @if($medicoInEvidenza)
                             <div class="founder d-flex align-items-center mt-5">
                                 <div class="img"
-                                     style="background-image: url('{{ asset('images/' . ($medico->immagine ?? 'doc-1.jpg')) }}'); width:100px; height:100px; border-radius: 50%; background-size: cover;">
+                                     style="background-image: url('{{ asset('images/' . ($medicoInEvidenza->immagine ?? 'doc-1.jpg')) }}');
+                                        width: 100px; height: 100px; border-radius: 50%; background-size: cover;">
                                 </div>
                                 <div class="text pl-3">
-                                    <h3 class="mb-0">{{ $medico->name }}</h3>
-                                    <span class="position">{{ $medico->ruolo ?? 'Medico' }}</span>
+                                    <h3 class="mb-0">{{ $medicoInEvidenza->nome }} {{ $medicoInEvidenza->cognome }}</h3>
+                                    <span class="text-muted">{{ $medicoInEvidenza->specializzazione ?? 'Medico Specialista' }}</span>
                                 </div>
                             </div>
                         @else
-                            <p class="text-danger mt-4">⚠️ Nessun medico disponibile da visualizzare.</p>
+                            <p class="text-danger mt-3">⚠️ Nessun medico disponibile al momento.</p>
                         @endif
+
                     </div>
                 </div>
             </div>
