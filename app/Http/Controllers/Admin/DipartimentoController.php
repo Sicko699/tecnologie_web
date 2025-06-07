@@ -28,9 +28,11 @@ class DipartimentoController extends Controller
     {
         $request->validate([
             'nome' => 'required|string|max:255',
+            'descrizione' => 'required|string|max:255',
         ]);
         $dipartimento = Dipartimento::create([
             'nome' => $request->nome,
+            'descrizione' => $request->descrizione,
         ]);
         // Se vuoi tornare subito alla modifica del nuovo dipartimento:
         // return redirect()->route('admin.dipartimenti.edit', ['dipartimento' => $dipartimento->id])->with('success', 'Dipartimento creato!');
@@ -49,6 +51,7 @@ class DipartimentoController extends Controller
     {
         $dipartimenti->update([
             'nome' => $request->nome,
+            'descrizione' => $request->descrizione,
         ]);
         return redirect()->route('admin.dipartimenti.index')->with('success', 'Dipartimento aggiornato!');
     }

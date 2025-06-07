@@ -13,54 +13,49 @@
         </div>
 
         {{-- Card Statistiche --}}
-        <div class="row g-4 justify-content-center mb-5">
-            {{-- Dipartimenti --}}
-            <div class="col-md-2">
-                <div class="card text-center shadow rounded-4 p-4 h-100">
-                    <i class="fas fa-building fa-2x text-primary mb-2"></i>
-                    <h5 class="fw-semibold">Dipartimenti</h5>
-                    <p class="display-6 fw-bold text-dark">{{ $dipartimentiCount }}</p>
-                    <a href="{{ route('admin.dipartimenti.index') }}" class="btn btn-outline-primary w-100 rounded-pill">Gestisci</a>
-                </div>
-            </div>
-
-            {{-- Prestazioni --}}
-            <div class="col-md-2">
-                <div class="card text-center shadow rounded-4 p-4 h-100">
-                    <i class="fas fa-stethoscope fa-2x text-success mb-2"></i>
-                    <h5 class="fw-semibold">Prestazioni</h5>
-                    <p class="display-6 fw-bold text-dark">{{ $prestazioniCount }}</p>
-                    <a href="{{ route('admin.prestazioni.index') }}" class="btn btn-outline-success w-100 rounded-pill">Gestisci</a>
-                </div>
-            </div>
-
-            {{-- Utenti --}}
-            <div class="col-md-2">
-                <div class="card text-center shadow rounded-4 p-4 h-100">
-                    <i class="fas fa-users fa-2x text-info mb-2"></i>
-                    <h5 class="fw-semibold">Utenti Staff</h5>
-                    <p class="display-6 fw-bold text-dark">{{ $utentiCount }}</p>
-                    <a href="{{ route('admin.utenti.index') }}" class="btn btn-outline-info w-100 rounded-pill">Gestisci</a>
-                </div>
-            </div>
-
-            {{-- Agenda --}}
-            <div class="col-md-2">
-                <div class="card text-center shadow rounded-4 p-4 h-100">
-                    <i class="fas fa-calendar-alt fa-2x text-warning mb-2"></i>
-                    <h5 class="fw-semibold">Agenda</h5>
-                    <p class="display-6 fw-bold text-dark">{{ $agendeCount }}</p>
-                    <a href="{{ route('admin.agende.index') }}" class="btn btn-outline-warning w-100 rounded-pill">Gestisci</a>
-                </div>
-            </div>
-
-            {{-- Statistiche Avanzate --}}
-            <div class="col-md-2">
-                <div class="card text-center shadow rounded-4 p-4 h-100">
-                    <i class="fas fa-chart-line fa-2x text-secondary mb-2"></i>
-                    <h5 class="fw-semibold">Statistiche Avanzate</h5>
-                    <div class="mt-4">
-                        <a href="{{ route('admin.statistiche.index') }}" class="btn btn-outline-secondary w-100 rounded-pill">Visualizza</a>
+        <div class="row justify-content-center mb-5 w-100">
+            <div class="col-12">
+                <div class="d-flex flex-wrap justify-content-center">
+                    <div class="dashboard-card p-0 m-2">
+                        <div class="card text-center shadow rounded-4 p-4 h-100">
+                            <i class="fas fa-building fa-2x text-primary mb-2"></i>
+                            <h5 class="fw-semibold">Dipartimenti</h5>
+                            <p class="display-6 fw-bold text-dark">{{ $dipartimentiCount }}</p>
+                            <a href="{{ route('admin.dipartimenti.index') }}" class="btn btn-outline-primary w-100 rounded-pill">Gestisci</a>
+                        </div>
+                    </div>
+                    <div class="dashboard-card p-0 m-2">
+                        <div class="card text-center shadow rounded-4 p-4 h-100">
+                            <i class="fas fa-stethoscope fa-2x text-success mb-2"></i>
+                            <h5 class="fw-semibold">Prestazioni</h5>
+                            <p class="display-6 fw-bold text-dark">{{ $prestazioniCount }}</p>
+                            <a href="{{ route('admin.prestazioni.index') }}" class="btn btn-outline-success w-100 rounded-pill">Gestisci</a>
+                        </div>
+                    </div>
+                    <div class="dashboard-card p-0 m-2">
+                        <div class="card text-center shadow rounded-4 p-4 h-100">
+                            <i class="fas fa-users fa-2x text-info mb-2"></i>
+                            <h5 class="fw-semibold">Membri Staff</h5>
+                            <p class="display-6 fw-bold text-dark">{{ $utentiCount }}</p>
+                            <a href="{{ route('admin.utenti.index') }}" class="btn btn-outline-info w-100 rounded-pill">Gestisci</a>
+                        </div>
+                    </div>
+                    <div class="dashboard-card p-0 m-2">
+                        <div class="card text-center shadow rounded-4 p-4 h-100">
+                            <i class="fas fa-calendar-alt fa-2x text-warning mb-2"></i>
+                            <h5 class="fw-semibold">Agenda</h5>
+                            <p class="display-6 fw-bold text-dark">{{ $agendeCount }}</p>
+                            <a href="{{ route('admin.agende.index') }}" class="btn btn-outline-warning w-100 rounded-pill">Gestisci</a>
+                        </div>
+                    </div>
+                    <div class="dashboard-card p-0 m-2">
+                        <div class="card text-center shadow rounded-4 p-4 h-100">
+                            <i class="fas fa-chart-line fa-2x text-secondary mb-2"></i>
+                            <h5 class="fw-semibold">Statistiche Avanzate</h5>
+                            <div class="mt-4">
+                                <a href="{{ route('admin.statistiche.index') }}" class="btn btn-outline-secondary w-100 rounded-pill">Visualizza</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -118,4 +113,28 @@
             }
         });
     </script>
+    <style>
+        .dashboard-card {
+            flex: 1 1 0;
+            min-width: 200px;
+            max-width: 20%; /* 5 card: 20%. Se vuoi 4 card per riga metti 25%. */
+            box-sizing: border-box;
+            display: flex;
+        }
+        .dashboard-card > .card {
+            width: 100%;
+        }
+        @media (max-width: 1200px) {
+            .dashboard-card { max-width: 25%; }
+        }
+        @media (max-width: 992px) {
+            .dashboard-card { max-width: 33.3333%; }
+        }
+        @media (max-width: 768px) {
+            .dashboard-card { max-width: 50%; }
+        }
+        @media (max-width: 576px) {
+            .dashboard-card { max-width: 100%; min-width: 100%; }
+        }
+    </style>
 @endpush

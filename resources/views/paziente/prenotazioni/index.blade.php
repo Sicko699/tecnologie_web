@@ -1,12 +1,12 @@
 @extends('layouts.app')
-@section('title', 'Le tue prenotazioni')
+@section('title', 'Le tue richieste')
 
 @section('content')
     <div class="container py-5">
-        <h2 class="fw-bold mb-4 text-center">Le tue prenotazioni</h2>
+        <h2 class="fw-bold mb-4 text-center">Le tue richieste</h2>
         <div class="d-flex justify-content-end mb-3">
             <a href="{{ route('paziente.prenotazioni.create') }}" class="btn btn-primary" style="border-radius:20px;">
-                + Nuova Prenotazione
+                + Nuova Richiesta
             </a>
         </div>
         @if($prenotazioni->count())
@@ -53,7 +53,7 @@
             </div>
         @else
             <div class="text-center text-muted py-5">
-                <p class="mb-0">Nessuna prenotazione trovata.</p>
+                <p class="mb-0">Nessuna richiesta trovata.</p>
             </div>
         @endif
     </div>

@@ -13,9 +13,7 @@ class CreatePrestazioniTable extends Migration
             $table->id('id_prestazione');
             $table->string('nome', 100);
             $table->string('descrizione', 255)->nullable();
-
             $table->unsignedBigInteger('id_dipartimento');
-            $table->string('id_membro', 16)->nullable()->index();
 
             // Solo UNA definizione della colonna medico_id
             $table->foreignId('medico_id')->nullable()->constrained('medici')->onDelete('set null');
@@ -26,10 +24,6 @@ class CreatePrestazioniTable extends Migration
                 ->on('dipartimenti')
                 ->onDelete('cascade');
 
-            $table->foreign('id_membro')
-                ->references('codice_fiscale')
-                ->on('membro_staff')
-                ->onDelete('cascade');
         });
     }
 

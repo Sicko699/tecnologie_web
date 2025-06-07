@@ -58,14 +58,20 @@ class PrenotazioneController extends Controller
             'id_prestazione' => 'required|exists:prestazioni,id_prestazione',
             'giorno_escluso' => 'nullable|string|max:100'
         ]);
+
+        // Recupera la prestazione selezionata
+        $prestazione = Prestazione::findOrFail($request->id_prestazione);
+
         Richiesta::create([
             'id_utente' => Auth::user()->codice_fiscale,
             'id_prestazione' => $request->id_prestazione,
             'giorno_escluso' => $request->giorno_escluso,
-            'stato' => 'in attesa'
+            'stato' => 'in attesa',
+            'id_dipartimento' => $prestazione->id_dipartimento  // <--- AGGIUNTO!
         ]);
         return redirect()->route('paziente.prenotazioni.index')->with('success', 'Prenotazione creata!');
     }
+
 
     // Form modifica prenotazione
     public function edit($id)

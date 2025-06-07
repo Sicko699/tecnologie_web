@@ -11,15 +11,28 @@ use Illuminate\Support\Facades\Auth;
 
 class PrestazioneControllerStaff extends Controller
 {
-    // Lista prestazioni gestite dallo staff attuale (relazione molti-a-molti)
     public function index()
     {
         $membro = Auth::user()->membroStaff;
-        $prestazioni = $membro
-            ? $membro->prestazioni()->with('dipartimento')->get()
-            : collect(); // se per errore non c'è membro_staff associato
+
+        // Controlla che il membro esista
+        if (!$membro) {
+            $prestazioni = collect();
+        } else {
+            // Recupera il dipartimento associato al membro staff
+            $dipartimento = \App\Models\Dipartimento::find($membro->id_dipartimento);
+
+            // Se trova il dipartimento, recupera le sue prestazioni
+            if ($dipartimento) {
+                $prestazioni = $dipartimento->prestazioni()->with('dipartimento')->get();
+            } else {
+                $prestazioni = collect();
+            }
+        }
+
         return view('staff.prestazioni.index', compact('prestazioni'));
     }
+
 
     // Form creazione prestazione
     public function create()

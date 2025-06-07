@@ -1,12 +1,12 @@
 @extends('layouts.app')
-@section('title', 'Nuova Prenotazione')
+@section('title', 'Nuova Richiesta')
 
 @section('content')
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-md-7 col-lg-5">
                 <h2 class="fw-bold mb-4 text-center" style="letter-spacing:.01em;">
-                    Nuova prenotazione
+                    Nuova richiesta
                 </h2>
                 <form method="POST" action="{{ route('paziente.prenotazioni.store') }}" class="p-0">
                     @csrf

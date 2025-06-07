@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
         $pw = '9wNl' . '9wNl';
 
         User::create([
-            'codice_fiscale' => 'PAZIPAZI01A01A', 
+            'codice_fiscale' => 'PAZIPAZI01A01A',
             'nome' => 'Utente',
             'cognome' => 'Esterno',
             'username' => 'pazipazi',
@@ -21,8 +21,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make($pw),
             'telefono' => '3331234567',
             'data_nascita' => '2000-01-01',
-            'foto' => null,
-            'ruolo' => 'paziente', 
+            'ruolo' => 'paziente',
         ]);
 
         User::create([
@@ -34,7 +33,6 @@ class UserSeeder extends Seeder
             'password' => Hash::make($pw),
             'telefono' => '3339876543',
             'data_nascita' => '1990-01-01',
-            'foto' => null,
             'ruolo' => 'staff',
         ]);
 
@@ -47,8 +45,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make($pw),
             'telefono' => '3331112233',
             'data_nascita' => '1980-01-01',
-            'foto' => null,
-            'ruolo' => 'admin', 
-        ]); 
+            'ruolo' => 'admin',
+        ]);
     }
 }

@@ -76,76 +76,6 @@
         </div>
         </div>
     </section>
-
-    <section class="ftco-section ftco-no-pt ftco-no-pb">
-        <div class="container-fluid px-md-0">
-            <div class="row no-gutters">
-                <!-- Servizi Dentali -->
-                <div class="col-md-3 d-flex align-items-stretch">
-                    <div class="consultation w-100 text-center px-4 px-md-5">
-                        <h3 class="mb-4">Servizi Dentali</h3>
-                        <p>
-                            Dallo sbiancamento professionale alle protesi su misura, offriamo un’ampia gamma di prestazioni per mantenere il tuo sorriso sano e brillante.
-                        </p>
-                        <a href="{{ route('department.index') }}" class="btn-custom">Scopri i servizi</a>
-                    </div>
-                </div>
-                <!-- Consulenza Gratuita -->
-                <div class="col-md-6 d-flex align-items-stretch">
-                    <div class="consultation consul w-100 px-4 px-md-5">
-                        <div class="text-center">
-                            <h3 class="mb-4">Consulenza Gratuita</h3>
-                        </div>
-
-                        {{-- Feedback visivo --}}
-                        @if(session('success'))
-                            <div class="alert alert-success text-center">
-                                {{ session('success') }}
-                            </div>
-                        @endif
-
-                        <form action="{{ route('richiesta.pubblica.store') }}" method="POST" class="appointment-form">
-                            @csrf
-                            <div class="row">
-                                <div class="col-md-12 col-lg-6 col-xl-4">
-                                    <div class="form-group">
-                                        <input type="text" name="nome" class="form-control" placeholder="Nome" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 col-lg-6 col-xl-4">
-                                    <div class="form-group">
-                                        <input type="text" name="cognome" class="form-control" placeholder="Cognome" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 col-lg-6 col-xl-4">
-                                    <div class="form-group">
-                                        <input type="text" name="telefono" class="form-control" placeholder="Numero di telefono" required>
-                                    </div>
-                                </div>
-
-                                <!-- Pulsante centrato -->
-                                <div class="col-12 d-flex justify-content-center mt-3">
-                                    <input type="submit" value="Prenota" class="btn btn-secondary py-2 px-4 w-auto">
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Trova un Dentista -->
-                <div class="col-md-3 d-flex align-items-stretch">
-                    <div class="consultation w-100 text-center px-4 px-md-5">
-                        <h3 class="mb-4">Il nostro team</h3>
-                        <p>
-                            Professionisti qualificati e sempre aggiornati per offrirti le migliori cure in un ambiente accogliente.
-                        </p>
-                        <a href="{{ route('doctor.index') }}" class="btn-custom">Scopri il team</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <section class="ftco-section ftco-services">
         <div class="container">
             <div class="row justify-content-center mb-5 pb-2">
@@ -199,22 +129,92 @@
                     </p>
                 </div>
             </div>
-            <div class="row">
-                @foreach($dottori as $dentista)
-                    <div class="col-md-3 d-flex services align-self-stretch p-4">
-                        <div class="media block-6 d-block text-center">
-                            <div class="icon d-flex justify-content-center align-items-center">
-                                <span class="{{ $dentista->icona ?? 'flaticon-drilling' }}"></span>
+            <div class="row g-4">
+                @foreach($dottori as $index => $dentista)
+                    @php
+                        // img fallback smart: doc-2, doc-3, ..., doc-7
+                        $img = $dentista->immagine ?? 'doc-' . (($index % 6) + 2) . '.jpg';
+                    @endphp
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch">
+                        <div class="dentist-card w-100">
+                            <img class="dentist-photo"
+                                 src="{{ asset('images/' . $img) }}"
+                                 alt="Foto {{ $dentista->nome }} {{ $dentista->cognome }}">
+                            <div class="dentist-name">{{ $dentista->nome }} {{ $dentista->cognome }}</div>
+                            <div class="dentist-role">
+                                {{ $dentista->ruolo ?? 'Dentista' }}
                             </div>
-                            <div class="media-body p-2 mt-3">
-                                <h3 class="heading">{{ $dentista->nome }}</h3>
-                                <h3 class="heading">{{ $dentista->cognome }}</h3>
-                                <p>{{ $dentista->membroStaff->descrizione ?? 'Nessuna descrizione disponibile' }}</p>
+                            <div class="dentist-desc">
+                                {{ $dentista->membroStaff->descrizione ?? 'Nessuna descrizione disponibile.' }}
                             </div>
                         </div>
                     </div>
                 @endforeach
             </div>
+
+
+            <style>
+                .dentist-card {
+                    background: #fff;
+                    border-radius: 1.5rem;
+                    box-shadow: 0 2px 16px 0 rgba(50,50,93,.07), 0 0.5px 1.5px 0 rgba(0,0,0,.03);
+                    padding: 2rem 1.2rem 1.5rem 1.2rem;
+                    text-align: center;
+                    transition: transform .16s cubic-bezier(.4,2.3,.3,1), box-shadow .16s;
+                    cursor: pointer;
+                    border: none;
+                    min-height: 330px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    align-items: center;
+                    position: relative;
+                }
+                .dentist-card:hover {
+                    transform: translateY(-6px) scale(1.025);
+                    box-shadow: 0 8px 32px 0 rgba(60,60,93,.13), 0 1.5px 6px 0 rgba(0,0,0,.09);
+                }
+                .dentist-photo {
+                    width: 96px;
+                    height: 96px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    box-shadow: 0 2px 8px rgba(50,50,93,0.09);
+                    margin-bottom: 1.2rem;
+                    border: 4px solid #f5f6fa;
+                    background: #f5f6fa;
+                }
+                .dentist-name {
+                    font-size: 1.2rem;
+                    font-weight: 700;
+                    margin-bottom: 0.15rem;
+                    letter-spacing: 0.01em;
+                    color: #262a35;
+                    line-height: 1.2;
+                }
+                .dentist-role {
+                    font-size: 0.97rem;
+                    color: #888ea2;
+                    font-weight: 500;
+                    margin-bottom: 0.7rem;
+                    letter-spacing: 0.02em;
+                }
+                .dentist-desc {
+                    font-size: 0.95rem;
+                    color: #5a6072;
+                    margin-bottom: 0;
+                    line-height: 1.45;
+                    min-height: 3.5em;
+                    font-weight: 400;
+                }
+                @media (max-width: 768px) {
+                    .dentist-card {
+                        min-height: 290px;
+                        padding: 1.2rem 0.5rem;
+                    }
+                }
+            </style>
+
         </div>
     </section>
 

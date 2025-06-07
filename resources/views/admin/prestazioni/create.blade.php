@@ -13,20 +13,30 @@
         <div class="card p-4 shadow-sm border-0">
             <form action="{{ route('admin.prestazioni.store') }}" method="POST">
                 @csrf
-                <input type="hidden" name="form_token" value="{{ $token }}">
 
                 <div class="mb-3">
-                    <label for="nome" class="form-label">Nome</label>
-                    <input type="text" name="nome" id="nome" class="form-control" value="{{ old('nome') }}" required>
+                    <label for="nome" class="form-label">Nome della Prestazione</label>
+                    <input type="text" name="nome" id="nome" class="form-control @error('nome') is-invalid @enderror"
+                           value="{{ old('nome') }}" required>
                     @error('nome')
                     <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
                 </div>
 
                 <div class="mb-3">
+                    <label for="descrizione" class="form-label">Descrizione</label>
+                    <input type="text" name="descrizione" id="descrizione" class="form-control @error('descrizione') is-invalid @enderror"
+                           value="{{ old('descrizione') }}" required>
+                    @error('descrizione')
+                    <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
                     <label for="id_dipartimento" class="form-label">Dipartimento</label>
-                    <select name="id_dipartimento" id="id_dipartimento" class="form-select" required>
-                        <option value="" disabled {{ old('id_dipartimento') ? '' : 'selected' }}>Seleziona</option>
+                    <select name="id_dipartimento" id="id_dipartimento"
+                            class="form-select @error('id_dipartimento') is-invalid @enderror" required>
+                        <option value="">Seleziona un dipartimento</option>
                         @foreach($dipartimenti as $d)
                             <option value="{{ $d->id_dipartimento }}" {{ old('id_dipartimento') == $d->id_dipartimento ? 'selected' : '' }}>
                                 {{ $d->nome }}

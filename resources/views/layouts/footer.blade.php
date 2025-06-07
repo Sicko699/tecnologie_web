@@ -33,11 +33,6 @@
                             </li>
                         </ul>
                     </div>
-                    <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-3">
-                        <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
-                        <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
-                        <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
-                    </ul>
                 </div>
             </div>
             <!-- Links -->

@@ -139,7 +139,7 @@
             @error('max_appuntamenti') <div class="text-danger">{{ $message }}</div> @enderror
         </div>
 
-        <div class="mt-4">
+        <div class="mt-4 mb-5">
             <button type="submit" class="btn btn-primary" id="submit-btn" onclick="this.disabled=true; this.form.submit();">Crea Slot Agenda</button>
             <a href="{{ route('admin.agende.index') }}" class="btn btn-secondary">Annulla</a>
         </div>

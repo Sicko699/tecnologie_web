@@ -47,8 +47,10 @@ class PublicController extends Controller
 
     public function show($id)
     {
-        $prestazione = Prestazione::with(['medico', 'dipartimento'])->findOrFail($id);
-        return view('public.prestazioni_show', compact('prestazione'));
+        $prestazione = Prestazione::with(['medico', 'dipartimento', 'agenda'])->findOrFail($id);
+        $agenda = $prestazione->agenda;
+
+        return view('public.prestazioni_show', compact('prestazione', 'agenda'));
     }
 
 }

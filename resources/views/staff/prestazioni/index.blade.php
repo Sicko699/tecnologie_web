@@ -34,7 +34,6 @@
                     <th><i class="fas fa-file-medical me-1 text-secondary"></i> Nome</th>
                     <th><i class="fas fa-building me-1 text-secondary"></i> Dipartimento</th>
                     <th><i class="fas fa-align-left me-1 text-secondary"></i> Descrizione</th>
-                    <th><i class="fas fa-tools me-1 text-secondary"></i> Azioni</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -43,20 +42,7 @@
                         <td>{{ $prestazione->nome }}</td>
                         <td>{{ $prestazione->dipartimento->nome }}</td>
                         <td>{{ $prestazione->descrizione }}</td>
-                        <td>
-                            <a href="{{ route('staff.prestazioni.edit', $prestazione->id_prestazione) }}"
-                               class="btn btn-sm btn-outline-warning rounded-pill me-1">
-                                <i class="fas fa-edit"></i> Modifica
-                            </a>
-                            <form action="{{ route('staff.prestazioni.destroy', $prestazione->id_prestazione) }}"
-                                  method="POST" class="d-inline">
-                                @csrf @method('DELETE')
-                                <button class="btn btn-sm btn-outline-danger rounded-pill"
-                                        onclick="return confirm('Confermi eliminazione?')">
-                                    <i class="fas fa-trash-alt"></i> Elimina
-                                </button>
-                            </form>
-                        </td>
+
                     </tr>
                 @empty
                     <tr>

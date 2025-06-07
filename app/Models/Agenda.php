@@ -19,7 +19,7 @@ class Agenda extends Model
         'id_prestazione',
         'configurazione_orari',
         'max_appuntamenti',
-        'giorni_settimana', // <-- aggiungi questo!
+        'giorni_settimana',
     ];
 
     protected $casts = [

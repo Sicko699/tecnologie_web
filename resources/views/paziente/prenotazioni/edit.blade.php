@@ -1,12 +1,12 @@
 @extends('layouts.app')
-@section('title', 'Modifica Prenotazione')
+@section('title', 'Modifica Richiesta')
 
 @section('content')
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-md-7 col-lg-5">
                 <h2 class="fw-bold mb-4 text-center" style="letter-spacing:.01em;">
-                    Modifica prenotazione
+                    Modifica richiesta
                 </h2>
                 <form method="POST" action="{{ route('paziente.prenotazioni.update', $prenotazione->id_richiesta) }}" class="p-0">
                     @csrf

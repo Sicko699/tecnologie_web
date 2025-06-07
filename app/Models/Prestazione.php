@@ -32,10 +32,10 @@ class Prestazione extends Model
         return $this->belongsToMany(
             MembroStaff::class,
             'membrostaff_prestazione',
-            'id_prestazione',        // chiave locale su questa tabella
-            'codice_fiscale',        // chiave esterna verso MembroStaff
-            'id_prestazione',        // local key su Prestazione
-            'codice_fiscale'         // local key su MembroStaff
+            'id_prestazione',
+            'codice_fiscale',
+            'id_prestazione',
+            'codice_fiscale'
         );
     }
 
@@ -44,4 +44,8 @@ class Prestazione extends Model
         return $this->belongsTo(Medico::class);
     }
 
+    public function agenda()
+    {
+        return $this->hasOne(Agenda::class, 'id_prestazione', 'id_prestazione');
+    }
 }

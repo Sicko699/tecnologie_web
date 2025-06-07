@@ -10,12 +10,49 @@
                 </h2>
 
                 <div class="mb-4 border rounded p-3 bg-light shadow-sm">
-                    <p class="mb-1"><strong>Utente:</strong> {{ $richiesta->utente->nome }} {{ $richiesta->utente->cognome }}</p>
-                    <p class="mb-0"><strong>Prestazione:</strong> {{ $richiesta->prestazione->nome }} ({{ $richiesta->prestazione->dipartimento->nome ?? '-' }})</p>
+                    <div class="mb-2">
+                        <span class="fw-semibold">Utente:</span> {{ $richiesta->utente->nome }} {{ $richiesta->utente->cognome }}
+                    </div>
+                    <div class="mb-2">
+                        <span class="fw-semibold">Prestazione:</span> {{ $richiesta->prestazione->nome }}
+                        ({{ $richiesta->prestazione->dipartimento->nome ?? '-' }})
+                    </div>
+                    @if($giornoEscluso)
+                        <div class="mb-2">
+                            <span class="fw-semibold">Giorno escluso:</span>
+                            <span class="badge bg-light text-secondary border border-secondary rounded-pill px-3 py-1">
+                {{ $giornoEscluso }}
+            </span>
+                        </div>
+                    @endif
+
+                    <div class="fw-semibold mb-1">Giorni disponibili per la prestazione:</div>
+                    @if(!empty($giorniSettimana))
+                        <div class="d-flex flex-wrap gap-1">
+                            @foreach($giorniSettimana as $giorno)
+                                @if(isset($giornoEscluso) && $giorno === $giornoEscluso)
+                                    <span class="badge bg-light text-secondary border border-secondary rounded-pill px-3 py-1" title="Giorno escluso">
+                        {{ $giorno }}
+                    </span>
+                                @else
+                                    <span class="badge bg-primary bg-opacity-75 text-white rounded-pill px-3 py-1">
+                        {{ $giorno }}
+                    </span>
+                                @endif
+                            @endforeach
+                        </div>
+                    @else
+                        <span class="text-danger small">Nessun giorno disponibile per questa prestazione.</span>
+                    @endif
                 </div>
 
+
+
+
+
                 <!-- Form per cambiare data (separato dal form principale) -->
-                <form method="GET" action="{{ route('staff.appuntamenti.create', $richiesta->id_richiesta) }}" id="dateForm">
+                <form method="GET" action="{{ route('staff.appuntamenti.create', $richiesta->id_richiesta) }}"
+                      id="dateForm">
                     <div class="mb-4">
                         <label for="data" class="form-label fw-semibold">Data</label>
                         <input type="date" id="data" name="data"

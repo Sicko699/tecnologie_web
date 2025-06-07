@@ -30,15 +30,9 @@ class RegisteredUserController extends Controller
             'email'          => ['nullable', 'email', 'max:255', 'unique:users,email'], // ora nullable
             'telefono'       => ['nullable', 'string', 'max:50'],
             'data_nascita'   => ['nullable', 'date'],
-            'foto'           => ['nullable', 'image', 'max:2048'],
             'password'       => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        // Gestione upload foto
-        $fotoPath = null;
-        if ($request->hasFile('foto')) {
-            $fotoPath = $request->file('foto')->store('profili', 'public');
-        }
 
         $user = User::create([
             'codice_fiscale' => strtoupper($request->codice_fiscale),
@@ -48,7 +42,6 @@ class RegisteredUserController extends Controller
             'email'          => $request->email, // può essere null
             'telefono'       => $request->telefono,
             'data_nascita'   => $request->data_nascita,
-            'foto'           => $fotoPath,
             'ruolo'          => 'paziente',
             'password'       => Hash::make($request->password),
         ]);

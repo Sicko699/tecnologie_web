@@ -19,22 +19,27 @@ class ProfiloController extends Controller
     {
         $user = Auth::user();
 
-        // VALIDAZIONE DATI
+        // ATTENZIONE: modifica qui se la tua PK non è 'id'
+        $primaryKey = 'id';
+        if (array_key_exists('codice_fiscale', $user->getAttributes())) {
+            $primaryKey = 'codice_fiscale';
+        }
+
         $request->validate([
             'nome' => 'required|string|max:100',
             'cognome' => 'required|string|max:100',
-            'email' => 'required|email|max:255|unique:users,email,' . $user->codice_fiscale . ',codice_fiscale',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->$primaryKey . ',' . $primaryKey,
             'telefono' => 'nullable|string|max:50',
 
-            // Se la password viene compilata, le regole entrano in gioco
-            'current_password' => 'nullable|required_with:password',
+            // Regole per cambio password (solo se password viene compilata)
+            'current_password' => 'required_with:password',
             'password' => [
                 'nullable',
-                'confirmed', // Controlla che password_confirmation sia uguale
+                'confirmed',
                 PasswordRule::min(8),
             ],
         ], [
-            'current_password.required_with' => 'Inserisci la vecchia password per modificare la password.',
+            'current_password.required_with' => 'Inserisci la vecchia password per modificarla.',
             'password.confirmed' => 'La conferma password non corrisponde.',
         ]);
 
@@ -44,9 +49,8 @@ class ProfiloController extends Controller
         $user->email = $request->email;
         $user->telefono = $request->telefono;
 
-        // CAMBIO PASSWORD (se richiesto)
+        // CAMBIO PASSWORD (solo se richiesto)
         if ($request->filled('password')) {
-            // Verifica la vecchia password
             if (!Hash::check($request->current_password, $user->password)) {
                 return back()->withErrors(['current_password' => 'La vecchia password non è corretta.'])->withInput();
             }
@@ -55,7 +59,7 @@ class ProfiloController extends Controller
 
         $user->save();
 
-        return redirect()->route('paziente.profilo')->with('success', 'Profilo aggiornato!');
+        return redirect()->route('paziente.dashboard')->with('success', 'Profilo aggiornato!');
     }
 
     public function destroy()

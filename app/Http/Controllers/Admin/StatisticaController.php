@@ -44,6 +44,7 @@ class StatisticaController extends Controller
             $prestazioniUtente = (clone $base)
                 ->get()
                 ->filter(fn($a) => optional($a->richiesta->utente)->codice_fiscale === $codiceFiscale);
+            //dd($prestazioniUtente);
         }
 
         return view('admin.statistiche.index', compact(

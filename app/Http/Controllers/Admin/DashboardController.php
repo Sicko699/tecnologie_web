@@ -18,7 +18,7 @@ class DashboardController extends Controller
         // Conteggi per le card
         $dipartimentiCount = Dipartimento::count();
         $prestazioniCount = Prestazione::count();
-        $utentiCount = User::whereIn('ruolo', ['admin', 'staff'])->count();
+        $utentiCount = User::whereIn('ruolo', ['staff'])->count();
         $agendeCount = Agenda::count();
 
         // Dati per il grafico: ultimi 6 mesi

@@ -1,12 +1,12 @@
 @extends('layouts.app')
-@section('title', 'Dettaglio Prenotazione')
+@section('title', 'Dettaglio Richiesta')
 
 @section('content')
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-md-7 col-lg-5">
                 <h2 class="fw-bold mb-4 text-center" style="letter-spacing:.01em;">
-                    Dettaglio prenotazione
+                    Dettaglio Richiesta
                 </h2>
                 <div class="card shadow-sm border-0 mb-3" style="border-radius: 14px;">
                     <div class="card-body px-4 py-4">

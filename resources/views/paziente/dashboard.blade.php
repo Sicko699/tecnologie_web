@@ -24,7 +24,7 @@
             <div class="col-md-4">
                 <div class="card border-0 h-100 text-center p-4" style="background: #fafbfc;">
                     <i class="fas fa-calendar-plus fa-2x mb-2 text-success"></i>
-                    <h5 class="mb-2 fw-semibold">Prenotazioni</h5>
+                    <h5 class="mb-2 fw-semibold">Richieste</h5>
                     <a href="{{ route('paziente.prenotazioni.index') }}" class="btn btn-primary w-100 mt-2" style="border-radius:20px;">Gestisci Prenotazioni</a>
                 </div>
             </div>

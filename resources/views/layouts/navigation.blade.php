@@ -1,4 +1,13 @@
 {{-- resources/views/layouts/navbar.blade.php --}}
+<div class="w-100 py-1 bg-light border-bottom shadow-sm" style="font-size:0.95rem; letter-spacing: 0.01em;">
+    <div class="container d-flex justify-content-center align-items-center gap-2" style="min-height:30px;">
+        <i class="bi bi-file-earmark-pdf text-danger me-1" style="font-size:1rem;"></i>
+        <a href="{{ asset('documentazione.pdf') }}" target="_blank" class="text-decoration-underline fw-bold text-dark" style="font-size:0.98em;">
+            Documentazione del sito
+        </a>
+    </div>
+</div>
+
 <div class="py-md-5 py-4 border-bottom">
     <div class="container">
         <div class="row no-gutters d-flex align-items-start align-items-center px-3 px-md-0">

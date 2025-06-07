@@ -32,12 +32,14 @@ class PrestazioneController extends Controller
         $request->validate([
             'nome' => 'required|string|max:255',
             'id_dipartimento' => 'required|exists:dipartimenti,id_dipartimento',
+            'descrizione' => 'required|string|max:255',
         ]);
 
         // 1. Crea la prestazione
         $prestazione = Prestazione::create([
             'nome' => $request->nome,
             'id_dipartimento' => $request->id_dipartimento,
+            'descrizione' => $request->descrizione,
         ]);
 
         // 2. Trova tutti i membri staff del dipartimento scelto
@@ -49,7 +51,8 @@ class PrestazioneController extends Controller
         // 4. Redirect (come già fai)
         return redirect()->route('admin.agende.create', [
             'id_dipartimento' => $prestazione->id_dipartimento,
-            'id_prestazione' => $prestazione->id_prestazione
+            'id_prestazione' => $prestazione->id_prestazione,
+            'descrizione' => $prestazione->descrizione
         ])->with('success', 'Prestazione creata e assegnata automaticamente a tutti i membri staff del dipartimento!');
     }
 
@@ -67,12 +70,14 @@ class PrestazioneController extends Controller
         $request->validate([
             'nome' => 'required|string|max:255',
             'id_dipartimento' => 'required|exists:dipartimenti,id_dipartimento',
+            'descrizione' => 'required|string|max:255',
         ]);
 
         $prestazione = Prestazione::findOrFail($id);
         $prestazione->update([
             'nome' => $request->nome,
             'id_dipartimento' => $request->id_dipartimento,
+            'descrizione' => $prestazione->descrizione
         ]);
 
         return redirect()->route('admin.prestazioni.index')->with('success', 'Prestazione aggiornata!');

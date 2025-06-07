@@ -43,7 +43,7 @@ Route::get('/ricerca', [RicercaController::class, 'index'])->name('ricerca.index
 // -------------------------------------
 Route::get('/dashboard', function () {
     \Log::info('Sono nella route dashboard', ['user' => Auth::user()]);
-    if (Auth::check()) {
+    if (Auth::check(    )) {
         $ruolo = Auth::user()->ruolo;
         if ($ruolo === 'admin') {
             \Log::info('Redirect admin');
@@ -128,7 +128,6 @@ Route::middleware(['auth', 'role:staff'])->prefix('staff')->name('staff.')->grou
     Route::delete('/appuntamenti/{appuntamento}', [StaffAppuntamentoController::class, 'destroy'])->name('appuntamenti.destroy');
 
     // Agenda giornaliera (visualizzazione appuntamenti per prestazione e giorno)
-    Route::get('/agenda', [StaffAppuntamentoController::class, 'agendaGiornalieraForm'])->name('agenda.giornaliera.form');
     Route::get('/agenda/giornaliera', [StaffAppuntamentoController::class, 'agendaGiornaliera'])->name('agenda.giornaliera');
     // Prestazioni - tutte le route tranne store
     Route::resource('prestazioni', StaffPrestazioneController::class)->except(['show', 'store']);

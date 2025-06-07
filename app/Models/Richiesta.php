@@ -29,7 +29,7 @@ class Richiesta extends Model
 
     public function prestazione()
     {
-        return $this->belongsTo(Prestazione::class, 'id_prestazione');
+        return $this->belongsTo(Prestazione::class, 'id_prestazione', 'id_prestazione');
     }
 
     public function appuntamenti()

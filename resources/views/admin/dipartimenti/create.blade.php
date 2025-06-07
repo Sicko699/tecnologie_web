@@ -18,7 +18,9 @@
                 <div class="mb-3">
                     <label for="nome" class="form-label">Nome del Dipartimento</label>
                     <input type="text" name="nome" class="form-control" value="{{ old('nome') }}" required>
-                    @error('nome')
+                    <label for="nome" class="form-label">Descrizione</label>
+                    <input type="text" name="descrizione" class="form-control" value="{{ old('descrizione') }}" required>
+                    @error('nome', 'descrizione')
                     <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
                 </div>

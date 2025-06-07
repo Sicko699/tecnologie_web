@@ -59,11 +59,6 @@
                         @error('email') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
                     <div class="mb-4">
-                        <label for="foto" class="form-label fw-semibold">Foto Profilo</label>
-                        <input type="file" name="foto" class="form-control" accept="image/*">
-                        @error('foto') <div class="text-danger small">{{ $message }}</div> @enderror
-                    </div>
-                    <div class="mb-4">
                         <label for="password" class="form-label fw-semibold">Password</label>
                         <div class="position-relative">
                             <input type="password" name="password" class="form-control" id="password" required>

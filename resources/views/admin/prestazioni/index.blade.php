@@ -4,62 +4,64 @@
 @section('content')
     <div class="container py-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold mb-0" style="letter-spacing: .01em;">Prestazioni</h2>
-            <a href="{{ route('admin.prestazioni.create') }}" class="btn btn-success rounded-pill px-4">+ Nuova Prestazione</a>
+            <h2 class="fw-bold mb-0"><i class="fas fa-stethoscope me-2 text-secondary"></i> Prestazioni</h2>
+            <a href="{{ route('admin.prestazioni.create') }}" class="btn btn-success rounded-pill px-4">
+                + Nuova Prestazione
+            </a>
         </div>
-
         @if(session('success'))
             <div class="alert alert-success rounded-3 shadow-sm">{{ session('success') }}</div>
         @endif
 
-        <div class="card shadow rounded-4">
-            <div class="card-body p-0">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light">
+        <div class="table-responsive" style="border-radius: 14px; overflow: hidden;">
+            <table class="table table-borderless align-middle bg-white shadow-sm mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th>Nome</th>
+                    <th>Descrizione</th>
+                    <th>Dipartimento</th>
+                    <th class="text-end" style="min-width:130px;">Azioni</th>
+                </tr>
+                </thead>
+                <tbody>
+                @forelse($prestazioni as $p)
                     <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Dipartimento</th>
-                        <th class="text-end">Azioni</th>
+                        <td>{{ $p->nome }}</td>
+                        <td style="white-space: normal; word-break: break-word;">
+                            {{ $p->descrizione }}
+                        </td>
+                        <td>{{ $p->dipartimento->nome ?? '-' }}</td>
+                        <td class="text-end">
+                            <a href="{{ route('admin.prestazioni.edit', $p->id_prestazione) }}"
+                               class="btn btn-outline-primary btn-sm me-1" style="border-radius:18px;" title="Modifica">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form action="{{ route('admin.prestazioni.destroy', $p->id_prestazione) }}"
+                                  method="POST"
+                                  style="display:inline;"
+                                  onsubmit="return confirm('Sicuro di voler eliminare questa prestazione?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-outline-danger btn-sm" style="border-radius:18px;" title="Elimina">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </td>
                     </tr>
-                    </thead>
-                    <tbody>
-                    @forelse($prestazioni as $p)
-                        <tr>
-                            <td>{{ $p->id_prestazione }}</td>
-                            <td>{{ $p->nome }}</td>
-                            <td>{{ $p->dipartimento->nome ?? '-' }}</td>
-                            <td class="text-end">
-                                <div class="d-flex justify-content-end gap-2">
-                                    <a href="{{ route('admin.prestazioni.edit', $p->id_prestazione) }}"
-                                       class="btn btn-sm btn-outline-primary rounded-pill px-3" title="Modifica">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <form action="{{ route('admin.prestazioni.destroy', $p->id_prestazione) }}" method="POST"
-                                          onsubmit="return confirm('Confermi eliminazione?')" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3" title="Elimina">
-                                            <i class="fas fa-times-circle"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="4" class="text-center py-4 text-muted">Nessuna prestazione disponibile.</td>
-                        </tr>
-                    @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="mt-4">
-            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4">
-                <i class="fas fa-arrow-left me-2"></i> Indietro
-            </a>
+                @empty
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">
+                            Nessuna prestazione presente.
+                        </td>
+                    </tr>
+                @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
+    <style>
+        .table { border-radius: 14px; overflow: hidden; }
+        .btn-outline-primary, .btn-outline-danger { min-width:36px; }
+        .btn-outline-primary i, .btn-outline-danger i { vertical-align: middle; }
+    </style>
 @endsection

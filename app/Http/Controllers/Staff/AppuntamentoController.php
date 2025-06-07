@@ -24,12 +24,20 @@ class AppuntamentoController extends Controller
     public function create($id_richiesta, Request $request)
     {
         $richiesta = Richiesta::with(['prestazione', 'utente'])->findOrFail($id_richiesta);
+        //dd('Trovata richiesta', $richiesta);
 
-        $agenda = Agenda::where('id_prestazione', $richiesta->id_prestazione)->firstOrFail();
+        $agenda = Agenda::where('id_prestazione', $richiesta->id_prestazione)->first();
+        if (!$agenda) {
+            return redirect()->route('staff.richieste.index')
+                ->with('error', 'Non esiste un\'agenda per questa prestazione.');
+        }
+        //dd('Trovata agenda', $agenda);
         $configurazione = $agenda->configurazione_orari;     // array di array slot per ogni giorno
         //dd($configurazione);
         $giorniSettimana = $agenda->giorni_settimana;        // array tipo ['Lunedì', 'Martedì', ...]
         $giornoEscluso = $richiesta->giorno_escluso;         // es. 'Martedì' o null
+
+        $giorniSettimana = $agenda->giorni_settimana; // array tipo ['Lunedì', 'Martedì', ...]
 
         // Data selezionata dal form, oppure oggi
         $dataSelezionata = $request->input('data', now()->toDateString());
@@ -73,8 +81,10 @@ class AppuntamentoController extends Controller
             'dataSelezionata' => $dataSelezionata,
             'slotDisponibili' => $slotDisponibili,
             'giornoEscluso' => $giornoEscluso,
-            'erroreGiornoEscluso' => $erroreGiornoEscluso
+            'erroreGiornoEscluso' => $erroreGiornoEscluso,
+            'giorniSettimana' => $giorniSettimana,
         ]);
+
     }
 
     // Store - salva l'appuntamento, valida che lo slot sia ancora disponibile
@@ -123,6 +133,7 @@ class AppuntamentoController extends Controller
             $app->data = $data;
             $app->ora = $oraInizio;
             $app->stato = 'prenotato';
+            $app->codice_fiscale = $richiesta->utente->codice_fiscale; // <-- AGGIUNGI QUESTO
             $app->save();
 
             // Aggiorna stato richiesta
@@ -168,7 +179,9 @@ class AppuntamentoController extends Controller
             'data' => $request->data,
             'ora' => $oraInizio,
             'stato' => $request->stato,
+            'codice_fiscale' => $appuntamento->richiesta->utente->codice_fiscale,
         ]);
+
 
         // NOTIFICA all'utente - CAMPI CORRETTI
         Notifica::create([
@@ -195,28 +208,25 @@ class AppuntamentoController extends Controller
         return redirect()->route('staff.appuntamenti.index')->with('success', 'Appuntamento eliminato!');
     }
 
-    // FORM per scegliere prestazione e giorno (agenda giornaliera)
-    public function agendaGiornalieraForm()
-    {
-        $prestazioni = Prestazione::all();
-        return view('staff.agenda.giornaliera_form', compact('prestazioni'));
-    }
-
     // Visualizzazione agenda giornaliera per prestazione e giorno
     public function agendaGiornaliera(Request $request)
     {
-        $id_prestazione = $request->input('id_prestazione');
-        $giorno = $request->input('giorno');
+        //dd($request);
         $prestazioni = Prestazione::all();
+        $appuntamenti = null;
+        $giorno = $request->input('giorno');
+        $id_prestazione = $request->input('id_prestazione');
 
-        $appuntamenti = Appuntamento::where('data', $giorno)
-            ->where('stato', '!=', 'erogato')
-            ->whereHas('richiesta', function($q) use ($id_prestazione) {
-                $q->where('id_prestazione', $id_prestazione);
-            })
-            ->with(['richiesta.utente', 'richiesta.prestazione'])
-            ->get();
+        if (!empty($id_prestazione) && !empty($giorno)) {
+            $appuntamenti = Appuntamento::where('data', $giorno)
+                ->where('stato', '!=', 'erogato')
+                ->whereHas('richiesta', function($q) use ($id_prestazione) {
+                    $q->where('id_prestazione', $id_prestazione);
+                })
+                ->with(['richiesta.utente', 'richiesta.prestazione'])
+                ->get();
+        }
 
-        return view('staff.agenda.giornaliera', compact('appuntamenti', 'giorno','prestazioni'));
+        return view('staff.agenda.giornaliera', compact('appuntamenti', 'giorno', 'prestazioni'));
     }
 }
