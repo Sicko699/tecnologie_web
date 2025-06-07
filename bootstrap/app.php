@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function ($middleware) {
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
+            'no.duplicate' => \App\Http\Middleware\PrevenireDuplicazione::class,
         ]);
     })
 

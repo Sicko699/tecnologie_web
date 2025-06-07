@@ -13,6 +13,7 @@
         <div class="card p-4 shadow-sm border-0">
             <form action="{{ route('admin.prestazioni.store') }}" method="POST">
                 @csrf
+                <input type="hidden" name="form_token" value="{{ $token }}">
 
                 <div class="mb-3">
                     <label for="nome" class="form-label">Nome</label>

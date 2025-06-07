@@ -10,6 +10,7 @@
                 </h2>
                 <form method="POST" action="{{ route('paziente.prenotazioni.store') }}" class="p-0">
                     @csrf
+                    <input type="hidden" name="form_token" value="{{ $token }}">
 
                     {{-- Prestazione --}}
                     <div class="mb-4">
@@ -59,7 +60,7 @@
                         <a href="{{ route('paziente.prenotazioni.index') }}" class="btn btn-link text-muted px-2" style="text-decoration:none;">
                             Annulla
                         </a>
-                        <button type="submit" class="btn btn-primary px-4" style="border-radius: 20px;">
+                        <button type="submit" class="btn btn-primary px-4" style="border-radius: 20px;" onclick="this.disabled=true; this.form.submit();">
                             Invia richiesta
                         </button>
                     </div>

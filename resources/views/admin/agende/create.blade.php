@@ -6,6 +6,7 @@
     <h1>Nuovo Slot Agenda</h1>
     <form action="{{ route('admin.agende.store') }}" method="POST">
         @csrf
+        <input type="hidden" name="form_token" value="{{ $token }}">
 
         {{-- Dipartimento --}}
         <div class="form-group">
@@ -139,7 +140,7 @@
         </div>
 
         <div class="mt-4">
-            <button type="submit" class="btn btn-primary" id="submit-btn">Crea Slot Agenda</button>
+            <button type="submit" class="btn btn-primary" id="submit-btn" onclick="this.disabled=true; this.form.submit();">Crea Slot Agenda</button>
             <a href="{{ route('admin.agende.index') }}" class="btn btn-secondary">Annulla</a>
         </div>
     </form>

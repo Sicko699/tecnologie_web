@@ -33,6 +33,7 @@
                 <!-- Form principale per salvare l'appuntamento -->
                 <form method="POST" action="{{ route('staff.appuntamenti.store') }}">
                     @csrf
+                    <input type="hidden" name="form_token" value="{{ $token }}">
                     <input type="hidden" name="id_richiesta" value="{{ $richiesta->id_richiesta }}">
                     <input type="hidden" name="data" value="{{ $dataSelezionata }}">
 

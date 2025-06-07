@@ -22,6 +22,7 @@
 
                 <form action="{{ route('admin.utenti.store') }}" method="POST" class="p-0">
                     @csrf
+                    <input type="hidden" name="form_token" value="{{ $token }}">
 
                     <div class="mb-4">
                         <label for="nome" class="form-label fw-semibold">Nome</label>

@@ -76,7 +76,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // -------------------------------------
-// AUTENTICAZIONE (Laravel Breeze/Jetstream/etc.)
+// AUTENTICAZIONE (Laravel Breeze)
 // -------------------------------------
 require __DIR__.'/auth.php';
 
@@ -90,8 +90,13 @@ Route::middleware(['auth', 'role:paziente'])->prefix('user')->name('paziente.')-
     Route::put('/profilo', [PazienteProfiloController::class, 'update'])->name('profilo.update');
     Route::delete('/account/delete', [PazienteProfiloController::class, 'destroy'])->name('account.delete');
 
-    // Prenotazioni
-    Route::resource('prenotazioni', PazientePrenotazioneController::class)->except(['dashboard']);
+    // Prenotazioni - tutte le route tranne store
+    Route::resource('prenotazioni', PazientePrenotazioneController::class)->except(['store', 'dashboard']);
+    // Route store separata protetta da middleware
+    Route::post('prenotazioni', [PazientePrenotazioneController::class, 'store'])
+        ->middleware('no.duplicate')
+        ->name('prenotazioni.store');
+
     // Appuntamenti
     Route::get('appuntamenti', [PazienteAppuntamentoController::class, 'index'])->name('appuntamenti.index');
 
@@ -99,6 +104,7 @@ Route::middleware(['auth', 'role:paziente'])->prefix('user')->name('paziente.')-
     Route::post('/notifiche/mark-all-read', [NotificaController::class, 'markAllRead'])
         ->name('notifiche.markAllRead');
 });
+
 
 // -------------------------------------
 // AREA STAFF (auth + ruolo staff)
@@ -111,7 +117,9 @@ Route::middleware(['auth', 'role:staff'])->prefix('staff')->name('staff.')->grou
 
     // Assegna appuntamento a richiesta (step di conferma slot)
     Route::get('/appuntamenti/create/{id_richiesta}', [StaffAppuntamentoController::class, 'create'])->name('appuntamenti.create');
-    Route::post('/appuntamenti', [StaffAppuntamentoController::class, 'store'])->name('appuntamenti.store');
+    Route::post('/appuntamenti', [StaffAppuntamentoController::class, 'store'])
+        ->middleware('no.duplicate')
+        ->name('appuntamenti.store');
 
     // Gestione appuntamenti (modifica/annulla)
     Route::get('/appuntamenti', [StaffAppuntamentoController::class, 'index'])->name('appuntamenti.index');
@@ -122,10 +130,17 @@ Route::middleware(['auth', 'role:staff'])->prefix('staff')->name('staff.')->grou
     // Agenda giornaliera (visualizzazione appuntamenti per prestazione e giorno)
     Route::get('/agenda', [StaffAppuntamentoController::class, 'agendaGiornalieraForm'])->name('agenda.giornaliera.form');
     Route::get('/agenda/giornaliera', [StaffAppuntamentoController::class, 'agendaGiornaliera'])->name('agenda.giornaliera');
-    Route::resource('prestazioni', StaffPrestazioneController::class)->except(['show']);
+    // Prestazioni - tutte le route tranne store
+    Route::resource('prestazioni', StaffPrestazioneController::class)->except(['show', 'store']);
+    // Route store separata protetta da middleware
+    Route::post('prestazioni', [StaffPrestazioneController::class, 'store'])
+        ->middleware('no.duplicate')
+        ->name('prestazioni.store');
+
     Route::get('staff/membri/{id}/edit-prestazioni', [StaffPrestazioneController::class, 'editGestionePrestazioni'])->name('staff.membri.editPrestazioni');
     Route::put('staff/membri/{id}/update-prestazioni', [StaffPrestazioneController::class, 'updateGestionePrestazioni'])->name('staff.membri.updatePrestazioni');
 });
+
 
 
 // -------------------------------------
@@ -133,15 +148,37 @@ Route::middleware(['auth', 'role:staff'])->prefix('staff')->name('staff.')->grou
 // -------------------------------------
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-    // CRUD su tutto
-    Route::resource('dipartimenti', AdminDipartimentoController::class);
-    Route::resource('prestazioni', AdminPrestazioneController::class);
-    Route::resource('utenti', AdminUtenteController::class);
-    Route::resource('appuntamenti', AdminAppuntamentoController::class);
-    Route::resource('notifiche', AdminNotificaController::class)->only(['index', 'store', 'destroy']);
+    // CRUD su tutto - escludi 'store' dalle resource
+    Route::resource('dipartimenti', AdminDipartimentoController::class)->except(['store']);
+    Route::resource('prestazioni', AdminPrestazioneController::class)->except(['store']);
+    Route::resource('utenti', AdminUtenteController::class)->except(['store']);
+    Route::resource('appuntamenti', AdminAppuntamentoController::class)->except(['store']);
+    Route::resource('notifiche', AdminNotificaController::class)->only(['index', 'destroy']);
     Route::resource('statistiche', AdminStatisticaController::class)->only(['index', 'show']);
-    Route::resource('agende', AgendaController::class);
+    Route::resource('agende', AgendaController::class)->except(['store']);
     Route::get('agende/{id}/giornaliera', [AgendaController::class, 'giornaliera'])->name('agende.giornaliera');
     Route::get('prestazioni/{prestazioni}', [AdminPrestazioneController::class, 'show'])->name('prestazioni.show');
 
-});
+    // Store separati e protetti
+    Route::post('dipartimenti', [AdminDipartimentoController::class, 'store'])
+        ->middleware('no.duplicate')
+        ->name('dipartimenti.store');
+    Route::post('prestazioni', [AdminPrestazioneController::class, 'store'])
+        ->middleware('no.duplicate')
+        ->name('prestazioni.store');
+    Route::post('utenti', [AdminUtenteController::class, 'store'])
+        ->middleware('no.duplicate')
+        ->name('utenti.store');
+    Route::post('appuntamenti', [AdminAppuntamentoController::class, 'store'])
+        ->middleware('no.duplicate')
+        ->name('appuntamenti.store');
+    Route::post('agende', [AgendaController::class, 'store'])
+        ->middleware('no.duplicate')
+        ->name('agende.store');
+    Route::post('notifiche', [AdminNotificaController::class, 'store'])
+        ->middleware('no.duplicate')
+        ->name('notifiche.store');
+}
+
+);
+
