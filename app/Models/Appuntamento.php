@@ -21,5 +21,15 @@ class Appuntamento extends Model
     {
         return $this->belongsTo(Richiesta::class, 'id_richiesta');
     }
+
+    public static function aggiornaErogati()
+    {
+        $oggi = now()->toDateString();
+
+        self::where('data', '<', $oggi)
+            ->where('stato', 'confermato')
+            ->update(['stato' => 'erogato']);
+    }
+
 }
 

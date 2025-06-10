@@ -141,6 +141,8 @@ class AppuntamentoController extends Controller
 
     public function index()
     {
+        Appuntamento::aggiornaErogati();
+
         $appuntamenti = Appuntamento::with(['richiesta.utente', 'richiesta.prestazione'])->get();
         return view('staff.appuntamenti.index', compact('appuntamenti'));
     }

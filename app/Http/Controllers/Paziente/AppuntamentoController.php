@@ -10,6 +10,8 @@ class AppuntamentoController extends Controller
 {
     public function index()
     {
+        Appuntamento::aggiornaErogati();
+
         $user_cf = Auth::user()->codice_fiscale;
         $appuntamenti = Appuntamento::whereHas('richiesta', function($q) use ($user_cf) {
             $q->where('id_utente', $user_cf);
