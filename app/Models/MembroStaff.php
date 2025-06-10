@@ -28,16 +28,15 @@ class MembroStaff extends Model
         return $this->belongsTo(Dipartimento::class, 'id_dipartimento');
     }
 
-    // Relazione molti-a-molti con Prestazione (pivot aggiornata)
     public function prestazioni()
     {
         return $this->belongsToMany(
             Prestazione::class,
             'membrostaff_prestazione',
-            'codice_fiscale',     // chiave locale su questa tabella
-            'id_prestazione',     // chiave esterna verso Prestazione
-            'codice_fiscale',     // local key su questa tabella
-            'id_prestazione'      // local key su Prestazione
+            'codice_fiscale',
+            'id_prestazione',
+            'codice_fiscale',
+            'id_prestazione'
         );
     }
 }

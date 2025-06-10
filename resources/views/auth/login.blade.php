@@ -1,4 +1,3 @@
-{{-- resources/views/login.blade.php --}}
 @extends('layouts.app')
 @section('title', 'Login')
 @section('content')
@@ -31,6 +30,7 @@
         </div>
     </div>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
         .form-label { font-size: 1.05em; margin-bottom: .3em; }
         .form-select, .form-control {

@@ -3,7 +3,6 @@
 @section('content')
 
     <section class="home-slider owl-carousel">
-        <!-- Prima card -->
         <div class="slider-item" style="background-image:url(images/bg_1.jpg);" data-stellar-background-ratio="0.5">
             <div class="overlay"></div>
             <div class="container">
@@ -19,7 +18,6 @@
             </div>
         </div>
 
-        <!-- Seconda card -->
         <div class="slider-item" style="background-image:url(images/bg_2.jpg);">
             <div class="overlay"></div>
             <div class="container">
@@ -132,7 +130,6 @@
             <div class="row g-4">
                 @foreach($dottori as $index => $dentista)
                     @php
-                        // img fallback smart: doc-2, doc-3, ..., doc-7
                         $img = $dentista->immagine ?? 'doc-' . (($index % 6) + 2) . '.jpg';
                     @endphp
                     <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch">

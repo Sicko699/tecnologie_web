@@ -15,7 +15,7 @@ class PublicController extends Controller
         $trattamenti = Prestazione::with('dipartimento')->get();
         $dipartimenti = Dipartimento::all();
 
-        // Solo utenti con relazione "medico"
+        $dottori = Medico::all();
         $dottori = Medico::all();
         $medicoInEvidenza = Medico::inRandomOrder()->first();
 
@@ -27,7 +27,6 @@ class PublicController extends Controller
         $dottori = Medico::all();
         return view('public.doctor', compact('dottori'));
     }
-
 
     public function about()
     {

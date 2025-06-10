@@ -46,11 +46,6 @@
                     @endif
                 </div>
 
-
-
-
-
-                <!-- Form per cambiare data (separato dal form principale) -->
                 <form method="GET" action="{{ route('staff.appuntamenti.create', $richiesta->id_richiesta) }}"
                       id="dateForm">
                     <div class="mb-4">
@@ -67,7 +62,6 @@
                     </div>
                 </form>
 
-                <!-- Form principale per salvare l'appuntamento -->
                 <form method="POST" action="{{ route('staff.appuntamenti.store') }}">
                     @csrf
                     <input type="hidden" name="form_token" value="{{ $token }}">
@@ -83,7 +77,6 @@
                         </div>
                     @endif
 
-                    {{-- Slot --}}
                     <div class="mb-4">
                         <label for="ora" class="form-label fw-semibold">Orario</label>
                         <select name="ora" id="ora" class="form-select @error('ora') is-invalid @enderror"

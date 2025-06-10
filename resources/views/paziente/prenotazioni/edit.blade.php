@@ -12,7 +12,6 @@
                     @csrf
                     @method('PUT')
 
-                    {{-- Prestazione --}}
                     <div class="mb-4">
                         <label class="form-label fw-semibold">
                             Prestazione richiesta
@@ -23,7 +22,6 @@
                                readonly>
                     </div>
 
-                    {{-- Giorno escluso --}}
                     <div class="mb-4">
                         <label for="giorno_escluso" class="form-label fw-semibold">
                             Giorno da escludere <span class="fw-normal text-muted" style="font-size:.98em;">(opzionale)</span>
@@ -46,7 +44,6 @@
                         @enderror
                     </div>
 
-                    {{-- Azioni --}}
                     <div class="d-flex gap-2 justify-content-between align-items-center pt-1">
                         <a href="{{ route('paziente.prenotazioni.show', $prenotazione->id_richiesta) }}" class="btn btn-link text-muted px-2" style="text-decoration:none;">
                             Annulla

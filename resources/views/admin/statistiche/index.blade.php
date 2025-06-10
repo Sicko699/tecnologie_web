@@ -3,10 +3,8 @@
 
 @section('content')
     <div class="container mt-5 mb-5">
-        {{-- Titolo --}}
         <h2 class="fw-bold text-primary mb-4">Statistiche Prestazioni</h2>
 
-        {{-- Filtro --}}
         <div class="card shadow rounded-4 mb-5">
             <div class="card-body">
                 <form method="GET" class="row g-4 align-items-end">
@@ -29,7 +27,6 @@
             </div>
         </div>
 
-        {{-- Grafico Prestazioni per Tipo --}}
         <div class="card shadow rounded-4 mb-5">
             <div class="card-header bg-primary text-white fw-bold">
                 Numero Prestazioni per Tipo
@@ -39,7 +36,6 @@
             </div>
         </div>
 
-        {{-- Grafico Prestazioni per Dipartimento --}}
         <div class="card shadow rounded-4 mb-5">
             <div class="card-header bg-primary text-white fw-bold">
                 Numero Prestazioni per Dipartimento
@@ -49,7 +45,6 @@
             </div>
         </div>
 
-        {{-- Tabella Prestazioni Utente --}}
         @if($prestazioniUtente)
             <div class="card shadow rounded-4 mb-5">
                 <div class="card-header bg-info text-white fw-bold d-flex justify-content-between align-items-center">
@@ -83,7 +78,6 @@
             </div>
         @endif
 
-        {{-- Pulsante Indietro --}}
         <div class="mt-5">
             <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4">
                 <i class="fas fa-arrow-left me-2"></i> Indietro
@@ -91,7 +85,6 @@
         </div>
     </div>
 
-    {{-- Chart.js CDN --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const prestazioniData = {

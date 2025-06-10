@@ -9,15 +9,13 @@ use App\Models\User;
 
 class NotificaController extends Controller
 {
-    // Mostra tutte le notifiche inviate
     public function index()
     {
         $notifiche = Notifica::with('utente')->orderByDesc('data_creazione')->get();
-        $utenti = User::all(); // Per eventuale invio da interfaccia
+        $utenti = User::all();
         return view('admin.notifiche.index', compact('notifiche', 'utenti'));
     }
 
-    // Invio nuova notifica
     public function store(Request $request)
     {
         $request->validate([
@@ -33,7 +31,6 @@ class NotificaController extends Controller
         return redirect()->route('admin.notifiche.index')->with('success', 'Notifica inviata!');
     }
 
-    // Elimina una notifica
     public function destroy($id)
     {
         $notifica = Notifica::findOrFail($id);

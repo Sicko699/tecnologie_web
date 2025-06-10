@@ -2,7 +2,6 @@
 @section('title', 'Chi siamo')
 @section('content')
 
-    <!-- Hero Section -->
     <section class="hero-wrap hero-wrap-2" style="background-image: url('{{ asset('images/bg_1.jpg') }}');"
              data-stellar-background-ratio="0.5">
         <div class="overlay"></div>
@@ -15,7 +14,6 @@
         </div>
     </section>
 
-    <!-- About Section -->
     <section class="ftco-section ftco-no-pt ftco-no-pb">
         <div class="container">
             <div class="row no-gutters">

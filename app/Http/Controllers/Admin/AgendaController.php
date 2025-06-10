@@ -55,7 +55,6 @@ class AgendaController extends Controller
             return back()->withErrors(['id_prestazione' => 'La prestazione non appartiene al dipartimento selezionato.'])->withInput();
         }
 
-        // Calcola i giorni effettivamente usati
         $nomiGiorni = ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
         $giorniSettimana = [];
         foreach ($orariPerGiorno as $idx => $slots) {
@@ -67,7 +66,7 @@ class AgendaController extends Controller
         Agenda::create([
             'id_dipartimento'      => $request->id_dipartimento,
             'id_prestazione'       => $request->id_prestazione,
-            'giorni_settimana'     => $giorniSettimana,            // <-- qui!
+            'giorni_settimana'     => $giorniSettimana,
             'configurazione_orari' => $orariPerGiorno,
             'max_appuntamenti'     => $request->max_appuntamenti,
         ]);
@@ -107,7 +106,6 @@ class AgendaController extends Controller
             return back()->withErrors(['orari_per_giorno' => 'Devi selezionare almeno uno slot orario.'])->withInput();
         }
 
-        // Calcola i giorni effettivamente usati
         $nomiGiorni = ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
         $giorniSettimana = [];
         foreach ($orariPerGiorno as $idx => $slots) {
@@ -119,7 +117,7 @@ class AgendaController extends Controller
         $agende->update([
             'id_dipartimento'      => $request->id_dipartimento,
             'id_prestazione'       => $request->id_prestazione,
-            'giorni_settimana'     => $giorniSettimana,           // <-- qui!
+            'giorni_settimana'     => $giorniSettimana,
             'configurazione_orari' => $orariPerGiorno,
             'max_appuntamenti'     => $request->max_appuntamenti,
         ]);
@@ -142,7 +140,6 @@ class AgendaController extends Controller
         return redirect()->route('admin.agende.index')->with('success', 'Agenda eliminata con successo!');
     }
 
-    // Gli altri metodi non resource rimangono come sono
     public function giornaliera($id_agenda, Request $request)
     {
         $agenda = Agenda::with(['prestazione', 'dipartimento'])->findOrFail($id_agenda);
@@ -201,13 +198,4 @@ class AgendaController extends Controller
         ]);
     }
 
-    public function getSlotDisponibili($id_agenda, $data)
-    {
-        $agenda = Agenda::findOrFail($id_agenda);
-        $dataCarbon = Carbon::parse($data);
-        $giornoMappato = $dataCarbon->dayOfWeek === 0 ? 6 : $dataCarbon->dayOfWeek - 1;
-
-        $configurazione = $agenda->configurazione_orari;
-        return $configurazione[$giornoMappato] ?? [];
-    }
 }

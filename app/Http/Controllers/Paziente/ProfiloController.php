@@ -19,7 +19,6 @@ class ProfiloController extends Controller
     {
         $user = Auth::user();
 
-        // ATTENZIONE: modifica qui se la tua PK non è 'id'
         $primaryKey = 'id';
         if (array_key_exists('codice_fiscale', $user->getAttributes())) {
             $primaryKey = 'codice_fiscale';
@@ -31,7 +30,6 @@ class ProfiloController extends Controller
             'email' => 'required|email|max:255|unique:users,email,' . $user->$primaryKey . ',' . $primaryKey,
             'telefono' => 'nullable|string|max:50',
 
-            // Regole per cambio password (solo se password viene compilata)
             'current_password' => 'required_with:password',
             'password' => [
                 'nullable',
@@ -43,13 +41,11 @@ class ProfiloController extends Controller
             'password.confirmed' => 'La conferma password non corrisponde.',
         ]);
 
-        // AGGIORNA DATI PROFILO
         $user->nome = $request->nome;
         $user->cognome = $request->cognome;
         $user->email = $request->email;
         $user->telefono = $request->telefono;
 
-        // CAMBIO PASSWORD (solo se richiesto)
         if ($request->filled('password')) {
             if (!Hash::check($request->current_password, $user->password)) {
                 return back()->withErrors(['current_password' => 'La vecchia password non è corretta.'])->withInput();

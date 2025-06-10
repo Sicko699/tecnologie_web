@@ -3,7 +3,6 @@
 
 @section('content')
     <div class="container py-5">
-        <!-- Header minimalista -->
         <div class="d-flex justify-content-between align-items-start mb-5">
             <div>
                 <h1 class="h2 fw-light text-dark mb-2">Agenda #{{ $agenda->id }}</h1>
@@ -22,7 +21,7 @@
         </div>
 
         <div class="row g-4">
-            <!-- Informazioni principali -->
+
             <div class="col-lg-8">
                 <div class="bg-light bg-opacity-50 rounded-4 p-4 mb-4">
                     <div class="row g-4">
@@ -45,7 +44,6 @@
                     </div>
                 </div>
 
-                <!-- Orari -->
                 <div class="bg-white border border-light rounded-4 p-4">
                     <h3 class="h5 fw-normal mb-4 text-dark">Orari disponibili</h3>
 
@@ -83,7 +81,6 @@
                 </div>
             </div>
 
-            <!-- Sidebar -->
             <div class="col-lg-4">
                 <div class="position-sticky" style="top: 2rem;">
                     <div class="bg-white border border-light rounded-4 p-4">

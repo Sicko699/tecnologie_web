@@ -137,25 +137,21 @@
         let comuniItalia = {};
         let province = {};
 
-        // Carica i dati dal file JSON
         async function loadCodiciCatastali() {
             try {
                 const response = await fetch('/codici_catastali.json');
                 const data = await response.json();
 
-                // Organizza i dati per provincia
                 comuniItalia = {};
                 province = {};
 
                 data.forEach(item => {
                     const sigla = item.provincia_sigla;
 
-                    // Aggiungi provincia se non esiste
                     if (!province[sigla]) {
-                        province[sigla] = sigla; // Puoi sostituire con nome completo se necessario
+                        province[sigla] = sigla;
                     }
 
-                    // Aggiungi comune alla provincia
                     if (!comuniItalia[sigla]) {
                         comuniItalia[sigla] = [];
                     }
@@ -163,7 +159,6 @@
                     comuniItalia[sigla].push([item.comune, item.codice]);
                 });
 
-                // Ordina i comuni alfabeticamente per ogni provincia
                 Object.keys(comuniItalia).forEach(sigla => {
                     comuniItalia[sigla].sort((a, b) => a[0].localeCompare(b[0]));
                 });
@@ -171,7 +166,6 @@
                 console.log('Codici catastali caricati:', Object.keys(comuniItalia).length, 'province');
             } catch (error) {
                 console.error('Errore nel caricamento dei codici catastali:', error);
-                // Fallback con dati minimi in caso di errore
                 province = {
                     'CH': 'Chieti',
                     'RM': 'Roma',
@@ -185,9 +179,8 @@
             }
         }
 
-        // --- Autocomplete province ---
         document.addEventListener('DOMContentLoaded', async function() {
-            // Carica i dati prima di inizializzare gli autocomplete
+
             await loadCodiciCatastali();
 
             const provInput = document.getElementById('provincia_nascita');
@@ -229,7 +222,6 @@
             });
         });
 
-        // --- Autocomplete comuni in base alla provincia ---
         document.addEventListener('DOMContentLoaded', function() {
             const comuneInput = document.getElementById('comune_nascita');
             const provInput = document.getElementById('provincia_nascita');
@@ -273,7 +265,6 @@
             });
         });
 
-        // --- CF generation con carattere di controllo ---
         function generaCF() {
             let nome = document.getElementById('nome').value || '';
             let cognome = document.getElementById('cognome').value || '';
@@ -319,9 +310,7 @@
             return ('0' + giorno).slice(-2);
         }
 
-        // Calcola il carattere di controllo (ultima lettera del CF)
         function calcolaCarattereControllo(cfParziale) {
-            // Tabelle di conversione per il calcolo del carattere di controllo
             const valoriPari = {
                 '0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9,
                 'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7, 'I': 8, 'J': 9,
@@ -340,21 +329,17 @@
 
             let somma = 0;
 
-            // Somma i valori delle posizioni dispari (1°, 3°, 5°, etc.)
             for (let i = 0; i < cfParziale.length; i += 2) {
                 somma += valoriDispari[cfParziale[i]] || 0;
             }
 
-            // Somma i valori delle posizioni pari (2°, 4°, 6°, etc.)
             for (let i = 1; i < cfParziale.length; i += 2) {
                 somma += valoriPari[cfParziale[i]] || 0;
             }
 
-            // Il carattere di controllo è dato dal resto della divisione per 26
             return caratteriControllo[somma % 26];
         }
 
-        // Aggiorna CF a ogni cambio
         ['nome', 'cognome', 'sesso', 'data_nascita', 'comune_nascita', 'provincia_nascita'].forEach(id => {
             document.addEventListener('DOMContentLoaded', () => {
                 let el = document.getElementById(id);
@@ -362,7 +347,6 @@
             });
         });
 
-        // Bottone "è corretto?" e "modifica"
         document.addEventListener('DOMContentLoaded', () => {
             const checkBtn = document.getElementById('cf-check');
             const editBtn = document.getElementById('cf-edit-btn');

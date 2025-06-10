@@ -9,7 +9,6 @@
             <i class="fas fa-calendar-day text-primary me-2"></i>Agenda Giornaliera
         </h2>
 
-        {{-- FORM FILTRO PRESTAZIONE E GIORNO --}}
         <form action="{{ route('staff.agenda.giornaliera') }}" method="GET" class="row g-3 align-items-end mb-4">
             <div class="col-md-5">
                 <label for="id_prestazione" class="form-label">Prestazione</label>
@@ -34,7 +33,6 @@
         </form>
 
         @if($id_prestazione && $giorno)
-            {{-- NAVIGAZIONE GIORNI --}}
             <div class="d-flex justify-content-between align-items-center mb-3">
                 @php
                     $carbonGiorno = Carbon::parse($giorno);

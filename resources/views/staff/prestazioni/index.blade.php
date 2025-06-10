@@ -2,28 +2,6 @@
 @section('title', 'Prestazioni Gestite')
 
 @section('content')
-    <style>
-        .table thead th {
-            background-color: #f8f9fa;
-            font-weight: 600;
-        }
-
-        .custom-table {
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
-            border-radius: 0.75rem;
-            overflow: hidden;
-        }
-
-        .table td, .table th {
-            vertical-align: middle;
-        }
-
-        .no-data {
-            padding: 2rem;
-            color: #6c757d;
-        }
-    </style>
-
     <div class="container py-5">
 
 
@@ -55,4 +33,26 @@
             </table>
         </div>
     </div>
+
+    <style>
+        .table thead th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .custom-table {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+
+        .table td, .table th {
+            vertical-align: middle;
+        }
+
+        .no-data {
+            padding: 2rem;
+            color: #6c757d;
+        }
+    </style>
 @endsection

@@ -8,11 +8,6 @@ use Illuminate\Http\Request;
 
 class DipartimentoController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware(['auth', 'role:admin']);
-    }
-
     public function index()
     {
         $dipartimenti = Dipartimento::all();
@@ -34,13 +29,10 @@ class DipartimentoController extends Controller
             'nome' => $request->nome,
             'descrizione' => $request->descrizione,
         ]);
-        // Se vuoi tornare subito alla modifica del nuovo dipartimento:
-        // return redirect()->route('admin.dipartimenti.edit', ['dipartimento' => $dipartimento->id])->with('success', 'Dipartimento creato!');
-        // Oppure solo alla lista:
+
         return redirect()->route('admin.dipartimenti.index')->with('success', 'Dipartimento creato!');
     }
 
-    // Con il binding SINGOLARE!
     public function edit(Dipartimento $dipartimenti)
     {
         $dipartimento = $dipartimenti;

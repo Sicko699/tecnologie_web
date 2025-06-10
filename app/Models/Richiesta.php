@@ -21,7 +21,6 @@ class Richiesta extends Model
         'id_dipartimento'
     ];
 
-
     public function utente()
     {
         return $this->belongsTo(User::class, 'id_utente', 'codice_fiscale');

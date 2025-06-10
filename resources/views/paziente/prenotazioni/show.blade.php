@@ -38,7 +38,6 @@
                         </dl>
                     </div>
                 </div>
-                {{-- Azioni --}}
                 <div class="d-flex justify-content-between align-items-center gap-2 pt-2">
                     <a href="{{ route('paziente.prenotazioni.edit', $prenotazione->id_richiesta) }}" class="btn btn-primary px-4" style="border-radius: 20px;">
                         Modifica

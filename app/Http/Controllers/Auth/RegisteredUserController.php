@@ -27,7 +27,7 @@ class RegisteredUserController extends Controller
             'username'       => ['required', 'string', 'max:50', 'unique:users,username'],
             'nome'           => ['required', 'string', 'max:100'],
             'cognome'        => ['required', 'string', 'max:100'],
-            'email'          => ['nullable', 'email', 'max:255', 'unique:users,email'], // ora nullable
+            'email'          => ['nullable', 'email', 'max:255', 'unique:users,email'],
             'telefono'       => ['nullable', 'string', 'max:50'],
             'data_nascita'   => ['nullable', 'date'],
             'password'       => ['required', 'confirmed', Rules\Password::defaults()],
@@ -39,7 +39,7 @@ class RegisteredUserController extends Controller
             'username'       => $request->username,
             'nome'           => $request->nome,
             'cognome'        => $request->cognome,
-            'email'          => $request->email, // può essere null
+            'email'          => $request->email,
             'telefono'       => $request->telefono,
             'data_nascita'   => $request->data_nascita,
             'ruolo'          => 'paziente',

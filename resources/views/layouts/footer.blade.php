@@ -1,8 +1,6 @@
-{{-- resources/views/layouts/footer.blade.php --}}
 <footer class="ftco-footer ftco-bg-dark ftco-section">
     <div class="container">
         <div class="row mb-5">
-            <!-- About -->
             <div class="col-md">
                 <div class="ftco-footer-widget mb-5">
                     <h2 class="ftco-heading-2 logo">Studio Dentistico Smile</h2>
@@ -35,7 +33,7 @@
                     </div>
                 </div>
             </div>
-            <!-- Links -->
+
             <div class="col-md">
                 <div class="ftco-footer-widget mb-5 ml-md-4">
                     <h2 class="ftco-heading-2">Link Utili</h2>
@@ -59,13 +57,12 @@
                     </ul>
                 </div>
             </div>
-            <!-- Opening Hours & Newsletter -->
+
             <div class="col-md">
                 <div class="ftco-footer-widget mb-5">
                     <h2 class="ftco-heading-2">Orari di Apertura</h2>
                     <h3 class="open-hours pl-4">
-                        <span class="ion-ios-time mr-3"></span>Lun–Ven: 9:00–19:00<br>
-                        Sabato: 9:00–13:00<br>
+                        <span class="ion-ios-time mr-3"></span>Lun–Sab: 8:00–20:00<br>
                         Domenica: chiuso
                     </h3>
                 </div>

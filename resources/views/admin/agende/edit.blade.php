@@ -8,7 +8,6 @@
             @csrf
             @method('PUT')
 
-            {{-- Dipartimento --}}
             <div class="form-group">
                 <label for="id_dipartimento">Dipartimento</label>
                 <select name="id_dipartimento" id="id_dipartimento" class="form-control" required>
@@ -25,7 +24,6 @@
                 @error('id_dipartimento') <div class="text-danger">{{ $message }}</div> @enderror
             </div>
 
-            {{-- Prestazione --}}
             <div class="form-group mt-2">
                 <label for="id_prestazione">Prestazione</label>
                 <select name="id_prestazione" id="id_prestazione" class="form-control" required>
@@ -54,15 +52,11 @@
                     $orariDisponibili[] = "$start-$end";
                 }
 
-                // Recupera la struttura orari per giorno
-                // Prima priorità: old() per validazione fallita
-                // Seconda priorità: dati esistenti dal database
                 $valoriOrariPerGiorno = [];
 
                 if (old('orari_per_giorno')) {
                     $valoriOrariPerGiorno = json_decode(old('orari_per_giorno'), true) ?: [];
                 } else {
-                    // Carica i dati esistenti dalla configurazione_orari dell'agenda
                     $configurazioneOrari = $agenda->configurazione_orari ?? [];
                     if (is_array($configurazioneOrari)) {
                         $valoriOrariPerGiorno = $configurazioneOrari;
@@ -70,14 +64,13 @@
                 }
             @endphp
 
-            {{-- Sezione per la selezione dei giorni e orari --}}
             <div class="card mt-4">
                 <div class="card-header">
                     <h5 class="mb-0">Configurazione Slot Orari per Giorno</h5>
                     <small class="text-muted">Modifica gli slot esistenti o aggiungine di nuovi</small>
                 </div>
                 <div class="card-body">
-                    {{-- Tab navigation per i giorni --}}
+
                     <ul class="nav nav-tabs" id="giorni-tabs" role="tablist">
                         @foreach($giorni as $idx => $giorno)
                             <li class="nav-item" role="presentation">
@@ -96,7 +89,6 @@
                         @endforeach
                     </ul>
 
-                    {{-- Contenuto dei tab --}}
                     <div class="tab-content mt-3" id="giorni-tab-content">
                         @foreach($giorni as $idx => $giorno)
                             <div class="tab-pane fade {{ $idx === 0 ? 'show active' : '' }}"
@@ -150,7 +142,6 @@
                         @endforeach
                     </div>
 
-                    {{-- Riepilogo delle selezioni --}}
                     <div class="mt-4 p-3 bg-light rounded">
                         <h6>Riepilogo Slot Selezionati:</h6>
                         <div id="riepilogo-slot">
@@ -158,7 +149,6 @@
                         </div>
                     </div>
 
-                    {{-- Avviso per modifiche --}}
                     <div class="alert alert-info mt-3">
                         <strong>Nota:</strong> Modificando gli slot orari, tutti gli appuntamenti esistenti in conflitto potrebbero essere interessati.
                         Assicurati di verificare gli appuntamenti prima di salvare le modifiche.
@@ -166,11 +156,9 @@
                 </div>
             </div>
 
-            {{-- Campo hidden per inviare i dati --}}
             <input type="hidden" id="orari_per_giorno" name="orari_per_giorno" value="{{ old('orari_per_giorno', json_encode($valoriOrariPerGiorno)) }}">
             @error('orari_per_giorno') <div class="text-danger mt-2">{{ $message }}</div> @enderror
 
-            {{-- Max appuntamenti --}}
             <div class="form-group mt-4">
                 <label for="max_appuntamenti">Numero massimo appuntamenti per slot</label>
                 <input type="number" class="form-control" name="max_appuntamenti" id="max_appuntamenti" min="1" required
@@ -178,7 +166,6 @@
                 @error('max_appuntamenti') <div class="text-danger">{{ $message }}</div> @enderror
             </div>
 
-            {{-- Pulsanti di azione --}}
             <div class="mt-4">
                 <button type="submit" class="btn btn-success" id="submit-btn">
                     <i class="fas fa-save"></i> Salva Modifiche
@@ -192,7 +179,6 @@
             </div>
         </form>
 
-        {{-- Sezione informazioni agenda corrente --}}
         <div class="card mt-4">
             <div class="card-header">
                 <h6 class="mb-0">Informazioni Agenda Corrente</h6>
@@ -265,10 +251,8 @@
             const giorni = @json($giorni);
             const orariDisponibili = @json($orariDisponibili);
 
-            // Oggetto per memorizzare le selezioni di ogni giorno
             window.orariPerGiorno = {};
 
-            // Inizializza con i valori esistenti o old se presenti
             try {
                 const existingData = document.getElementById('orari_per_giorno').value;
                 if (existingData && existingData !== '{}' && existingData !== '') {
@@ -279,7 +263,6 @@
                 window.orariPerGiorno = {};
             }
 
-            // Inizializza gli event listeners per tutti i checkbox
             document.querySelectorAll('.orario-checkbox').forEach(checkbox => {
                 checkbox.addEventListener('change', function() {
                     const giorno = this.dataset.giorno;
@@ -287,25 +270,21 @@
                 });
             });
 
-            // Inizializza l'interfaccia al caricamento
             for (let i = 0; i < giorni.length; i++) {
                 aggiornaUI(i);
             }
             aggiornaRiepilogo();
 
-            // Event listener per il submit del form
             document.querySelector('form').addEventListener('submit', function(e) {
                 if (Object.keys(window.orariPerGiorno).length === 0 ||
                     Object.values(window.orariPerGiorno).every(arr => arr.length === 0)) {
                     e.preventDefault();
                     if (confirm('Non hai selezionato nessuno slot orario. Questo eliminerà tutti gli slot esistenti. Vuoi continuare?')) {
-                        // Permetti l'invio per eliminare tutti gli slot
                         return true;
                     }
                     return false;
                 }
 
-                // Conferma per le modifiche significative
                 if (!confirm('Sei sicuro di voler salvare le modifiche agli slot orari?')) {
                     e.preventDefault();
                     return false;
@@ -313,9 +292,7 @@
             });
         });
 
-        // Funzione per cambiare giorno (gestisce i tab manualmente)
         function cambiaGiorno(giornoIdx) {
-            // Rimuovi active da tutti i tab e pannelli
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.classList.remove('active');
             });
@@ -323,12 +300,10 @@
                 pane.classList.remove('show', 'active');
             });
 
-            // Aggiungi active al tab e pannello selezionato
             document.getElementById(`tab-${giornoIdx}`).classList.add('active');
             document.getElementById(`giorno-${giornoIdx}`).classList.add('show', 'active');
         }
 
-        // Funzioni globali per i pulsanti di utilità
         function selezionaTuttiOrari(giornoIdx) {
             const checkboxes = document.querySelectorAll(`input[data-giorno="${giornoIdx}"]`);
             checkboxes.forEach(cb => {
@@ -348,11 +323,9 @@
         function copiaOrariDaGiornoPrecedente(giornoIdx) {
             const giornoPrecedente = giornoIdx - 1;
             if (giornoPrecedente >= 0) {
-                // Deseleziona tutti i checkbox del giorno corrente
                 const checkboxesCorrente = document.querySelectorAll(`input[data-giorno="${giornoIdx}"]`);
                 checkboxesCorrente.forEach(cb => cb.checked = false);
 
-                // Seleziona gli stessi orari del giorno precedente
                 const checkboxesPrecedente = document.querySelectorAll(`input[data-giorno="${giornoPrecedente}"]:checked`);
                 checkboxesPrecedente.forEach(cb => {
                     const valorePrecedente = cb.value;
@@ -381,7 +354,6 @@
             aggiornaRiepilogo();
         }
 
-        // Funzione per aggiornare l'interfaccia utente
         function aggiornaUI(giornoIdx) {
             const count = window.orariPerGiorno[giornoIdx] ? window.orariPerGiorno[giornoIdx].length : 0;
             const countElement = document.getElementById(`count-${giornoIdx}`);
@@ -399,12 +371,10 @@
             }
         }
 
-        // Funzione per aggiornare il campo hidden
         function aggiornaHiddenField() {
             document.getElementById('orari_per_giorno').value = JSON.stringify(window.orariPerGiorno);
         }
 
-        // Funzione per aggiornare il riepilogo
         function aggiornaRiepilogo() {
             const giorni = @json($giorni);
             const riepilogoDiv = document.getElementById('riepilogo-slot');

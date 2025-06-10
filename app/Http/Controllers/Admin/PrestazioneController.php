@@ -35,20 +35,16 @@ class PrestazioneController extends Controller
             'descrizione' => 'required|string|max:255',
         ]);
 
-        // 1. Crea la prestazione
         $prestazione = Prestazione::create([
             'nome' => $request->nome,
             'id_dipartimento' => $request->id_dipartimento,
             'descrizione' => $request->descrizione,
         ]);
 
-        // 2. Trova tutti i membri staff del dipartimento scelto
-        $membri = \App\Models\MembroStaff::where('id_dipartimento', $request->id_dipartimento)->get();
+        $membri = MembroStaff::where('id_dipartimento', $request->id_dipartimento)->get();
 
-        // 3. Associa la prestazione a questi membri staff tramite la tabella pivot
         $prestazione->membriStaff()->sync($membri->pluck('codice_fiscale'));
 
-        // 4. Redirect (come già fai)
         return redirect()->route('admin.agende.create', [
             'id_dipartimento' => $prestazione->id_dipartimento,
             'id_prestazione' => $prestazione->id_prestazione,

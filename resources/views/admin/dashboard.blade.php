@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="container mt-5 mb-5">
-        {{-- Intestazione --}}
+
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="fw-bold mb-0">
                 <i class="fas fa-user-shield me-2 text-danger"></i>
@@ -12,7 +12,6 @@
             </h2>
         </div>
 
-        {{-- Card Statistiche --}}
         <div class="row justify-content-center mb-5 w-100">
             <div class="col-12">
                 <div class="d-flex flex-wrap justify-content-center">
@@ -61,7 +60,6 @@
             </div>
         </div>
 
-        {{-- Grafico Appuntamenti Mensili --}}
         <div class="card shadow rounded-4 border-0">
             <div class="card-header bg-white fw-semibold">
                 <i class="fas fa-chart-bar me-2 text-secondary"></i> Appuntamenti Mensili
@@ -117,7 +115,7 @@
         .dashboard-card {
             flex: 1 1 0;
             min-width: 200px;
-            max-width: 20%; /* 5 card: 20%. Se vuoi 4 card per riga metti 25%. */
+            max-width: 20%;
             box-sizing: border-box;
             display: flex;
         }

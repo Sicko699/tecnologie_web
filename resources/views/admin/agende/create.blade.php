@@ -8,7 +8,6 @@
         @csrf
         <input type="hidden" name="form_token" value="{{ $token }}">
 
-        {{-- Dipartimento --}}
         <div class="form-group">
             <label for="id_dipartimento">Dipartimento</label>
             <select name="id_dipartimento" id="id_dipartimento" class="form-control" required>
@@ -24,7 +23,6 @@
         </div>
 
         @php
-            // Per passare le prestazioni in JS:
             $prestazioni_js = $prestazioni->map(fn($p) => [
                 'id_prestazione' => $p->id_prestazione,
                 'nome' => $p->nome,
@@ -32,7 +30,6 @@
             ]);
         @endphp
 
-        {{-- Prestazione --}}
         <div class="form-group mt-2">
             <label for="id_prestazione">Prestazione</label>
             <select name="id_prestazione" id="id_prestazione" class="form-control" required>
@@ -52,7 +49,6 @@
             $valoriOrariPerGiorno = old('orari_per_giorno') ? json_decode(old('orari_per_giorno'), true) : [];
         @endphp
 
-        {{-- Sezione per la selezione dei giorni e orari --}}
         <div class="card mt-4">
             <div class="card-header">
                 <h5 class="mb-0">Configurazione Slot Orari per Giorno</h5>
@@ -172,7 +168,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Filtro prestazioni in base al dipartimento
+
         const allPrestazioni = @json($prestazioni_js);
         const selectDipartimento = document.getElementById('id_dipartimento');
         const selectPrestazione = document.getElementById('id_prestazione');
@@ -193,16 +189,13 @@
                     selectPrestazione.appendChild(opt);
                 });
             }
-            // Preseleziona old
             if (oldPrestazione) selectPrestazione.value = oldPrestazione;
         }
 
         selectDipartimento.addEventListener('change', filtraPrestazioni);
 
-        // Autoselect se c'è old (o selezione predefinita)
         if (selectDipartimento.value) filtraPrestazioni();
 
-        // Tutto il resto per la selezione orari (come hai già tu)
         const giorni = @json($giorni);
         const orariDisponibili = @json($orariDisponibili);
         window.orariPerGiorno = {};
@@ -229,7 +222,6 @@
         });
     });
 
-    // FUNZIONI GLOBALI per i bottoni dei tab (NON toccare se funzionano)
     function cambiaGiorno(giornoIdx) {
         document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
         document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('show', 'active'));

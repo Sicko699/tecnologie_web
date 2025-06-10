@@ -75,12 +75,9 @@ class RichiestaController extends Controller
             'nome' => 'required|string|max:255',
             'cognome' => 'required|string|max:255',
             'reparto' => 'required|string|max:255',
-            'data' => 'required|string', // string perché viene convertita manualmente
+            'data' => 'required|string',
             'ora' => 'required|string|max:10',
         ]);
-
-        // Conversione data da 'd/m/Y' a 'Y-m-d'
-        $dataConvertita = Carbon::createFromFormat('d/m/Y', $request->data)->format('Y-m-d');
 
         Richiesta::create([
             'nome' => $request->nome,

@@ -8,7 +8,7 @@
                 <i class="fas fa-user-circle me-2 text-primary"></i>
                 Benvenuto, {{ Auth::user()->nome }}
             </h2>
-            <!-- Campanella notifiche -->
+
             <button class="btn btn-link p-0 position-relative" style="font-size: 2rem;" data-bs-toggle="modal" data-bs-target="#notificheModal" id="notificheBtn">
                 <i class="fas fa-bell"></i>
                 @if(isset($notifiche) && count($notifiche->where('conferma_lettura', false)))
@@ -19,7 +19,6 @@
             </button>
         </div>
 
-        {{-- CARDS --}}
         <div class="row g-4 justify-content-center">
             <div class="col-md-4">
                 <div class="card border-0 h-100 text-center p-4" style="background: #fafbfc;">
@@ -45,7 +44,6 @@
         </div>
     </div>
 
-    <!-- MODALE NOTIFICHE -->
     <div class="modal fade" id="notificheModal" tabindex="-1" aria-labelledby="notificheModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="border-radius:18px;">
@@ -95,7 +93,6 @@
                             'Accept': 'application/json'
                         }
                     }).then(resp => resp.json()).then(data => {
-                        // Rimuovi badge, aggiorna colori icone
                         document.getElementById('notificheBadge')?.remove();
                         document.querySelectorAll('#notificheList .fa-circle').forEach(i => i.classList.remove('text-success'));
                         document.querySelectorAll('#notificheList .fa-circle').forEach(i => i.classList.add('text-secondary'));

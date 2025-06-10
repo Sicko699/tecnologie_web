@@ -15,19 +15,17 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Conteggi per le card
         $dipartimentiCount = Dipartimento::count();
         $prestazioniCount = Prestazione::count();
         $utentiCount = User::whereIn('ruolo', ['staff'])->count();
         $agendeCount = Agenda::count();
 
-        // Dati per il grafico: ultimi 6 mesi
         $chartLabels = [];
         $chartData = [];
 
         for ($i = 5; $i >= 0; $i--) {
             $month = Carbon::now()->subMonths($i);
-            $label = $month->format('M Y'); // Es: "Jun 2025"
+            $label = $month->format('M Y');
 
             $count = Appuntamento::whereYear('data', $month->year)
                 ->whereMonth('data', $month->month)

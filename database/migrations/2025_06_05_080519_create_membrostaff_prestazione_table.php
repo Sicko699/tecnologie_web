@@ -15,7 +15,7 @@ class CreateMembrostaffPrestazioneTable extends Migration
             $table->foreign('codice_fiscale')->references('codice_fiscale')->on('membro_staff')->onDelete('cascade');
             $table->foreign('id_prestazione')->references('id_prestazione')->on('prestazioni')->onDelete('cascade');
 
-            $table->primary(['codice_fiscale', 'id_prestazione']); // chiave composta
+            $table->primary(['codice_fiscale', 'id_prestazione']);
         });
     }
 

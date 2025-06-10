@@ -1,4 +1,3 @@
-{{-- resources/views/layouts/navbar.blade.php --}}
 <div class="w-100 py-1 bg-light border-bottom shadow-sm" style="font-size:0.95rem; letter-spacing: 0.01em;">
     <div class="container d-flex justify-content-center align-items-center gap-2" style="min-height:30px;">
         <i class="bi bi-file-earmark-pdf text-danger me-1" style="font-size:1rem;"></i>
@@ -19,7 +18,7 @@
                     <span class="icon-map"></span>
                 </div>
                 <div class="pr-md-4 pl-md-0 pl-3 text">
-                    <p class="con"><span>Chiamata Gratuita </span> <span>+39 123 123 1234</span></p>
+                    <p class="con"><span>Chiamata Gratuita </span> <span>+39 0612 345678</span></p>
                     <p class="con">Via Guglielmo Oberdan 12, Ancona</p>
                 </div>
             </div>
@@ -58,7 +57,6 @@
                     <a href="{{ route('contact') }}" class="nav-link">Contatti</a>
                 </li>
 
-                {{-- Autenticazione --}}
                 @auth
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
@@ -89,7 +87,6 @@
                     </li>
                 @endauth
 
-                {{-- Form di ricerca --}}
                 <li class="nav-item">
                     <form class="d-flex ms-3" method="GET" action="{{ route('ricerca.prestazioni') }}">
                         <input class="form-control form-control-sm me-2" type="search" name="q"

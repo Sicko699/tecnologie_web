@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Dipartimento;
 use App\Models\User;
 use App\Models\MembroStaff;
+use \App\Models\Prestazione;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Hash;
@@ -60,7 +61,7 @@ class UtenteController extends Controller
             'id_dipartimento' => $request->id_dipartimento,
         ]);
 
-        $prestazioni = \App\Models\Prestazione::where('id_dipartimento', $membroStaff->id_dipartimento)->get();
+        $prestazioni = Prestazione::where('id_dipartimento', $membroStaff->id_dipartimento)->get();
         $membroStaff->prestazioni()->syncWithoutDetaching($prestazioni->pluck('id_prestazione'));
 
         return redirect()->route('admin.utenti.index')->with('success', 'Staff creato con successo.');
@@ -90,7 +91,6 @@ class UtenteController extends Controller
             'username' => $request->username,
         ]);
 
-        // ✅ Se esiste, aggiorna. Se non esiste, crea.
         if ($utente->membroStaff) {
             $utente->membroStaff->update([
                 'id_dipartimento' => $request->id_dipartimento,
@@ -101,7 +101,6 @@ class UtenteController extends Controller
             ]);
         }
 
-        // Controllo finale
         $utente->load('membroStaff.dipartimento');
         return redirect()->route('admin.utenti.index')->with('success', 'Utente aggiornato correttamente.');
     }

@@ -29,7 +29,7 @@
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
             </form>
-            <!-- Icona profilo -->
+
             @guest
                 <a href="{{ route('login') }}" class="btn btn-profile ms-2" title="Accedi">
                     <i class="fa-regular fa-user fa-lg"></i>
