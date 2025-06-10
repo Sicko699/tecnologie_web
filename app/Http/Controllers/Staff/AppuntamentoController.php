@@ -10,6 +10,7 @@ use App\Models\Notifica;
 use App\Models\Prestazione;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AppuntamentoController extends Controller
@@ -208,17 +209,24 @@ class AppuntamentoController extends Controller
         return redirect()->route('staff.appuntamenti.index')->with('success', 'Appuntamento eliminato!');
     }
 
-    // Visualizzazione agenda giornaliera per prestazione e giorno
     public function agendaGiornaliera(Request $request)
     {
-        //dd($request);
-        $prestazioni = Prestazione::all();
-        $appuntamenti = null;
-        $giorno = $request->input('giorno');
-        $id_prestazione = $request->input('id_prestazione');
+        $user = Auth::user();
+        $membro = $user->membroStaff;
 
-        if (!empty($id_prestazione) && !empty($giorno)) {
-            $appuntamenti = Appuntamento::where('data', $giorno)
+        if (!$membro) {
+            abort(403, 'Non sei associato a nessun dipartimento.');
+        }
+
+        // Prendi tutte le prestazioni di quel dipartimento (versione più “aperta”)
+        $prestazioni = \App\Models\Prestazione::where('id_dipartimento', $membro->id_dipartimento)->get();
+
+        $giorno = $request->input('giorno', now()->toDateString());
+        $id_prestazione = $request->input('id_prestazione');
+        $appuntamenti = collect();
+
+        if ($id_prestazione && $giorno) {
+            $appuntamenti = \App\Models\Appuntamento::where('data', $giorno)
                 ->where('stato', '!=', 'erogato')
                 ->whereHas('richiesta', function($q) use ($id_prestazione) {
                     $q->where('id_prestazione', $id_prestazione);
@@ -227,6 +235,6 @@ class AppuntamentoController extends Controller
                 ->get();
         }
 
-        return view('staff.agenda.giornaliera', compact('appuntamenti', 'giorno', 'prestazioni'));
+        return view('staff.agenda.giornaliera', compact('appuntamenti', 'giorno', 'prestazioni', 'id_prestazione'));
     }
 }

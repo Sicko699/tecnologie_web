@@ -40,7 +40,6 @@ class UtenteController extends Controller
             'nome'           => ['required', 'string', 'max:100'],
             'cognome'        => ['required', 'string', 'max:100'],
             'username'       => ['required', 'string', 'max:50', 'unique:users,username'],
-            'email'          => ['required', 'email', 'unique:users,email'],
             'password'       => ['required', 'confirmed', Rules\Password::defaults()],
             'id_dipartimento'=> ['required', 'exists:dipartimenti,id_dipartimento'],
         ]);
@@ -52,7 +51,6 @@ class UtenteController extends Controller
             'nome'           => $request->nome,
             'cognome'        => $request->cognome,
             'username'       => $request->username,
-            'email'          => $request->email,
             'password'       => Hash::make($request->password),
             'ruolo'          => 'staff',
         ]);
