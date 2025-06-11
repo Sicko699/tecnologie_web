@@ -41,7 +41,7 @@ class PrestazioneController extends Controller
             'descrizione' => $request->descrizione,
         ]);
 
-        $membri = MembroStaff::where('id_dipartimento', $request->id_dipartimento)->get();
+        $membri = \App\Models\MembroStaff::where('id_dipartimento', $request->id_dipartimento)->get();
 
         $prestazione->membriStaff()->sync($membri->pluck('codice_fiscale'));
 
@@ -51,8 +51,6 @@ class PrestazioneController extends Controller
             'descrizione' => $prestazione->descrizione
         ])->with('success', 'Prestazione creata e assegnata automaticamente a tutti i membri staff del dipartimento!');
     }
-
-
 
     public function edit($id)
     {

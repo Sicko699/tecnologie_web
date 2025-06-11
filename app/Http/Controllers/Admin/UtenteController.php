@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Dipartimento;
 use App\Models\User;
 use App\Models\MembroStaff;
-use \App\Models\Prestazione;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Hash;
@@ -26,8 +25,6 @@ class UtenteController extends Controller
 
         return view('admin.utenti.index', compact('utenti'));
     }
-
-
 
     public function create()
     {
@@ -61,7 +58,7 @@ class UtenteController extends Controller
             'id_dipartimento' => $request->id_dipartimento,
         ]);
 
-        $prestazioni = Prestazione::where('id_dipartimento', $membroStaff->id_dipartimento)->get();
+        $prestazioni = \App\Models\Prestazione::where('id_dipartimento', $membroStaff->id_dipartimento)->get();
         $membroStaff->prestazioni()->syncWithoutDetaching($prestazioni->pluck('id_prestazione'));
 
         return redirect()->route('admin.utenti.index')->with('success', 'Staff creato con successo.');

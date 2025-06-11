@@ -13,7 +13,9 @@ class User extends Authenticatable
 
     protected $table = 'users';
     protected $primaryKey = 'codice_fiscale';
+    public $incrementing = false;
     public $timestamps = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'codice_fiscale', 'nome', 'cognome', 'username', 'email', 'password', 'telefono', 'data_nascita', 'ruolo'
@@ -44,6 +46,11 @@ class User extends Authenticatable
     public function notifiche()
     {
         return $this->hasMany(Notifica::class, 'codice_fiscale', 'codice_fiscale');
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->nome . ' ' . $this->cognome;
     }
 
     public function username()

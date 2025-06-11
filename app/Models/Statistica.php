@@ -18,6 +18,11 @@ class Statistica extends Model
 
     public $timestamps = false;
 
+    public function amministratore()
+    {
+        return $this->belongsTo(Amministratore::class, 'id_amministratore', 'codice_fiscale');
+    }
+
     public function prestazione()
     {
         return $this->belongsTo(Prestazione::class, 'id_prestazione');

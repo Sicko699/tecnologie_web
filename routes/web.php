@@ -33,8 +33,7 @@ Route::get('/ricerca/prestazioni', [RicercaController::class, 'index'])->name('r
 Route::get('/ricerca', [RicercaController::class, 'index'])->name('ricerca.index');
 
 Route::get('/dashboard', function () {
-    \Log::info('Sono nella route dashboard', ['user' => Auth::user()]);
-    if (Auth::check(    )) {
+    if (Auth::check()) {
         $ruolo = Auth::user()->ruolo;
         if ($ruolo === 'admin') {
             return redirect()->route('admin.dashboard');
@@ -61,7 +60,6 @@ require __DIR__.'/auth.php';
 
 Route::middleware(['auth', 'role:paziente'])->prefix('user')->name('paziente.')->group(function () {
     Route::get('/dashboard', [PazientePrenotazioneController::class, 'dashboard'])->name('dashboard');
-
     Route::get('/profilo', [PazienteProfiloController::class, 'show'])->name('profilo');
     Route::put('/profilo', [PazienteProfiloController::class, 'update'])->name('profilo.update');
     Route::delete('/account/delete', [PazienteProfiloController::class, 'destroy'])->name('account.delete');

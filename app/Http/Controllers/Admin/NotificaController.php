@@ -30,7 +30,6 @@ class NotificaController extends Controller
         ]);
         return redirect()->route('admin.notifiche.index')->with('success', 'Notifica inviata!');
     }
-
     public function destroy($id)
     {
         $notifica = Notifica::findOrFail($id);

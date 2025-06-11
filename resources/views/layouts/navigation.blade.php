@@ -1,9 +1,10 @@
 <div class="w-100 py-1 bg-light border-bottom shadow-sm" style="font-size:0.95rem; letter-spacing: 0.01em;">
     <div class="container d-flex justify-content-center align-items-center gap-2" style="min-height:30px;">
-        <i class="bi bi-file-earmark-pdf text-danger me-1" style="font-size:1rem;"></i>
-        <a href="{{ asset('documentazione.pdf') }}" target="_blank" class="text-decoration-underline fw-bold text-dark" style="font-size:0.98em;">
-            Documentazione del sito
+        <i class="bc bi-file-earmark-pdf text-danger me-1" style="font-size:1rem;"></i>
+        <a href="{{ asset('documentazione.pdf') }}" download>
+            Scarica la documentazione del sito
         </a>
+
     </div>
 </div>
 

@@ -74,7 +74,6 @@ class AgendaController extends Controller
         return redirect()->route('admin.agende.index')->with('success', 'Agenda creata con successo!');
     }
 
-
     public function show(Agenda $agende)
     {
         return view('admin.agende.show', ['agenda' => $agende]);
@@ -198,4 +197,13 @@ class AgendaController extends Controller
         ]);
     }
 
+    public function getSlotDisponibili($id_agenda, $data)
+    {
+        $agenda = Agenda::findOrFail($id_agenda);
+        $dataCarbon = Carbon::parse($data);
+        $giornoMappato = $dataCarbon->dayOfWeek === 0 ? 6 : $dataCarbon->dayOfWeek - 1;
+
+        $configurazione = $agenda->configurazione_orari;
+        return $configurazione[$giornoMappato] ?? [];
+    }
 }
