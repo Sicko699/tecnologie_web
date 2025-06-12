@@ -41,7 +41,7 @@ class PrestazioneController extends Controller
             'descrizione' => $request->descrizione,
         ]);
 
-        $membri = \App\Models\MembroStaff::where('id_dipartimento', $request->id_dipartimento)->get();
+        $membri = MembroStaff::where('id_dipartimento', $request->id_dipartimento)->get();
 
         $prestazione->membriStaff()->sync($membri->pluck('codice_fiscale'));
 

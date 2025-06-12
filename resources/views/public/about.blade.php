@@ -54,7 +54,7 @@
                                 </div>
                             </div>
                         @else
-                            <p class="text-danger mt-3">⚠️ Nessun medico disponibile al momento.</p>
+                            <p class="text-danger mt-3"> Nessun medico disponibile al momento.</p>
                         @endif
 
                     </div>

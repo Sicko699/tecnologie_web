@@ -81,7 +81,8 @@
                     <div class="mb-4">
                         <label for="ora" class="form-label fw-semibold">Orario</label>
                         @php
-                            $selectedSlot = $primoSlotView;
+                            // Prendi il valore selezionato: old('ora') se c’è, altrimenti il primo slot disponibile
+                            $selectedSlot = old('ora') ?? (count($slotDisponibili) > 0 ? reset($slotDisponibili) : null);
                         @endphp
 
                         <select name="ora" id="ora" class="form-select @error('ora') is-invalid @enderror"

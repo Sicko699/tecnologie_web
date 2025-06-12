@@ -48,11 +48,6 @@ class User extends Authenticatable
         return $this->hasMany(Notifica::class, 'codice_fiscale', 'codice_fiscale');
     }
 
-    public function getNameAttribute()
-    {
-        return $this->nome . ' ' . $this->cognome;
-    }
-
     public function username()
     {
         return 'username';

@@ -9,6 +9,7 @@ use App\Models\MembroStaff;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Prestazione;
 
 class UtenteController extends Controller
 {
@@ -58,7 +59,7 @@ class UtenteController extends Controller
             'id_dipartimento' => $request->id_dipartimento,
         ]);
 
-        $prestazioni = \App\Models\Prestazione::where('id_dipartimento', $membroStaff->id_dipartimento)->get();
+        $prestazioni =Prestazione::where('id_dipartimento', $membroStaff->id_dipartimento)->get();
         $membroStaff->prestazioni()->syncWithoutDetaching($prestazioni->pluck('id_prestazione'));
 
         return redirect()->route('admin.utenti.index')->with('success', 'Staff creato con successo.');

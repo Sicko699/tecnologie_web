@@ -140,7 +140,6 @@
             `);
         }
 
-        // Prima renderizzazione con i dati blade
         $(function() {
             prestazioniChart = renderChart(
                 'prestazioniChart',
@@ -158,7 +157,6 @@
             );
         });
 
-        // Submit AJAX
         $('#statistiche-form').on('submit', function(e) {
             e.preventDefault();
             let nome = $('#nome').val();
@@ -169,7 +167,6 @@
                 method: "GET",
                 data: $(this).serialize(),
                 success: function(data) {
-                    // Aggiorna i grafici
                     prestazioniChart = renderChart(
                         'prestazioniChart',
                         prestazioniChart,
@@ -185,7 +182,6 @@
                         'Numero Prestazioni per Dipartimento'
                     );
 
-                    // Aggiorna tabella utente se presente
                     renderUtenteTable(data.prestazioniUtente, nome, cognome);
                 },
                 error: function(xhr) {

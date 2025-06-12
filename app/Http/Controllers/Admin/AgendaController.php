@@ -197,13 +197,4 @@ class AgendaController extends Controller
         ]);
     }
 
-    public function getSlotDisponibili($id_agenda, $data)
-    {
-        $agenda = Agenda::findOrFail($id_agenda);
-        $dataCarbon = Carbon::parse($data);
-        $giornoMappato = $dataCarbon->dayOfWeek === 0 ? 6 : $dataCarbon->dayOfWeek - 1;
-
-        $configurazione = $agenda->configurazione_orari;
-        return $configurazione[$giornoMappato] ?? [];
-    }
 }

@@ -30,12 +30,8 @@ class Prestazione extends Model
     public function membriStaff()
     {
         return $this->belongsToMany(
-            MembroStaff::class,
-            'membrostaff_prestazione',
-            'id_prestazione',
-            'codice_fiscale',
-            'id_prestazione',
-            'codice_fiscale'
+            MembroStaff::class, 'membrostaff_prestazione', 'id_prestazione',
+            'codice_fiscale', 'id_prestazione', 'codice_fiscale'
         );
     }
 

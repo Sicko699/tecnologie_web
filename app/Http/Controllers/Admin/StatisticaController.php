@@ -17,8 +17,8 @@ class StatisticaController extends Controller
     {
         $start = $request->input('start_date');
         $end = $request->input('end_date');
-        $nome = $request->input('nome');      // <-- nome utente
-        $cognome = $request->input('cognome'); // <-- cognome utente
+        $nome = $request->input('nome');
+        $cognome = $request->input('cognome');
 
         $dateFilter = function ($query) use ($start, $end) {
             if ($start && $end) {
@@ -29,17 +29,14 @@ class StatisticaController extends Controller
         $base = Appuntamento::where($dateFilter)
             ->with('richiesta.prestazione', 'richiesta.dipartimento', 'richiesta.utente');
 
-        // Conta prestazioni per tipo
         $prestazioniCount = (clone $base)->get()
             ->groupBy(fn($a) => optional($a->richiesta->prestazione)->nome)
             ->map(fn($items) => count($items));
 
-        // Conta prestazioni per dipartimento
         $dipartimentiCount = (clone $base)->get()
             ->groupBy(fn($a) => optional($a->richiesta->dipartimento)->nome)
             ->map(fn($items) => count($items));
 
-        // Filtra appuntamenti per utente nome + cognome
         $prestazioniUtente = null;
         if ($nome && $cognome) {
             $prestazioniUtente = (clone $base)
@@ -53,7 +50,6 @@ class StatisticaController extends Controller
                 })->values();
         }
 
-        // Risposta AJAX: JSON
         if ($request->ajax()) {
             return response()->json([
                 'prestazioniCount' => $prestazioniCount,
@@ -62,7 +58,6 @@ class StatisticaController extends Controller
             ]);
         }
 
-        // Prima visualizzazione normale
         return view('admin.statistiche.index', compact(
             'prestazioniCount',
             'dipartimentiCount',

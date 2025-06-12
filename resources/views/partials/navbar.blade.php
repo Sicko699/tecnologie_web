@@ -22,7 +22,7 @@
                     <a href="{{ route('contact') }}" class="nav-link">Contatti</a>
                 </li>
             </ul>
-            <!-- Ricerca moderna -->
+
             <form class="d-none d-lg-flex position-relative me-3" action="{{ route('search') }}" method="GET" style="min-width:210px;">
                 <input class="form-control search-input" type="search" placeholder="Cerca..." aria-label="Search" name="q" autocomplete="off">
                 <button class="btn search-btn" type="submit">
@@ -56,7 +56,6 @@
 </nav>
 
 <style>
-    /* Evidenzia la tab corrente e hover */
     .navbar-nav .nav-link {
         color: #f7f7f7 !important;
         padding: 0.75rem 1.1rem;
