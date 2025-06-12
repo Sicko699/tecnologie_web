@@ -22,9 +22,16 @@
                             <td>{{ $app->ora }}</td>
                             <td>{{ $app->richiesta->prestazione->nome ?? '-' }}</td>
                             <td>
-                            <span class="badge rounded-pill {{ $app->stato == 'confermato' ? 'bg-success' : 'bg-secondary' }}">
-                                {{ ucfirst($app->stato) }}
-                            </span>
+                                @php
+                                    $color = match($app->stato) {
+                                        'confermato' => 'bg-success',
+                                        'erogato' => 'bg-primary',
+                                        default => 'bg-secondary',
+                                    };
+                                @endphp
+                                <span class="badge rounded-pill {{ $color }}">
+                                    {{ ucfirst($app->stato) }}
+                                </span>
                             </td>
                         </tr>
                     @endforeach
