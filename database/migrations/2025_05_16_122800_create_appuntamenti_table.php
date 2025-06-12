@@ -14,12 +14,10 @@ class CreateAppuntamentiTable extends Migration
             $table->date('data');
             $table->time('ora');
             $table->enum('stato', ['in attesa ', 'prenotato', 'erogato']);
-            $table->string('codice_fiscale', 20);
             $table->string('codice_fiscale', 16);
             $table->foreign('codice_fiscale')->references('codice_fiscale')->on('users')->onDelete('cascade');
 
             $table->timestamps();
-
 
             $table->foreign('id_richiesta')->references('id_richiesta')->on('richieste')->onDelete('cascade');
         });

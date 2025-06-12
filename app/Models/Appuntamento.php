@@ -10,6 +10,15 @@ class Appuntamento extends Model
 {
     use HasFactory;
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($appuntamento) {
+            $appuntamento->richiesta()->delete();
+        });
+    }
+
     protected $table = 'appuntamenti';
     public $timestamps = false;
     protected $primaryKey = 'id_appuntamento';
@@ -28,14 +37,15 @@ class Appuntamento extends Model
         $oggi = now()->toDateString();
         $ora = now()->toTimeString();
 
-        $richieste = Richiesta::where('stato', 'in attesa')
+        $richieste = Richiesta::where('stato', 'confermato')
             ->with(['appuntamenti'])
             ->get();
 
         foreach ($richieste as $richiesta) {
             foreach ($richiesta->appuntamenti as $app) {
+                //dd($app);
                 if (
-                    $app->stato === 'confermato' &&
+                    $app->stato === 'prenotato' &&
                     (
                         $app->data < $oggi ||
                         ($app->data === $oggi && $app->ora < $ora)

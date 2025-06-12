@@ -7,18 +7,22 @@
 
         <div class="card shadow rounded-4 mb-5">
             <div class="card-body">
-                <form method="GET" class="row g-4 align-items-end">
+                <form id="statistiche-form" class="row g-4 align-items-end">
                     <div class="col-md-3">
                         <label for="start_date" class="form-label fw-semibold">Dal</label>
-                        <input type="date" id="start_date" name="start_date" value="{{ request('start_date') }}" class="form-control" />
+                        <input type="date" id="start_date" name="start_date" class="form-control" />
                     </div>
                     <div class="col-md-3">
                         <label for="end_date" class="form-label fw-semibold">Al</label>
-                        <input type="date" id="end_date" name="end_date" value="{{ request('end_date') }}" class="form-control" />
+                        <input type="date" id="end_date" name="end_date" class="form-control" />
                     </div>
-                    <div class="col-md-4">
-                        <label for="utente_id" class="form-label fw-semibold">Utente (opzionale)</label>
-                        <input type="text" id="utente_id" name="utente_id" value="{{ request('utente_id') }}" class="form-control" placeholder="Codice Fiscale" />
+                    <div class="col-md-2">
+                        <label for="nome" class="form-label fw-semibold">Nome Utente</label>
+                        <input type="text" id="nome" name="nome" class="form-control" placeholder="Nome" />
+                    </div>
+                    <div class="col-md-2">
+                        <label for="cognome" class="form-label fw-semibold">Cognome Utente</label>
+                        <input type="text" id="cognome" name="cognome" class="form-control" placeholder="Cognome" />
                     </div>
                     <div class="col-md-2 d-grid">
                         <button type="submit" class="btn btn-primary btn-lg rounded-pill">Filtra</button>
@@ -45,38 +49,7 @@
             </div>
         </div>
 
-        @if($prestazioniUtente)
-            <div class="card shadow rounded-4 mb-5">
-                <div class="card-header bg-info text-white fw-bold d-flex justify-content-between align-items-center">
-                    <span>Prestazioni erogate all'utente CF: <code>{{ request('utente_id') }}</code></span>
-                    <a href="{{ route('admin.prestazioni.index') }}" class="btn btn-light btn-sm rounded-pill">Torna a Prestazioni</a>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
-                            <tr>
-                                <th>ID Appuntamento</th>
-                                <th>Prestazione</th>
-                                <th>Dipartimento</th>
-                                <th>Data</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($prestazioniUtente as $p)
-                                <tr>
-                                    <td>{{ $p->id_appuntamento }}</td>
-                                    <td>{{ $p->richiesta->prestazione->nome ?? '-' }}</td>
-                                    <td>{{ $p->richiesta->dipartimento->nome ?? '-' }}</td>
-                                    <td>{{ $p->data ?? '-' }}</td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        @endif
+        <div id="utente-results"></div>
 
         <div class="mt-5">
             <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4">
@@ -85,84 +58,140 @@
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        const prestazioniData = {
-            labels: {!! json_encode(array_keys($prestazioniCount->toArray())) !!},
-            datasets: [{
-                label: 'Numero Prestazioni',
-                data: {!! json_encode(array_values($prestazioniCount->toArray())) !!},
-                backgroundColor: 'rgba(54, 162, 235, 0.75)',
-                borderRadius: 6,
-                barPercentage: 0.7,
-                borderSkipped: false
-            }]
-        };
+        let prestazioniChart, dipartimentiChart;
 
-        new Chart(document.getElementById('prestazioniChart'), {
-            type: 'bar',
-            data: prestazioniData,
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: false },
-                    title: {
-                        display: true,
-                        text: 'Numero Prestazioni per Tipo',
-                        font: { size: 18 }
-                    },
-                    tooltip: { enabled: true }
+        function renderChart(canvasId, chartRef, labels, data, title) {
+            if (chartRef) chartRef.destroy();
+            return new Chart(document.getElementById(canvasId), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: title,
+                        data: data,
+                        backgroundColor: 'rgba(54, 162, 235, 0.75)',
+                        borderRadius: 6,
+                        barPercentage: 0.7,
+                        borderSkipped: false
+                    }]
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { drawBorder: false },
-                        ticks: { stepSize: 1 }
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: title,
+                            font: { size: 18 }
+                        },
+                        tooltip: { enabled: true }
                     },
-                    x: {
-                        grid: { display: false }
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { drawBorder: false },
+                            ticks: { stepSize: 1 }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
                     }
                 }
+            });
+        }
+
+        function renderUtenteTable(prestazioniUtente, nome, cognome) {
+            if (!prestazioniUtente || prestazioniUtente.length === 0) {
+                $('#utente-results').html('');
+                return;
             }
+            let rows = prestazioniUtente.map(p =>
+                `<tr>
+                    <td>${p.data ?? '-'}</td>
+                    <td>${p.richiesta?.prestazione?.nome ?? '-'}</td>
+                    <td>${p.richiesta?.dipartimento?.nome ?? '-'}</td>
+                    <td>${p.stato ?? '-'}</td>
+                </tr>`
+            ).join('');
+            $('#utente-results').html(`
+                <div class="card shadow rounded-4 mb-5">
+                    <div class="card-header bg-info text-white fw-bold">
+                        Prestazioni erogate all'utente: <b>${nome} ${cognome}</b>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Prestazione</th>
+                                        <th>Dipartimento</th>
+                                        <th>Stato</th>
+                                    </tr>
+                                </thead>
+                                <tbody>${rows}</tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `);
+        }
+
+        // Prima renderizzazione con i dati blade
+        $(function() {
+            prestazioniChart = renderChart(
+                'prestazioniChart',
+                prestazioniChart,
+                {!! json_encode(array_keys($prestazioniCount->toArray())) !!},
+                {!! json_encode(array_values($prestazioniCount->toArray())) !!},
+                'Numero Prestazioni per Tipo'
+            );
+            dipartimentiChart = renderChart(
+                'dipartimentiChart',
+                dipartimentiChart,
+                {!! json_encode(array_keys($dipartimentiCount->toArray())) !!},
+                {!! json_encode(array_values($dipartimentiCount->toArray())) !!},
+                'Numero Prestazioni per Dipartimento'
+            );
         });
 
-        const dipartimentiData = {
-            labels: {!! json_encode(array_keys($dipartimentiCount->toArray())) !!},
-            datasets: [{
-                label: 'Numero Prestazioni per Dipartimento',
-                data: {!! json_encode(array_values($dipartimentiCount->toArray())) !!},
-                backgroundColor: 'rgba(54, 162, 235, 0.75)',
-                borderRadius: 6,
-                barPercentage: 0.7,
-                borderSkipped: false
-            }]
-        };
+        // Submit AJAX
+        $('#statistiche-form').on('submit', function(e) {
+            e.preventDefault();
+            let nome = $('#nome').val();
+            let cognome = $('#cognome').val();
 
-        new Chart(document.getElementById('dipartimentiChart'), {
-            type: 'bar',
-            data: dipartimentiData,
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: false },
-                    title: {
-                        display: true,
-                        text: 'Numero Prestazioni per Dipartimento',
-                        font: { size: 18 }
-                    },
-                    tooltip: { enabled: true }
+            $.ajax({
+                url: "{{ route('admin.statistiche.index') }}",
+                method: "GET",
+                data: $(this).serialize(),
+                success: function(data) {
+                    // Aggiorna i grafici
+                    prestazioniChart = renderChart(
+                        'prestazioniChart',
+                        prestazioniChart,
+                        Object.keys(data.prestazioniCount),
+                        Object.values(data.prestazioniCount),
+                        'Numero Prestazioni per Tipo'
+                    );
+                    dipartimentiChart = renderChart(
+                        'dipartimentiChart',
+                        dipartimentiChart,
+                        Object.keys(data.dipartimentiCount),
+                        Object.values(data.dipartimentiCount),
+                        'Numero Prestazioni per Dipartimento'
+                    );
+
+                    // Aggiorna tabella utente se presente
+                    renderUtenteTable(data.prestazioniUtente, nome, cognome);
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { drawBorder: false },
-                        ticks: { stepSize: 1 }
-                    },
-                    x: {
-                        grid: { display: false }
-                    }
+                error: function(xhr) {
+                    alert('Errore nella ricerca');
                 }
-            }
+            });
         });
     </script>
 @endsection

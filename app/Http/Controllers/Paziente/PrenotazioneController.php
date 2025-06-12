@@ -67,6 +67,7 @@ class PrenotazioneController extends Controller
     {
         $prenotazione = Richiesta::where('id_utente', Auth::user()->codice_fiscale)->findOrFail($id);
         $giorno_escluso = $prenotazione->giorno_escluso;
+        //dd($giorno_escluso);
         return view('paziente.prenotazioni.edit', compact('prenotazione', 'giorno_escluso'));
     }
 
