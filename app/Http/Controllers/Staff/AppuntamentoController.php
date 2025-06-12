@@ -34,8 +34,6 @@ class AppuntamentoController extends Controller
         $giorniSettimana = $agenda->giorni_settimana;
         $giornoEscluso = $richiesta->giorno_escluso;
 
-        $giorniSettimana = $agenda->giorni_settimana;
-
         $dataSelezionata = $request->input('data', now()->toDateString());
         $carbonData = Carbon::parse($dataSelezionata);
         $giornoData = ucfirst($carbonData->locale('it')->dayName);
@@ -48,11 +46,18 @@ class AppuntamentoController extends Controller
         } else {
             $idxInAgenda = array_search($giornoData, $giorniSettimana);
             if ($idxInAgenda !== false) {
-
                 $slotGiorno = $configurazione[$idxInAgenda] ?? [];
+
+                $isToday = $dataSelezionata === now()->toDateString();
+                $oraAttuale = now()->format('H:i');
+
                 foreach ($slotGiorno as $slot) {
                     $oraInizio = explode('-', $slot)[0];
                     if (strlen($oraInizio) === 5) $oraInizio .= ':00';
+
+                    if ($isToday && $oraInizio <= $oraAttuale) {
+                        continue;
+                    }
 
                     $countPrenotati = Appuntamento::where('data', $dataSelezionata)
                         ->where('ora', $oraInizio)
@@ -77,8 +82,8 @@ class AppuntamentoController extends Controller
             'erroreGiornoEscluso' => $erroreGiornoEscluso,
             'giorniSettimana' => $giorniSettimana,
         ]);
-
     }
+
 
     public function store(Request $request)
     {

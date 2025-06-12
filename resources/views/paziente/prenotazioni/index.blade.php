@@ -36,9 +36,11 @@
                                 <a href="{{ route('paziente.prenotazioni.show', $pren->id_richiesta) }}" class="btn btn-outline-info btn-sm me-1" title="Visualizza" style="border-radius:18px;">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <a href="{{ route('paziente.prenotazioni.edit', $pren->id_richiesta) }}" class="btn btn-outline-primary btn-sm me-1" title="Modifica" style="border-radius:18px;">
-                                    <i class="fas fa-edit"></i>
-                                </a>
+                                @if($pren->stato !== 'confermato')
+                                    <a href="{{ route('paziente.prenotazioni.edit', $pren->id_richiesta) }}" class="btn btn-outline-primary btn-sm me-1" title="Modifica" style="border-radius:18px;">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                @endif
                                 <form action="{{ route('paziente.prenotazioni.destroy', $pren->id_richiesta) }}" method="POST" style="display:inline;">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="btn btn-outline-danger btn-sm" title="Elimina" style="border-radius:18px;" onclick="return confirm('Eliminare questa prenotazione?')">
@@ -56,6 +58,13 @@
                 <p class="mb-0">Nessuna richiesta trovata.</p>
             </div>
         @endif
+
+        <div class="mt-4">
+            <a href="{{ route('paziente.dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4">
+                <i class="fas fa-arrow-left me-2"></i> Indietro
+            </a>
+        </div>
+
     </div>
     <style>
         .table { border-radius: 14px; overflow: hidden; }

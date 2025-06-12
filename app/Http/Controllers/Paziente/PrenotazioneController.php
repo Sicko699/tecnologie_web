@@ -66,7 +66,8 @@ class PrenotazioneController extends Controller
     public function edit($id)
     {
         $prenotazione = Richiesta::where('id_utente', Auth::user()->codice_fiscale)->findOrFail($id);
-        return view('paziente.prenotazioni.edit', compact('prenotazione'));
+        $giorno_escluso = $prenotazione->giorno_escluso;
+        return view('paziente.prenotazioni.edit', compact('prenotazione', 'giorno_escluso'));
     }
 
     public function update(Request $request, $id)
@@ -75,7 +76,10 @@ class PrenotazioneController extends Controller
             'giorno_escluso' => 'nullable|string|max:100'
         ]);
         $prenotazione = Richiesta::where('id_utente', Auth::user()->codice_fiscale)->findOrFail($id);
-        $prenotazione->update($request->only('giorno_escluso'));
+        $prenotazione->update([
+            'giorno_escluso' => $request->giorno_escluso,
+            'stato' => 'in attesa'
+        ]);
         return redirect()->route('paziente.prenotazioni.index')->with('success', 'Prenotazione aggiornata!');
     }
 

@@ -30,6 +30,7 @@
                     @if(!empty($giorniSettimana))
                         <div class="d-flex flex-wrap gap-1">
                             @foreach($giorniSettimana as $giorno)
+
                                 @if(isset($giornoEscluso) && $giorno === $giornoEscluso)
                                     <span class="badge bg-light text-secondary border border-secondary rounded-pill px-3 py-1" title="Giorno escluso">
                         {{ $giorno }}
@@ -79,17 +80,23 @@
 
                     <div class="mb-4">
                         <label for="ora" class="form-label fw-semibold">Orario</label>
+                        @php
+                            // Prendi il valore selezionato: old('ora') se c’è, altrimenti il primo slot disponibile
+                            $selectedSlot = old('ora') ?? (count($slotDisponibili) > 0 ? reset($slotDisponibili) : null);
+                        @endphp
+
                         <select name="ora" id="ora" class="form-select @error('ora') is-invalid @enderror"
                                 {{ $erroreGiornoEscluso || empty($slotDisponibili) ? 'disabled' : '' }} required>
                             <option value="">Seleziona uno slot disponibile</option>
                             @forelse($slotDisponibili as $slot)
-                                <option value="{{ $slot }}" {{ old('ora') == $slot ? 'selected' : '' }}>
+                                <option value="{{ $slot }}" {{ $selectedSlot == $slot ? 'selected' : '' }}>
                                     {{ $slot }}
                                 </option>
                             @empty
                                 <option disabled>Nessuno slot disponibile per questa data</option>
                             @endforelse
                         </select>
+
                         @error('ora')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

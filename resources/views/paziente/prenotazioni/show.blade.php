@@ -39,9 +39,11 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-between align-items-center gap-2 pt-2">
-                    <a href="{{ route('paziente.prenotazioni.edit', $prenotazione->id_richiesta) }}" class="btn btn-primary px-4" style="border-radius: 20px;">
-                        Modifica
-                    </a>
+                    @if($prenotazione->stato !== 'confermato')
+                        <a href="{{ route('paziente.prenotazioni.edit', $prenotazione->id_richiesta) }}" class="btn btn-primary px-4" style="border-radius: 20px;">
+                            Modifica
+                        </a>
+                    @endif
                     <form action="{{ route('paziente.prenotazioni.destroy', $prenotazione->id_richiesta) }}" method="POST" onsubmit="return confirm('Eliminare la prenotazione?');">
                         @csrf
                         @method('DELETE')
