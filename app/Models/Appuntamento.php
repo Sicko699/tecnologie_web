@@ -28,14 +28,14 @@ class Appuntamento extends Model
         $oggi = now()->toDateString();
         $ora = now()->toTimeString();
 
-        $richieste = Richiesta::where('stato', 'in attesa')
+        $richieste = Richiesta::where('stato', 'confermato')
             ->with(['appuntamenti'])
             ->get();
 
         foreach ($richieste as $richiesta) {
             foreach ($richiesta->appuntamenti as $app) {
                 if (
-                    $app->stato === 'confermato' &&
+                    $app->stato === 'prenotato' &&
                     (
                         $app->data < $oggi ||
                         ($app->data === $oggi && $app->ora < $ora)
