@@ -54,6 +54,14 @@
                         @error('telefono') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
                     <div class="mb-4">
+                        <label for="indirizzo" class="form-label fw-semibold">Indirizzo</label>
+                        <input type="text" name="indirizzo" class="form-control" id="indirizzo">
+                    </div>
+                    <div class="mb-4">
+                        <label for="città" class="form-label fw-semibold">Città</label>
+                        <input type="text" name="città" class="form-control" id="città">
+                    </div>
+                    <div class="mb-4">
                         <label for="email" class="form-label fw-semibold">Email</label>
                         <input type="email" name="email" class="form-control" required>
                         @error('email') <div class="text-danger small">{{ $message }}</div> @enderror

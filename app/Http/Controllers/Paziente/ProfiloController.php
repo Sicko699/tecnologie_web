@@ -29,7 +29,8 @@ class ProfiloController extends Controller
             'cognome' => 'required|string|max:100',
             'email' => 'required|email|max:255|unique:users,email,' . $user->$primaryKey . ',' . $primaryKey,
             'telefono' => 'nullable|string|max:50',
-
+            'indirizzo' => 'nullable|string|max:255',
+            'città' => 'nullable|string|max:100',
             'current_password' => 'required_with:password',
             'password' => [
                 'nullable',
@@ -45,6 +46,8 @@ class ProfiloController extends Controller
         $user->cognome = $request->cognome;
         $user->email = $request->email;
         $user->telefono = $request->telefono;
+        $user->indirizzo = $request->indirizzo;
+        $user->città = $request->città;
 
         if ($request->filled('password')) {
             if (!Hash::check($request->current_password, $user->password)) {

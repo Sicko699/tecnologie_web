@@ -18,7 +18,8 @@ class User extends Authenticatable
     protected $keyType = 'string';
 
     protected $fillable = [
-        'codice_fiscale', 'nome', 'cognome', 'username', 'email', 'password', 'telefono', 'data_nascita', 'ruolo'
+        'codice_fiscale', 'nome', 'cognome', 'username','indirizzo',
+        'città' ,'email', 'password', 'telefono', 'data_nascita', 'ruolo'
     ];
 
     protected $hidden = ['password', 'remember_token'];

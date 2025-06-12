@@ -18,6 +18,8 @@ class CreateUsersTable extends Migration
             $table->string('telefono', 50)->nullable();
             $table->date('data_nascita')->nullable();
             $table->enum('ruolo', ['paziente', 'staff', 'admin']);
+            $table->string('indirizzo')->nullable();
+            $table->string('città')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -36,6 +36,18 @@
                     </div>
 
                     <div class="mb-4">
+                        <label class="form-label fw-semibold">Indirizzo</label>
+                        <input type="text" class="form-control @error('indirizzo') is-invalid @enderror" name="indirizzo" value="{{ old('indirizzo', Auth::user()->indirizzo) }}">
+                        @error('indirizzo') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Città</label>
+                        <input type="text" class="form-control @error('città') is-invalid @enderror" name="città" value="{{ old('città', Auth::user()->citta) }}">
+                        @error('citta') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="mb-4">
                         <label class="form-label fw-semibold">Vecchia Password</label>
                         <div class="position-relative">
                             <input type="password" class="form-control @error('current_password') is-invalid @enderror" name="current_password" id="current_password">
