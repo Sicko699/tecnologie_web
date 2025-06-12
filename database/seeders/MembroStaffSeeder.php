@@ -11,9 +11,8 @@ class MembroStaffSeeder extends Seeder
     {
         DB::table('membro_staff')->insert([
             [
-                'codice_fiscale' => 'BNCGPP90A01F205T',
-                'id_dipartimento' => 1, // Ortodonzia
-                'descrizione' => 'Ortodonzista certificato'
+                'codice_fiscale' => 'STAFFSTAFF01A01A',
+                'id_dipartimento' => 1,
             ]
         ]);
     }

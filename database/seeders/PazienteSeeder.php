@@ -10,7 +10,7 @@ class PazienteSeeder extends Seeder
     public function run()
     {
         DB::table('pazienti')->insert([
-            ['codice_fiscale' => 'VRDLGI95C10H501A']
+            ['codice_fiscale' => 'PAZIPAZI01A01A'],
         ]);
     }
 }

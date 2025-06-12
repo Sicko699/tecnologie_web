@@ -17,7 +17,7 @@ class StatisticaController extends Controller
     {
         $start = $request->input('start_date');
         $end = $request->input('end_date');
-        $codiceFiscale = $request->input('utente_id'); // codice fiscale
+        $codiceFiscale = $request->input('utente_id');
 
         $dateFilter = function ($query) use ($start, $end) {
             if ($start && $end) {

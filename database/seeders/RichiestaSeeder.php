@@ -3,25 +3,43 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Richiesta;
-use App\Models\User;
-use App\Models\Prestazione;
-use App\Models\Dipartimento;
+use Illuminate\Support\Facades\DB;
 
-class RichiestaSeeder extends Seeder
+class RichiesteSeeder extends Seeder
 {
-    public function run(): void
+    public function run()
     {
-        $user = User::where('ruolo', 'paziente')->inRandomOrder()->first();
-        $prestazione = Prestazione::inRandomOrder()->first();
-        $dipartimento = $prestazione->id_dipartimento;
-
-        Richiesta::create([
-            'id_utente' => $user->codice_fiscale,
-            'id_prestazione' => $prestazione->id_prestazione,
-            'id_dipartimento' => $dipartimento,
-            'giorno_escluso' => 'lunedì',
-            'stato' => 'in attesa',
+        DB::table('richieste')->insert([
+            [
+                'id_richiesta' => 1,
+                'id_utente' => 'PAZIPAZI01A01A',
+                'id_prestazione' => 2,
+                'id_dipartimento' => 2,
+                'giorno_escluso' => 'Venerdì',
+                'stato' => 'in attesa',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id_richiesta' => 2,
+                'id_utente' => 'PAZIPAZI01A01A',
+                'id_prestazione' => 3,
+                'id_dipartimento' => 3,
+                'giorno_escluso' => 'Giovedì',
+                'stato' => 'in attesa',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id_richiesta' => 3,
+                'id_utente' => 'PAZIPAZI01A01A',
+                'id_prestazione' => 2,
+                'id_dipartimento' => 2,
+                'giorno_escluso' => 'Sabato',
+                'stato' => 'in attesa',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }

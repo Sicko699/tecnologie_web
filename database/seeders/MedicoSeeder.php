@@ -11,29 +11,22 @@ class MedicoSeeder extends Seeder
     {
         $medici = [
             [
+                'id'=>1,
                 'nome' => 'Luca',
                 'cognome' => 'Bianchi',
                 'specializzazione' => 'Ortodonzia',
             ],
             [
+                'id'=>2,
                 'nome' => 'Giulia',
                 'cognome' => 'Rossi',
                 'specializzazione' => 'Chirurgia Orale',
             ],
             [
+                'id'=>3,
                 'nome' => 'Marco',
                 'cognome' => 'Verdi',
                 'specializzazione' => 'Igiene e Prevenzione',
-            ],
-            [
-                'nome' => 'Sara',
-                'cognome' => 'Esposito',
-                'specializzazione' => 'Estetica Dentale',
-            ],
-            [
-                'nome' => 'Francesco',
-                'cognome' => 'Romano',
-                'specializzazione' => 'Implantologia',
             ],
         ];
 

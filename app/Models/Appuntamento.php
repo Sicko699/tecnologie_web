@@ -9,6 +9,14 @@ use Carbon\Carbon;
 class Appuntamento extends Model
 {
     use HasFactory;
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($appuntamento) {
+            $appuntamento->richiesta()->delete();
+        });
+    }
 
     protected $table = 'appuntamenti';
     public $timestamps = false;

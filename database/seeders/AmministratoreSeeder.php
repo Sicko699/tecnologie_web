@@ -10,7 +10,7 @@ class AmministratoreSeeder extends Seeder
     public function run()
     {
         DB::table('amministratori')->insert([
-            ['codice_fiscale' => 'RSSMRA85M01H501Z']
+            ['codice_fiscale' => 'ADMINADMIN01A01A']
         ]);
     }
 }
