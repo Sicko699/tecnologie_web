@@ -1,7 +1,13 @@
 @extends('layouts.app')
 @section('title', 'Agenda Giornaliera')
 
-@php use Carbon\Carbon; @endphp
+@php
+    use Carbon\Carbon;
+    // Imposta la locale italiana (funziona su Linux/macOS)
+    setlocale(LC_TIME, 'it_IT.UTF-8');
+    // Se sei su Windows, prova anche 'italian' al posto di 'it_IT.UTF-8'
+    Carbon::setLocale('it');
+@endphp
 
 @section('content')
     <div class="container py-5">
@@ -46,7 +52,7 @@
                         <i class="fas fa-chevron-left me-2"></i> Giorno precedente
                     </button>
                 </form>
-                <span class="fw-bold">{{ $carbonGiorno->translatedFormat('l d F Y') }}</span>
+                <span class="fw-bold">{{ ucfirst($carbonGiorno->translatedFormat('l d F Y')) }}</span>
                 <form method="GET" action="{{ route('staff.agenda.giornaliera') }}">
                     <input type="hidden" name="id_prestazione" value="{{ $id_prestazione }}">
                     <input type="hidden" name="giorno" value="{{ $nextDay }}">
@@ -78,9 +84,9 @@
                             <td>{{ $a->richiesta->utente->name ?? $a->richiesta->utente->codice_fiscale }}</td>
                             <td>{{ $a->richiesta->prestazione->nome }}</td>
                             <td>
-                            <span class="badge rounded-pill {{ $a->stato === 'prenotato' ? 'bg-primary' : ($a->stato === 'erogato' ? 'bg-success' : 'bg-secondary') }}">
-                                {{ ucfirst($a->stato) }}
-                            </span>
+                                <span class="badge rounded-pill {{ $a->stato === 'prenotato' ? 'bg-primary' : ($a->stato === 'erogato' ? 'bg-success' : 'bg-secondary') }}">
+                                    {{ ucfirst($a->stato) }}
+                                </span>
                             </td>
                             <td class="text-end">
                                 <a href="{{ route('staff.appuntamenti.edit', ['appuntamento' => $a->id_appuntamento]) }}"
@@ -115,6 +121,5 @@
                 <i class="fas fa-arrow-left me-2"></i> Indietro
             </a>
         </div>
-
     </div>
 @endsection

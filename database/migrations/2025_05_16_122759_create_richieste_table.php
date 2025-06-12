@@ -14,6 +14,7 @@ class CreateRichiesteTable extends Migration
             $table->unsignedBigInteger('id_prestazione')->nullable();
             $table->unsignedBigInteger('id_dipartimento')->nullable(false);
             $table->string('giorno_escluso', 100)->nullable();
+            $table->timestamps();
             $table->string('stato', 30)->default('in attesa');
             $table->foreign('id_utente')->references('codice_fiscale')->on('users')->onDelete('cascade');
             $table->foreign('id_prestazione')->references('id_prestazione')->on('prestazioni')->onDelete('cascade');

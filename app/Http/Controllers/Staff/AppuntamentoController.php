@@ -41,13 +41,71 @@ class AppuntamentoController extends Controller
         $slotDisponibili = [];
         $erroreGiornoEscluso = null;
 
+        // Trova la prima data disponibile e il primo slot disponibile
+        $primaDataDisponibile = null;
+        $primoSlotDisponibile = null;
+        $maxSearchDays = 30; // cerca fino a 30 giorni avanti per sicurezza
+
+        for ($i = 0; $i < $maxSearchDays; $i++) {
+            $testDate = now()->copy()->addDays($i)->toDateString();
+            $carbonTestDate = Carbon::parse($testDate);
+            $giornoTest = ucfirst($carbonTestDate->locale('it')->dayName);
+
+            // Salta se è il giorno escluso
+            if ($giornoEscluso && $giornoTest === $giornoEscluso) continue;
+
+            // Cerca posizione del giorno nella configurazione agenda
+            $idxInAgenda = array_search($giornoTest, $giorniSettimana);
+            if ($idxInAgenda === false) continue;
+
+            $slotGiorno = $configurazione[$idxInAgenda] ?? [];
+
+            // Calcola orario attuale solo per oggi
+            $isToday = $testDate === now()->toDateString();
+            $oraAttuale = now()->format('H:i');
+
+            // Cerca il primo slot disponibile in questo giorno
+            foreach ($slotGiorno as $slot) {
+                $oraInizio = explode('-', $slot)[0];
+                if (strlen($oraInizio) === 5) $oraInizio .= ':00';
+
+                // Salta slot già passati se oggi
+                if ($isToday && $oraInizio <= $oraAttuale) continue;
+
+                // Conta appuntamenti prenotati
+                $countPrenotati = Appuntamento::where('data', $testDate)
+                    ->where('ora', $oraInizio)
+                    ->whereHas('richiesta', function ($q) use ($richiesta) {
+                        $q->where('id_prestazione', $richiesta->id_prestazione);
+                    })
+                    ->count();
+
+                if ($countPrenotati < $agenda->max_appuntamenti) {
+                    // Primo slot trovato!
+                    $primaDataDisponibile = $testDate;
+                    $primoSlotDisponibile = $slot;
+                    break 2; // esci sia dal foreach che dal for
+                }
+            }
+        }
+// Fallback: se nulla trovato, lascia default today/data selezionata
+        if (!$primaDataDisponibile) $primaDataDisponibile = now()->toDateString();
+
+        $dataSelezionata = $request->input('data', $primaDataDisponibile);
+
+// Ora ricalcola gli slot disponibili PER LA DATA SELEZIONATA
+        $carbonData = Carbon::parse($dataSelezionata);
+        $giornoData = ucfirst($carbonData->locale('it')->dayName);
+
+        $slotDisponibili = [];
+        $erroreGiornoEscluso = null;
+
         if ($giornoEscluso && $giornoData === $giornoEscluso) {
             $erroreGiornoEscluso = $giornoEscluso;
         } else {
             $idxInAgenda = array_search($giornoData, $giorniSettimana);
             if ($idxInAgenda !== false) {
                 $slotGiorno = $configurazione[$idxInAgenda] ?? [];
-
                 $isToday = $dataSelezionata === now()->toDateString();
                 $oraAttuale = now()->format('H:i');
 
@@ -73,6 +131,9 @@ class AppuntamentoController extends Controller
             }
         }
 
+// Passa il primo slot valido, se trovato, alla view
+        $primoSlotView = old('ora') ?? $primoSlotDisponibile ?? (count($slotDisponibili) > 0 ? reset($slotDisponibili) : null);
+
         return view('staff.appuntamenti.create', [
             'richiesta' => $richiesta,
             'agenda' => $agenda,
@@ -81,7 +142,9 @@ class AppuntamentoController extends Controller
             'giornoEscluso' => $giornoEscluso,
             'erroreGiornoEscluso' => $erroreGiornoEscluso,
             'giorniSettimana' => $giorniSettimana,
+            'primoSlotView' => $primoSlotView,
         ]);
+
     }
 
 
@@ -217,11 +280,8 @@ class AppuntamentoController extends Controller
         if ($id_prestazione && $giorno) {
             $appuntamenti = Appuntamento::where('data', $giorno)
                 ->where('stato', '!=', 'erogato')
-                ->whereHas('richiesta', function($q) use ($id_prestazione) {
-                    $q->where('id_prestazione', $id_prestazione);
-                })
-                ->with(['richiesta.utente', 'richiesta.prestazione'])
                 ->get();
+            //dd($id_prestazione, $giorno,$appuntamenti);
         }
 
         return view('staff.agenda.giornaliera', compact('appuntamenti', 'giorno', 'prestazioni', 'id_prestazione'));
