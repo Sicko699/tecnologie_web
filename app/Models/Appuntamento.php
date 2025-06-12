@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Appuntamento extends Model
 {
@@ -25,11 +26,25 @@ class Appuntamento extends Model
     public static function aggiornaErogati()
     {
         $oggi = now()->toDateString();
+        $ora = now()->toTimeString();
 
-        self::where('data', '<', $oggi)
-            ->where('stato', 'confermato')
-            ->update(['stato' => 'erogato']);
+        $richieste = Richiesta::where('stato', 'in attesa')
+            ->with(['appuntamenti'])
+            ->get();
+
+        foreach ($richieste as $richiesta) {
+            foreach ($richiesta->appuntamenti as $app) {
+                if (
+                    $app->stato === 'confermato' &&
+                    (
+                        $app->data < $oggi ||
+                        ($app->data === $oggi && $app->ora < $ora)
+                    )
+                ) {
+                    $app->stato = 'erogato';
+                    $app->save();
+                }
+            }
+        }
     }
-
 }
-
