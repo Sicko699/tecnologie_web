@@ -1,6 +1,8 @@
 @extends('layouts.app')
 @section('title', 'I tuoi appuntamenti')
 
+@php use Carbon\Carbon; @endphp
+
 @section('content')
     <div class="container py-5">
         <h2 class="fw-bold mb-4 text-center">I tuoi appuntamenti</h2>
@@ -19,7 +21,13 @@
                     @foreach($appuntamenti as $app)
                         <tr>
                             <td>{{ $app->data }}</td>
-                            <td>{{ $app->ora }}</td>
+                            <td>
+                                {{
+                                    Carbon::createFromFormat('H:i:s', $app->ora)->format('H:i')
+                                }} - {{
+                                    Carbon::createFromFormat('H:i:s', $app->ora)->addHour()->format('H:i')
+                                }}
+                            </td>
                             <td>{{ $app->richiesta->prestazione->nome ?? '-' }}</td>
                             <td>
                                 @php

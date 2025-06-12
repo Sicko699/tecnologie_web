@@ -18,6 +18,15 @@ class Appuntamento extends Model
         });
     }
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($appuntamento) {
+            $appuntamento->richiesta()->delete();
+        });
+    }
+
     protected $table = 'appuntamenti';
     public $timestamps = false;
     protected $primaryKey = 'id_appuntamento';
@@ -42,6 +51,7 @@ class Appuntamento extends Model
 
         foreach ($richieste as $richiesta) {
             foreach ($richiesta->appuntamenti as $app) {
+                //dd($app);
                 if (
                     $app->stato === 'prenotato' &&
                     (
