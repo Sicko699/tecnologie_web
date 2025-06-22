@@ -192,8 +192,12 @@
                     </div>
                     <div class="col-md-6">
                         <p><strong>Max Appuntamenti:</strong> {{ $agenda->max_appuntamenti ?? 'N/A' }}</p>
-                        <p><strong>Creato il:</strong> {{ $agenda->created_at ? $agenda->created_at->format('d/m/Y H:i') : 'N/A' }}</p>
-                        <p><strong>Ultimo aggiornamento:</strong> {{ $agenda->updated_at ? $agenda->updated_at->format('d/m/Y H:i') : 'N/A' }}</p>
+                        <p><strong>Creato il:</strong>
+                            {{ $agenda->created_at ? \Carbon\Carbon::parse($agenda->created_at)->format('d/m/Y H:i') : 'N/A' }}
+                        </p>
+                        <p><strong>Ultimo aggiornamento:</strong>
+                            {{ $agenda->updated_at ? \Carbon\Carbon::parse($agenda->updated_at)->format('d/m/Y H:i') : 'N/A' }}
+                        </p>
                     </div>
                 </div>
             </div>

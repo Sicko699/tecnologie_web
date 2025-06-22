@@ -11,17 +11,13 @@
                 </div>
             </div>
             <div class="d-flex gap-2">
-                <a href="{{ route('admin.agende.index') }}" class="btn btn-light border-0 text-muted">
+                <a href="{{ route('staff.agenda.index') }}" class="btn btn-light border-0 text-muted">
                     ← Indietro
-                </a>
-                <a href="{{ route('admin.agende.edit', $agenda) }}" class="btn btn-dark">
-                    Modifica
                 </a>
             </div>
         </div>
 
         <div class="row g-4">
-
             <div class="col-lg-8">
                 <div class="bg-light bg-opacity-50 rounded-4 p-4 mb-4">
                     <div class="row g-4">
@@ -48,9 +44,7 @@
 
                 <div class="bg-white border border-light rounded-4 p-4">
                     <h3 class="h5 fw-normal mb-4 text-dark">Orari disponibili</h3>
-
                     @php $giorni = ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato']; @endphp
-
                     @if(is_array($agenda->configurazione_orari) && !empty($agenda->configurazione_orari))
                         <div class="space-y-3">
                             @foreach($agenda->configurazione_orari as $giornoIdx => $orari)
@@ -82,21 +76,15 @@
                     @endif
                 </div>
             </div>
-
             <div class="col-lg-4">
                 <div class="position-sticky" style="top: 2rem;">
                     <div class="bg-white border border-light rounded-4 p-4">
                         <div class="d-grid gap-2">
-                            <a href="{{ route('admin.agende.edit', $agenda) }}" class="btn btn-dark">
-                                Modifica agenda
-                            </a>
-                            <a href="{{ route('admin.agende.index') }}" class="btn btn-light text-muted">
+                            <a href="{{ route('staff.agenda.index') }}" class="btn btn-light text-muted">
                                 Tutte le agende
                             </a>
                         </div>
-
                         <hr class="my-4 border-light">
-
                         <div class="small text-muted">
                             <div class="d-flex justify-content-between mb-2">
                                 <span>Ultima modifica</span>

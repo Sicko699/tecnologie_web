@@ -49,17 +49,26 @@
                         @error('comune_nascita') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
                     <div class="mb-4">
-                        <label for="telefono" class="form-label fw-semibold">Telefono</label>
-                        <input type="text" name="telefono" class="form-control">
-                        @error('telefono') <div class="text-danger small">{{ $message }}</div> @enderror
+                        <label for="città" class="form-label fw-semibold">Città</label>
+                        <input type="text" name="città" class="form-control" id="città">
                     </div>
                     <div class="mb-4">
                         <label for="indirizzo" class="form-label fw-semibold">Indirizzo</label>
                         <input type="text" name="indirizzo" class="form-control" id="indirizzo">
                     </div>
                     <div class="mb-4">
-                        <label for="città" class="form-label fw-semibold">Città</label>
-                        <input type="text" name="città" class="form-control" id="città">
+                        <label for="telefono" class="form-label fw-semibold">Telefono</label>
+                        <input type="text"
+                               name="telefono"
+                               class="form-control"
+                               id="telefono"
+                               inputmode="numeric"
+                               pattern="\d{10}"
+                               maxlength="10"
+                               minlength="10"
+                               required
+                               autocomplete="tel">
+                        @error('telefono') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
                     <div class="mb-4">
                         <label for="email" class="form-label fw-semibold">Email</label>
@@ -147,7 +156,7 @@
 
         async function loadCodiciCatastali() {
             try {
-                const response = await fetch('/codici_catastali.json');
+                const response = await fetch('codici_catastali.json');
                 const data = await response.json();
 
                 comuniItalia = {};
@@ -373,5 +382,18 @@
                 };
             }
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const telefonoInput = document.getElementById('telefono');
+            if (telefonoInput) {
+                telefonoInput.addEventListener('input', function(e) {
+                    this.value = this.value.replace(/\D/g, '');
+                    if (this.value.length > 10) {
+                        this.value = this.value.slice(0, 10);
+                    }
+                });
+            }
+        });
+
     </script>
 @endpush

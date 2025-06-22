@@ -14,17 +14,12 @@ class PrestazioneControllerStaff extends Controller
     public function index()
     {
         $membro = Auth::user()->membroStaff;
-
         if (!$membro) {
             $prestazioni = collect();
         } else {
-            $dipartimento = Dipartimento::find($membro->id_dipartimento);
-
-            if ($dipartimento) {
-                $prestazioni = $dipartimento->prestazioni()->with('dipartimento')->get();
-            } else {
-                $prestazioni = collect();
-            }
+            $prestazioni = Prestazione::where('id_dipartimento', $membro->id_dipartimento)
+                ->with('dipartimento')
+                ->get();
         }
 
         return view('staff.prestazioni.index', compact('prestazioni'));
@@ -32,15 +27,25 @@ class PrestazioneControllerStaff extends Controller
 
     public function create()
     {
-        $dipartimenti = Dipartimento::all();
+        $membro = Auth::user()->membroStaff;
+        $dipartimenti = $membro ? Dipartimento::where('id_dipartimento', $membro->id_dipartimento)->get() : collect();
         return view('staff.prestazioni.create', compact('dipartimenti'));
     }
+
     public function store(Request $request)
     {
+        $membro = Auth::user()->membroStaff;
         $request->validate([
             'nome' => 'required|max:255',
             'descrizione' => 'nullable',
-            'id_dipartimento' => 'required|exists:dipartimenti,id_dipartimento',
+            'id_dipartimento' => [
+                'required',
+                function ($attribute, $value, $fail) use ($membro) {
+                    if ($membro && $value != $membro->id_dipartimento) {
+                        $fail('Non puoi creare prestazioni per altri dipartimenti.');
+                    }
+                }
+            ],
         ]);
 
         $prestazione = Prestazione::create([
@@ -49,35 +54,46 @@ class PrestazioneControllerStaff extends Controller
             'id_dipartimento' => $request->id_dipartimento,
         ]);
 
-        $membro = Auth::user()->membroStaff;
         if ($membro) {
             $membro->prestazioni()->attach($prestazione->id_prestazione);
         }
 
         return redirect()->route('staff.prestazioni.index')->with('success', 'Prestazione creata!');
     }
+
     public function edit($id)
     {
         $membro = Auth::user()->membroStaff;
-        $prestazione = $membro
-            ? $membro->prestazioni()->where('prestazioni.id_prestazione', $id)->firstOrFail()
-            : abort(403);
+        $prestazione = Prestazione::where('id_prestazione', $id)
+            ->where('id_dipartimento', $membro ? $membro->id_dipartimento : null)
+            ->firstOrFail();
 
-        $dipartimenti = Dipartimento::all();
+        $dipartimenti = $membro
+            ? Dipartimento::where('id_dipartimento', $membro->id_dipartimento)->get()
+            : collect();
+
         return view('staff.prestazioni.edit', compact('prestazione', 'dipartimenti'));
     }
+
     public function update(Request $request, $id)
     {
+        $membro = Auth::user()->membroStaff;
+        $prestazione = Prestazione::where('id_prestazione', $id)
+            ->where('id_dipartimento', $membro ? $membro->id_dipartimento : null)
+            ->firstOrFail();
+
         $request->validate([
             'nome' => 'required|max:255',
             'descrizione' => 'nullable',
-            'id_dipartimento' => 'required|exists:dipartimenti,id_dipartimento',
+            'id_dipartimento' => [
+                'required',
+                function ($attribute, $value, $fail) use ($membro) {
+                    if ($membro && $value != $membro->id_dipartimento) {
+                        $fail('Non puoi modificare il dipartimento.');
+                    }
+                }
+            ],
         ]);
-
-        $membro = Auth::user()->membroStaff;
-        $prestazione = $membro
-            ? $membro->prestazioni()->where('prestazioni.id_prestazione', $id)->firstOrFail()
-            : abort(403);
 
         $prestazione->update($request->only('nome', 'descrizione', 'id_dipartimento'));
 
@@ -87,12 +103,13 @@ class PrestazioneControllerStaff extends Controller
     public function destroy($id)
     {
         $membro = Auth::user()->membroStaff;
-        if (!$membro) abort(403);
+        $prestazione = Prestazione::where('id_prestazione', $id)
+            ->where('id_dipartimento', $membro ? $membro->id_dipartimento : null)
+            ->firstOrFail();
 
         $membro->prestazioni()->detach($id);
 
-        $prestazione = Prestazione::find($id);
-        if ($prestazione && $prestazione->membriStaff()->count() === 0) {
+        if ($prestazione->membriStaff()->count() === 0) {
             $prestazione->delete();
         }
 
@@ -102,7 +119,8 @@ class PrestazioneControllerStaff extends Controller
     public function editGestionePrestazioni($codice_fiscale)
     {
         $membro = MembroStaff::findOrFail($codice_fiscale);
-        $prestazioni = Prestazione::all();
+        $dipartimentoId = $membro->id_dipartimento;
+        $prestazioni = Prestazione::where('id_dipartimento', $dipartimentoId)->get();
         $prestazioniGestite = $membro->prestazioni->pluck('id_prestazione')->toArray();
 
         return view('staff.membri.edit_prestazioni', compact('membro', 'prestazioni', 'prestazioniGestite'));

@@ -84,23 +84,25 @@
                             <td>{{ $a->richiesta->utente->name ?? $a->richiesta->utente->codice_fiscale }}</td>
                             <td>{{ $a->richiesta->prestazione->nome }}</td>
                             <td>
-                                <span class="badge rounded-pill {{ $a->stato === 'prenotato' ? 'bg-primary' : ($a->stato === 'erogato' ? 'bg-success' : 'bg-secondary') }}">
-                                    {{ ucfirst($a->stato) }}
-                                </span>
+                <span class="badge rounded-pill {{ $a->stato === 'prenotato' ? 'bg-primary' : ($a->stato === 'erogato' ? 'bg-success' : 'bg-secondary') }}">
+                    {{ ucfirst($a->stato) }}
+                </span>
                             </td>
                             <td class="text-end">
-                                <a href="{{ route('staff.appuntamenti.edit', ['appuntamento' => $a->id_appuntamento]) }}"
-                                   class="btn btn-outline-warning btn-sm me-1" style="border-radius:18px;">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <form action="{{ route('staff.appuntamenti.destroy', ['appuntamento' => $a->id_appuntamento]) }}"
-                                      method="POST" style="display:inline;"
-                                      onsubmit="return confirm('Confermi eliminazione?')">
-                                    @csrf @method('DELETE')
-                                    <button class="btn btn-outline-danger btn-sm" style="border-radius:18px;">
-                                        <i class="fas fa-times-circle"></i>
-                                    </button>
-                                </form>
+                                @if($a->stato === 'prenotato')
+                                    <a href="{{ route('staff.appuntamenti.edit', ['appuntamento' => $a->id_appuntamento]) }}"
+                                       class="btn btn-outline-warning btn-sm me-1" style="border-radius:18px;">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form action="{{ route('staff.appuntamenti.destroy', ['appuntamento' => $a->id_appuntamento]) }}"
+                                          method="POST" style="display:inline;"
+                                          onsubmit="return confirm('Confermi eliminazione?')">
+                                        @csrf @method('DELETE')
+                                        <button class="btn btn-outline-danger btn-sm" style="border-radius:18px;">
+                                            <i class="fas fa-times-circle"></i>
+                                        </button>
+                                    </form>
+                                @endif
                             </td>
                         </tr>
                     @endforeach
@@ -119,6 +121,9 @@
         <div class="mt-3 mb-2">
             <a href="{{ route('staff.dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4">
                 <i class="fas fa-arrow-left me-2"></i> Indietro
+            </a>
+            <a href="{{ route('staff.agenda.index') }}" class="btn btn-outline-info rounded-pill px-4 ms-2">
+                <i class="fas fa-list me-2"></i> Visualizza tutte le agende
             </a>
         </div>
     </div>

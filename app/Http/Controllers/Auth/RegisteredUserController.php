@@ -30,7 +30,7 @@ class RegisteredUserController extends Controller
             'indirizzo' => ['nullable', 'string', 'max:255'],
             'città'     => ['nullable', 'string', 'max:100'],
             'email'          => ['nullable', 'email', 'max:255', 'unique:users,email'],
-            'telefono'       => ['nullable', 'string', 'max:50'],
+            'telefono' => ['required', 'regex:/^\d{10}$/'],
             'data_nascita'   => ['nullable', 'date'],
             'password'       => ['required', 'confirmed', Rules\Password::defaults()],
         ]);

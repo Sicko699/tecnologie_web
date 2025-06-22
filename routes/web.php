@@ -92,6 +92,9 @@ Route::middleware(['auth', 'role:staff'])->prefix('staff')->name('staff.')->grou
     Route::delete('/appuntamenti/{appuntamento}', [StaffAppuntamentoController::class, 'destroy'])->name('appuntamenti.destroy');
 
     Route::get('/agenda/giornaliera', [StaffAppuntamentoController::class, 'agendaGiornaliera'])->name('agenda.giornaliera');
+    Route::get('/agenda', [\App\Http\Controllers\Staff\AgendaController::class, 'index'])->name('agenda.index');
+    Route::get('/agenda/{agenda}', [\App\Http\Controllers\Staff\AgendaController::class, 'show'])->name('agenda.show');
+
 
     Route::resource('prestazioni', StaffPrestazioneController::class)->except(['show', 'store']);
 
